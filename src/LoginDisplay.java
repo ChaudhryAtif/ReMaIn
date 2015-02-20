@@ -7,39 +7,31 @@ public class LoginDisplay extends JFrame {
     JPanel dayInfo = new JPanel();                                          // Top Section
     JPanel users = new JPanel(new GridLayout(2, 2));                        // Bottom Section
     JLabel timeAndDate = new JLabel();                                      // Dynamic Time & Date;
-
-    private JButton cook, host, waiter, manager;
+    private JButton cook, host, waiter, manager;                            // User Buttons
     ButtonListener click = new ButtonListener();                            // Listener for Buttons
-
     PasswordVerifier pwdVerifier = new PasswordVerifier();                  // Initialize PasswordVerifier Class
 
     public LoginDisplay() {
         // Set Window/Frame's Characteristics
-//        super("Restaurant Management Interface");                           // Window Title
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);                     // Close on Exit
-
-        setUndecorated(true);                                               //\
-        Color color = UIManager.getColor("activeCaptionBorder");            // Removes Title Bar (Disable Drag)
-        getRootPane().setBorder(BorderFactory.createLineBorder(color, 4));  ///
-
         setExtendedState(JFrame.MAXIMIZED_BOTH);                            // Keep window maximized
         setLayout(new GridLayout(2, 1));                                    // Set Layout
         setLocationRelativeTo(null);                                        // Position @ Center
+        setUndecorated(true);                                               // Remove Title Bar (Disable Drag)
         setVisible(true);                                                   // Show on Screen
         setResizable(false);                                                // Size is NOT adjustable (Always Maximized)
 
-        Utilities.startClock(timeAndDate);                                  // Initiate Clock Function to get Time and Date
+        Utilities.startClock(timeAndDate, "Welcome!");                      // Initiate Clock Function to get Time and Date
         Utilities.updateFont(timeAndDate, .1);                              // Update font (10% of minimum screen resolution
         dayInfo.add(timeAndDate);                                           // Add Time and Date to GUI
 
         // Create buttons for users, and update font
         cook = new JButton("Cook");
-        Utilities.updateFont(cook, .1);
         host = new JButton("Host");
-        Utilities.updateFont(host, .1);
         waiter = new JButton("Waiter");
-        Utilities.updateFont(waiter, .1);
         manager = new JButton("Manager");
+        Utilities.updateFont(cook, .1);
+        Utilities.updateFont(host, .1);
+        Utilities.updateFont(waiter, .1);
         Utilities.updateFont(manager, .1);
 
         // Add users to the JPanel
@@ -58,15 +50,6 @@ public class LoginDisplay extends JFrame {
         waiter.addActionListener(click);
         manager.addActionListener(click);
 
-//        Makes window some-what "unmovable" by readjusting the location
-//        addComponentListener(new ComponentAdapter() {
-//            public void componentResized(ComponentEvent e) {
-//                setSize(sWidth, sHeight);    // Full Screen Size
-//            }
-//            public void componentMoved(ComponentEvent e) {
-//                setLocation(0, 0);
-//            }
-//        });
     }
 
     /**
@@ -82,7 +65,7 @@ public class LoginDisplay extends JFrame {
 
             if (event.getSource() == host) {
                 if (pwdVerifier.verifyPwd("host")) {
-                    System.out.println("Host Password Accepted!");
+                    HostDisplay hDisplay = new HostDisplay();
                 }
             }
 
@@ -98,7 +81,4 @@ public class LoginDisplay extends JFrame {
             }
         }
     }
-
-    //                  //                  //                  //                  //
-
 }
