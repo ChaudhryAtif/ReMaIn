@@ -3,14 +3,15 @@ import java.awt.*;
 import java.util.Calendar;
 
 public class Utilities {
-    static int sWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();                  // Screen Width
-    static int sHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();                // Screen Height
+    static int sWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();           // Screen Width
+    static int sHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();         // Screen Height
 
     /**
      * Start dynamic time and date (via Threading)
-     * @param jLabel JLabel to set the time to
+     * @param jLabel JLabel to set the time to)
+     * @param msg    String to set the Welcome message to
      */
-    public static void startClock(final JLabel jLabel) {
+    public static void startClock(final JLabel jLabel, final String msg) {
         Thread updateClock = new Thread() {                                                     // New thread foe Dynamic time
             public void run () {                                                                // Automatically run (void)
                 while (true) {
@@ -20,7 +21,7 @@ public class Utilities {
                         String date = String.format("%tA, %tB %te, %tY", cal, cal, cal, cal);   // Date format: Sunday, February 1, 2015
 
                         // Set Message, Time, and Date on new lines. Update Font
-                        jLabel.setText("<html><center> Welcome!<br>"+time+"<br>"+date+"</center></html>");
+                        jLabel.setText("<html><center>"+msg+"<br>"+time+"<br>"+date+"</center></html>");
 
                         sleep(1000);                                                            // Wait 1000ms = 1s before fetching time
                     } catch (InterruptedException e) {
@@ -38,7 +39,7 @@ public class Utilities {
      * @param screenCent Percentage of screen resolution as font size
      */
     public static void updateFont(final JLabel jLabel, double screenCent) {
-        int FontSz = (int) (Math.min(sWidth, sHeight)*screenCent);                              // 10% of minimum(width, height)
+        int FontSz = (int) (Math.min(sWidth, sHeight)*screenCent);                              // xx% of minimum(width, height)
         final Font screenFont = new Font("SansSerif", Font.BOLD, FontSz);                       // Update Look
 
         jLabel.setFont(screenFont);
