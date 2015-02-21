@@ -1,59 +1,127 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class CookDisplay extends JFrame {
-    JPanel onCall = new JPanel();
-    JPanel inventory = new JPanel();
+public class LoginDisplay extends JFrame {
+    JPanel dayInfo = new JPanel();                                          // Top Section
+    JPanel users = new JPanel(new GridLayout(2, 2));                        // Bottom Section
+    JLabel timeAndDate = new JLabel();                                      // Dynamic Time & Date;
+    private JButton cook, host, waiter, manager;                            // User Buttons
 
-    JLabel fLabel = new JLabel("1st Tab");
-    JLabel sLabel = new JLabel("2nd Tab");
+    ButtonListener click = new ButtonListener();                            // Listener for Buttons
+    PasswordVerifier pwdVerifier = new PasswordVerifier();                  // Initialize PasswordVerifier Class
 
-    JTabbedPane tabbedPane = new JTabbedPane();
+    JButton backBtn = new JButton("Back");
+    JButton quitBtn = new JButton("Quit");
 
-    public CookDisplay() {
-        setupCDisplay();
-    }
-
-    private void setupCDisplay() {
-        setUndecorated(true);                                               //\
-        Color color = UIManager.getColor("activeCaptionBorder");            // Removes Title Bar (Disable Drag)
-        getRootPane().setBorder(BorderFactory.createLineBorder(color, 4));  ///
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);                     // Close on Exit
+    public LoginDisplay() {
         setExtendedState(JFrame.MAXIMIZED_BOTH);                            // Keep window maximized
-        setLayout(new GridLayout(2, 1));
         setLocationRelativeTo(null);                                        // Position @ Center
+        setUndecorated(true);                                               // Removes Title Bar (Disable Drag)
         setVisible(true);                                                   // Show on Screen
-        setResizable(false);                                                // Size is NOT adjustable (Always Maximized)
+        setResizable(false);
 
-        inventory.add(sLabel);
-        tabbedPane.add("OnCall", onCall);
-        tabbedPane.add("Inventory", inventory);
+        /** Characteristics of GBL **/
+        GridBagLayout gbl_Layout = new GridBagLayout();
+        gbl_Layout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+        gbl_Layout.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
+        setLayout(gbl_Layout);
 
-        add(tabbedPane);
+        GridBagConstraints gbc_backBtn = new GridBagConstraints();          // Add Constraints to Back Button
+        gbc_backBtn.gridx = 0;
+        gbc_backBtn.gridy = 0;
+        gbc_backBtn.gridwidth = 1;
+        gbc_backBtn.gridheight = 1;
+        gbc_backBtn.insets = new Insets(5, 5, 5, 5);
+        Utilities.updateFont(backBtn, .02);
+        add(backBtn, gbc_backBtn);
 
-        JTable orderTable;
+        GridBagConstraints gbc_quitBtn = new GridBagConstraints();          // Add Constraints to Quit Button
+        gbc_quitBtn.gridx = 13;
+        gbc_quitBtn.gridy = 0;
+        gbc_quitBtn.insets = new Insets(5, 5, 5, 5);
+        Utilities.updateFont(quitBtn, .02);
+        add(quitBtn, gbc_quitBtn);
 
-        Object[][] orderData = {
-                {"111", "11", "Pizza, Juice, Fries, Juice", "3m", ""},
-                {"222", "99", "Soda, Fries", "4m", ""}
-        };
-        Object[] colNames = {"OrderID", "Table", "Order", "Time Elapsed", "Help"};
+        Utilities.startClock(timeAndDate, "Welcome!");                      // Initiate Clock Function to get Time and Date
+        Utilities.updateFont(timeAndDate, .11);                             // Update font (10% of minimum screen resolution
+        dayInfo.add(timeAndDate);
 
-        orderTable = new JTable(orderData, colNames);
-        orderTable.setLayout(new FlowLayout());
+        GridBagConstraints gbc_dayInfo = new GridBagConstraints();          // Add Constraints to Day Info Panel
+        gbc_dayInfo.gridx = 0;
+        gbc_dayInfo.gridy = 0;
+        gbc_dayInfo.gridwidth = 13;
+        gbc_dayInfo.gridheight = 3;
+        gbc_dayInfo.fill = GridBagConstraints.VERTICAL;
+        gbc_dayInfo.insets = new Insets(0, 0, 5, 0);
+        add(dayInfo, gbc_dayInfo);
 
-        orderTable.setPreferredScrollableViewportSize(new Dimension(500,100));
-        orderTable.setFillsViewportHeight(true);
 
-//        JScrollPane scrollPane = new JScrollPane(orderTable);
-//        orderTable.add(scrollPane);
+        // Create buttons for users, and update font
+        cook = new JButton("Cook");
+        host = new JButton("Host");
+        waiter = new JButton("Waiter");
+        manager = new JButton("Manager");
+        Utilities.updateFont(cook, .1);
+        Utilities.updateFont(host, .1);
+        Utilities.updateFont(waiter, .1);
+        Utilities.updateFont(manager, .1);
 
-        onCall.add(new JScrollPane(orderTable));
+        // Add users to the JPanel
+        users.add(cook);
+        users.add(host);
+        users.add(waiter);
+        users.add(manager);
+
+        GridBagConstraints gbc_users = new GridBagConstraints();           // Add Constraints to Users Panel
+        gbc_users.gridx = 0;
+        gbc_users.gridy = 3;
+        gbc_users.gridwidth = 14;
+        gbc_users.gridheight = 3;
+        gbc_users.fill = GridBagConstraints.BOTH;
+        gbc_users.insets = new Insets(0, 0, 5, 5);
+        add(users, gbc_users);
+
+        // Listeners for all the Buttons;
+        cook.addActionListener(click);
+        host.addActionListener(click);
+        waiter.addActionListener(click);
+        manager.addActionListener(click);
+        quitBtn.addActionListener(click);
+
     }
 
-    public static void main(String[] args) {
-        CookDisplay cDisplay = new CookDisplay();
-    }
+    /**
+     * ButtonListener implementation to respond to button clicks
+     */
+    public class ButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent event) {
+            if (event.getSource() == cook) {
+                if (pwdVerifier.verifyPwd("cook")) {                        // If the password is correct, open CookDisplay
+                    CookDisplay cDisplay = new CookDisplay();
+                }
+            }
 
+            if (event.getSource() == host) {                                // If the password is correct, open HostDisplay
+                if (pwdVerifier.verifyPwd("host")) {
+                    HostDisplay hDisplay = new HostDisplay();
+                }
+            }
+
+            if (event.getSource() == waiter) {
+                if (pwdVerifier.verifyPwd("waiter")) {
+                    System.out.println("Waiter Password Accepted!");
+                }
+            }
+            if (event.getSource() == manager) {
+                if (pwdVerifier.verifyPwd("manager")) {
+                    ManagerDisplay mDisplay = new ManagerDisplay();         // If the password is correct, open ManagerDisplay
+                }
+            }
+            if (event.getSource() == quitBtn) {                             // If the quit button is pressed, quit
+                System.exit(0);
+            }
+        }
+    }
 }
