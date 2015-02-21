@@ -21,8 +21,6 @@ public class HostDisplay extends JFrame {
 
         /** Characteristics of GBL **/
         GridBagLayout gbl_Layout = new GridBagLayout();
-        gbl_Layout.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        gbl_Layout.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
         gbl_Layout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
         gbl_Layout.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
         setLayout(gbl_Layout);
@@ -43,6 +41,10 @@ public class HostDisplay extends JFrame {
         Utilities.updateFont(quitBtn, .02);
         add(quitBtn, gbc_quitBtn);
 
+        Utilities.startClock(timeAndDate, "Welcome, Hoster!");              // Initiate Clock Function to get Time and Date
+        Utilities.updateFont(timeAndDate, .09);                             // Update font (10% of minimum screen resolution
+        dayInfo.add(timeAndDate);
+
         GridBagConstraints gbc_dayInfo = new GridBagConstraints();          // Add Constraints to Day Info Panel
         gbc_dayInfo.gridx = 0;
         gbc_dayInfo.gridy = 0;
@@ -51,20 +53,6 @@ public class HostDisplay extends JFrame {
         gbc_dayInfo.fill = GridBagConstraints.VERTICAL;
         gbc_dayInfo.insets = new Insets(0, 0, 5, 0);
         add(dayInfo, gbc_dayInfo);
-
-        Utilities.startClock(timeAndDate, "Welcome, Hoster!");              // Initiate Clock Function to get Time and Date
-        Utilities.updateFont(timeAndDate, .05);                             // Update font (10% of minimum screen resolution
-        dayInfo.add(timeAndDate);
-
-        GridBagConstraints gbc_tables = new GridBagConstraints();           // Add Constraints to Tables Panel
-        gbc_tables.gridx = 0;
-        gbc_tables.gridy = 3;
-        gbc_tables.gridwidth = 14;
-        gbc_tables.gridheight = 3;
-        gbc_tables.fill = GridBagConstraints.BOTH;
-        gbc_tables.insets = new Insets(0, 0, 5, 5);
-        tables.setLayout(new GridLayout(0, 3, 0, 0));
-        add(tables, gbc_tables);
 
         // Create + Set Table Row(s) Layout
         JPanel tableRowOne = new JPanel();
@@ -104,6 +92,16 @@ public class HostDisplay extends JFrame {
         tables.add(tableRowOne);
         tables.add(tableRowTwo);
         tables.add(tableRowThree);
+
+        GridBagConstraints gbc_tables = new GridBagConstraints();           // Add Constraints to Tables Panel
+        gbc_tables.gridx = 0;
+        gbc_tables.gridy = 3;
+        gbc_tables.gridwidth = 14;
+        gbc_tables.gridheight = 3;
+        gbc_tables.fill = GridBagConstraints.BOTH;
+        gbc_tables.insets = new Insets(0, 0, 5, 5);
+        tables.setLayout(new GridLayout(0, 3, 0, 0));
+        add(tables, gbc_tables);
     }
 
     public static void main(String[] args) {
