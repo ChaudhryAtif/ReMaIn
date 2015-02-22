@@ -1,6 +1,6 @@
 public class TakenTable extends Table {
     /*
-    *   Constructor
+    *    Constructor
     */
     public TakenTable(int heads, String arrivalTime, String waiter) {
         this.heads = heads;
@@ -9,16 +9,16 @@ public class TakenTable extends Table {
     }
     
     /*
-    *   Getters
+    *    Getters
     */
     public int getHeads() { return heads; }
     public string getArrivalTime() { return arrivalTime; }
     public String getWaiter() { return waiter; }
     
     /*
-    *   Private Variables
+    *    Private Variables
     */
     private int heads;           // Number of people at the table
-    private int arrivalTime;    // Time the guests were seated
+    private int arrivalTime;     // Time the guests were seated
     private int waiter;          // Waiter who is serving them
 }

@@ -1,6 +1,6 @@
 public class ReservedTable extends Table {
     /*
-    *   Constructor
+    *    Constructor
     */
     public ReservedTable(int heads, String reservationTime) {
         this.heads = heads;
@@ -8,14 +8,14 @@ public class ReservedTable extends Table {
     }
     
     /*
-    *   Getters
+    *    Getters
     */
     public int getHeads() { return heads; }
     public string getReservationTime() { return reservationTime; }
     
     /*
-    *   Private Variables
+    *    Private Variables
     */
-    private int heads;                 // Expected number of people to sit at the table
+    private int heads;              // Expected number of people to sit at the table
     private int reservationTime;    // Expected arrival time of the guests
 }
