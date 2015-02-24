@@ -1,5 +1,4 @@
 
-
 /** TODO LIST:
  *
  * MATCH cook display window to GUI design
@@ -9,10 +8,10 @@
  *
  */
 
-class Main {
-    public static void main(String[] args) {
-
-        LoginDisplay start = new LoginDisplay();
-
+class ReMaIn 
+{
+    public static void main(String[] args)
+    {
+        new LoginDisplay();
     }
 }

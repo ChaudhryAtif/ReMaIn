@@ -12,16 +12,16 @@ import java.awt.event.ActionListener;
  */
 
 public class LoginDisplay extends JFrame {
-    private JPanel dayInfo 			= new JPanel(new GridBagLayout());                          // Top Section
-    private GridBagConstraints gc 	= new GridBagConstraints();									// Location manager 
+    private JPanel dayInfo 			= new JPanel(new GridBagLayout());                  // Top Section
+    private GridBagConstraints gc 	= new GridBagConstraints();							// Location manager 
     
-    private JPanel users			= new JPanel(new GridLayout(2, 2));                       	// Bottom Section											// 
-    private JLabel timeAndDate		= new JLabel();                                      		// Dynamic Time & Date;
+    private JPanel users			= new JPanel(new GridLayout(2, 2));                 // Bottom Section											// 
+    private JLabel timeAndDate		= new JLabel();                                     // Dynamic Time & Date;
 
     private JButton cook, host, waiter, manager, quitButton;
     ButtonListener click = new ButtonListener();                           				// Listener for Buttons
 
-    PasswordVerifier pwdVerifier = new PasswordVerifier();                  			// Initialize PasswordVerifier Class
+    private PasswordVerifier pwdVerifier = new PasswordVerifier();                // Initialize PasswordVerifier Class
 
     public LoginDisplay() {
         // Set Window/Frame's Characteristics
