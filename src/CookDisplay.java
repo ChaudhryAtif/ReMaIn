@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 public class CookDisplay extends JFrame 
 {
     private JPanel dayInfo;                 	// Top Panel
+    private JPanel bottomPane;
     private GridBagConstraints	gc;				// Layout Manager for Gridbag
     
     private JPanel onCall;						
@@ -31,7 +32,8 @@ public class CookDisplay extends JFrame
         setResizable(false);                                                // Size is NOT adjustable (Always Maximized)
         
         // Initialize private Variables
-        dayInfo 		= new JPanel(new GridBagLayout());
+        dayInfo 		= new JPanel(new GridBagLayout());					// Initializes the Gridbag layout
+        bottomPane		= new JPanel();
         gc				= new GridBagConstraints();
         onCall 			= new JPanel();
         inventory 		= new JPanel();
@@ -83,14 +85,22 @@ public class CookDisplay extends JFrame
         orderTable = new JTable(orderData, colNames);
         orderTable.setLayout(new FlowLayout());
 
-        orderTable.setPreferredScrollableViewportSize(new Dimension(500,100));
-        orderTable.setFillsViewportHeight(true);
+        // Set the table to be as big as possible on screen
+        orderTable.setPreferredScrollableViewportSize(new Dimension(Utilities.getSWidth()-35, (Utilities.getSHeight()/2)-87));
+        
+        orderTable.setFillsViewportHeight(true);											
+        Utilities.updateFont(orderTable, .02);												// Make font bigger
+        orderTable.setRowHeight(30);														// Make rows of table bigger
 
-        onCall.add(new JScrollPane(orderTable));
+        onCall.add(new JScrollPane(orderTable));											// Allows table to scroll
 
         inventory.add(label);
-        tabbedPane.add("OnCall", onCall);
-        tabbedPane.add("Inventory", inventory);
+        
+        tabbedPane.setFont(new Font("SansSerif", Font.BOLD, 15));
+        tabbedPane.add("<html><body leftmargin=15 topmargin=18 marginwidth=15 marginheight=15>OnCall</body></html>", onCall);
+        tabbedPane.add("<html><body leftmargin=15 topmargin=18 marginwidth=15 marginheight=15>Inventory</body></html>", inventory);
+        
+        bottomPane.add(tabbedPane);
         
         // Add action Listeners to buttons
         quitButton.addActionListener(click);
@@ -98,7 +108,7 @@ public class CookDisplay extends JFrame
         
         // Add top and bottom to JFrame
         add(dayInfo);
-        add(tabbedPane);
+        add(bottomPane);
     }
     
     /**

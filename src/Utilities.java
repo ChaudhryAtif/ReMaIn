@@ -3,8 +3,8 @@ import java.awt.*;
 import java.util.Calendar;
 
 public class Utilities {
-    static int sWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();           // Screen Width
-    static int sHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();         // Screen Height
+   private static int sWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();           // Screen Width
+   private static int sHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();         // Screen Height
 
     /**
      * Start dynamic time and date (via Threading)
@@ -16,7 +16,7 @@ public class Utilities {
             public void run () {                                                                // Automatically run (void)
                 while (true) {
                     try {                                                                       /*** Time/Date suffix help: goo.gl/tGBKSC **/
-                        Calendar cal = Calendar.getInstance();                                  // Get info from Calender library
+                        Calendar cal = Calendar.getInstance();                                  // Get info from Calendar library
                         String time = String.format("%tr", cal);                                // Time format: HH:MM:SS AM|PM
                         String date = String.format("%tA, %tB %te, %tY", cal, cal, cal, cal);   // Date format: Sunday, February 1, 2015
 
@@ -33,27 +33,26 @@ public class Utilities {
         updateClock.start();                                                                    // Start threading (updating time in seconds)
     } // Clock
 
-    /**
-     * Change font size based on the screen resolution
-     * @param jLabel     JLabel to update the font on
-     * @param screenCent Percentage of screen resolution as font size
-     */
-    public static void updateFont(final JLabel jLabel, double screenCent) {
+	/**
+	* Change font size based on the screen resolution
+	* @param componemt JComponent to update the font on
+	* @param screenCent Percentage of screen resolution as font size
+	*/
+    public static void updateFont(final JComponent component, double screenCent)
+    {
         int FontSz = (int) (Math.min(sWidth, sHeight)*screenCent);                              // xx% of minimum(width, height)
         final Font screenFont = new Font("SansSerif", Font.BOLD, FontSz);                       // Update Look
-
-        jLabel.setFont(screenFont);
+        
+        component.setFont(screenFont);
     }
-
-    /**
-     * Change font size based on the screen resolution
-     * @param jButton    JButton to update the font on
-     * @param screenCent Percentage of screen resolution as font size
+    
+    /*
+     * Return the screen width
      */
-    public static void updateFont(final JButton jButton, double screenCent) {
-        int FontSz = (int) (Math.min(sWidth, sHeight)*screenCent);                              // 10% of minimum(width, height)
-        final Font screenFont = new Font("SansSerif", Font.BOLD, FontSz);                       // Update Look
-
-        jButton.setFont(screenFont);
-    }
+    public static int getSWidth() 	{return sWidth;}
+    
+    /*
+     * Return the screen height
+     */
+    public static int getSHeight()	{return sHeight;}
 }
