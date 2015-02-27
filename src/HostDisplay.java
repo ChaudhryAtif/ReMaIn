@@ -13,46 +13,8 @@ public class HostDisplay extends JFrame {
     }
 
     private void setupHDisplay() {
-        setExtendedState(JFrame.MAXIMIZED_BOTH);                            // Keep window maximized
-        setLocationRelativeTo(null);                                        // Position @ Center
-        setUndecorated(true);                                               // Removes Title Bar (Disable Drag)
-        setVisible(true);                                                   // Show on Screen
-        setResizable(false);
-
-        /** Characteristics of GBL **/
-        GridBagLayout gbl_Layout = new GridBagLayout();
-        gbl_Layout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-        gbl_Layout.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
-        setLayout(gbl_Layout);
-
-        GridBagConstraints gbc_backBtn = new GridBagConstraints();          // Add Constraints to Back Button
-        gbc_backBtn.gridx = 0;
-        gbc_backBtn.gridy = 0;
-        gbc_backBtn.gridwidth = 1;
-        gbc_backBtn.gridheight = 1;
-        gbc_backBtn.insets = new Insets(5, 5, 5, 5);
-        Utilities.updateFont(backBtn, .02);
-        add(backBtn, gbc_backBtn);
-
-        GridBagConstraints gbc_quitBtn = new GridBagConstraints();          // Add Constraints to Quit Button
-        gbc_quitBtn.gridx = 13;
-        gbc_quitBtn.gridy = 0;
-        gbc_quitBtn.insets = new Insets(5, 5, 5, 5);
-        Utilities.updateFont(quitBtn, .02);
-        add(quitBtn, gbc_quitBtn);
-
-        Utilities.startClock(timeAndDate, "Welcome, Hoster!");              // Initiate Clock Function to get Time and Date
-        Utilities.updateFont(timeAndDate, .09);                             // Update font (10% of minimum screen resolution
-        dayInfo.add(timeAndDate);
-
-        GridBagConstraints gbc_dayInfo = new GridBagConstraints();          // Add Constraints to Day Info Panel
-        gbc_dayInfo.gridx = 0;
-        gbc_dayInfo.gridy = 0;
-        gbc_dayInfo.gridwidth = 13;
-        gbc_dayInfo.gridheight = 2;
-        gbc_dayInfo.fill = GridBagConstraints.VERTICAL;
-        gbc_dayInfo.insets = new Insets(0, 0, 5, 0);
-        add(dayInfo, gbc_dayInfo);
+        // Add Back and Quit Buttons, as well as Time and Date
+        Utilities.startDayInfo(this, dayInfo, backBtn, quitBtn, "Welcome, Hoster!", timeAndDate, .09, 2, false);
 
         // Create + Set Table Row(s) Layout
         JPanel tableRowOne = new JPanel();
