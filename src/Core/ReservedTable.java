@@ -11,11 +11,11 @@ public class ReservedTable extends Table {
     *    Getters
     */
     public int getHeads() { return heads; }
-    public string getReservationTime() { return reservationTime; }
+    public String getReservationTime() { return reservationTime; }
     
     /*
     *    Private Variables
     */
     private int heads;              // Expected number of people to sit at the table
-    private int reservationTime;    // Expected arrival time of the guests
+    private String reservationTime;    // Expected arrival time of the guests
 }

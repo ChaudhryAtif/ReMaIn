@@ -12,13 +12,13 @@ public class TakenTable extends Table {
     *    Getters
     */
     public int getHeads() { return heads; }
-    public string getArrivalTime() { return arrivalTime; }
+    public String getArrivalTime() { return arrivalTime; }
     public String getWaiter() { return waiter; }
     
     /*
     *    Private Variables
     */
     private int heads;           // Number of people at the table
-    private int arrivalTime;     // Time the guests were seated
-    private int waiter;          // Waiter who is serving them
+    private String arrivalTime;     // Time the guests were seated
+    private String waiter;          // Waiter who is serving them
 }
