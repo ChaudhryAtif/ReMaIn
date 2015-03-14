@@ -1,12 +1,23 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.text.MaskFormatter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.DecimalFormat;
 
 public class HostDisplay extends JFrame {
-    JPanel dayInfo = new JPanel();
-    JPanel tables = new JPanel();
-    JLabel timeAndDate = new JLabel();                                      // Dynamic Time & Date;
-    JButton backBtn = new JButton("Back");
-    JButton quitBtn = new JButton("Quit");
+    private JPanel dayInfo = new JPanel(), tables = new JPanel();           // Top (dayInfo), Bottom (tables) sections
+    private JButton[] tableList = new JButton[12];
+    private boolean[] clicked = new boolean[12];
+
+    private ImageIcon reserved;
+
+    private JLabel timeDate = new JLabel();                                 // Dynamic Time & Date;
+    private ButtonListener click = new ButtonListener();                    // Listener for Buttons
 
     public HostDisplay() {
         setupHDisplay();
@@ -14,7 +25,7 @@ public class HostDisplay extends JFrame {
 
     private void setupHDisplay() {
         // Add Back and Quit Buttons, as well as Time and Date
-        Utilities.startDayInfo(this, dayInfo, backBtn, quitBtn, "Welcome, Hoster!", timeAndDate, .09, 2, false);
+        Utilities.startDayInfo(this, dayInfo, "Welcome, Hoster!", timeDate, .09, false);
 
         // Create + Set Table Row(s) Layout
         JPanel tableRowOne = new JPanel();
@@ -24,49 +35,155 @@ public class HostDisplay extends JFrame {
         tableRowTwo.setLayout(new GridLayout(3, 0, 0, 0));
         tableRowThree.setLayout(new GridLayout(4, 0, 0, 0));
 
-        // Create Table Buttons (x11)
-        JButton table_01 = new JButton("Table 1");
-        JButton table_02 = new JButton("Table 2");
-        JButton table_03 = new JButton("Table 3");
-        JButton table_04 = new JButton("Table 4");
-        JButton table_05 = new JButton("Table 5");
-        JButton table_06 = new JButton("Table 6");
-        JButton table_07 = new JButton("Table 7");
-        JButton table_08 = new JButton("Table 8");
-        JButton table_09 = new JButton("Table 9");
-        JButton table_10 = new JButton("Table 10");
-        JButton table_11 = new JButton("Table 11");
+        // Create Table Buttons (x11), Add ActionListener to them and Add them to Table Rows
+        for (int i=1; i < 12; i++) {
+            tableList[i] = new JButton("Table " + new DecimalFormat("00").format(i));           // Create button w/ Name
+            Utilities.updateFont(tableList[i], .05);
+            tableList[i].addActionListener(click);                                              // Add ActionListener
 
-        // Add Tables to Rows
-        tableRowOne.add(table_01);
-        tableRowOne.add(table_02);
-        tableRowOne.add(table_03);
-        tableRowOne.add(table_04);
-        tableRowTwo.add(table_05);
-        tableRowTwo.add(table_06);
-        tableRowTwo.add(table_07);
-        tableRowThree.add(table_08);
-        tableRowThree.add(table_09);
-        tableRowThree.add(table_10);
-        tableRowThree.add(table_11);
+            if (i < 5) { tableRowOne.add(tableList[i]);                                         // 1st Row: 1-4
+            } else if (i < 8) { tableRowTwo.add(tableList[i]);                                  // 2nd Row: 5-7
+            } else tableRowThree.add(tableList[i]);                                             // 3rd Row: 8-11
+        }
 
         // Add Rows to Table Panel
+        tables.setLayout(new GridLayout(0, 3, 0, 0));
+
         tables.add(tableRowOne);
         tables.add(tableRowTwo);
         tables.add(tableRowThree);
+        add(tables, BorderLayout.CENTER);
 
-        GridBagConstraints gbc_tables = new GridBagConstraints();           // Add Constraints to Tables Panel
-        gbc_tables.gridx = 0;
-        gbc_tables.gridy = 3;
-        gbc_tables.gridwidth = 14;
-        gbc_tables.gridheight = 3;
-        gbc_tables.fill = GridBagConstraints.BOTH;
-        gbc_tables.insets = new Insets(0, 0, 5, 5);
-        tables.setLayout(new GridLayout(0, 3, 0, 0));
-        add(tables, gbc_tables);
+        // Reserved Picture
+        try {
+            reserved = new ImageIcon(ImageIO.read(new URL("http://icons.iconarchive.com/icons/blackvariant/button-ui-system-apps/128/X11-icon.png")));
+        } catch(MalformedURLException mue) {
+            mue.printStackTrace();
+        } catch(IOException ioe) {
+            ioe.printStackTrace();
+        }
+
+        /** Set Visible Last To Avoid Glitches/Flickering **/
+        setVisible(true);                                                                       // Show on Screen
+        setResizable(false);                                                                    // Size is NOT adjustable (Always Maximized)
     }
 
-    public static void main(String[] args) {
+    /**
+     * ButtonListener implementation to respond to button clicks
+     */
+    private class ButtonListener implements ActionListener {
+        JPanel panel;
+        JTextField resName, resOrder;
+        JFormattedTextField resDate, resTime, resPhone, resHead;
+
+        public void actionPerformed(ActionEvent event) {
+            for (int i=1; i<12; i++) {
+                if (event.getSource() == tableList[i]) {
+                    if (!clicked[i]) {
+                        panel = new JPanel();
+                        panel.setLayout(new BoxLayout(panel, 1));
+
+                        try {                                                                   // Due to MaskFormatter
+                            resName = new JTextField();
+                            resName.setDocument(new InputLimit(20));
+                            resName.setBorder(BorderFactory.createTitledBorder("Name"));
+
+                            resDate = new JFormattedTextField(new MaskFormatter("##/##/####"));
+                            resDate.setToolTipText("Date format:mm/dd/yyyy");
+                            resDate.setBorder(BorderFactory.createTitledBorder("Date"));
+
+                            resTime = new JFormattedTextField(new MaskFormatter("##:## ??"));
+                            resTime.setToolTipText("Time Format: hh:mm am/pm");
+                            resTime.setBorder(BorderFactory.createTitledBorder("Time"));
+
+                            resPhone = new JFormattedTextField(new MaskFormatter("(###) ###-####"));
+                            resPhone.setBorder(BorderFactory.createTitledBorder("Phone Number"));
+
+                            resHead = new JFormattedTextField(new MaskFormatter("#"));
+                            resHead.setBorder(BorderFactory.createTitledBorder("Number of Heads"));
+
+                            resOrder = new JTextField();
+                            resOrder.setDocument(new InputLimit(30));
+                            resOrder.setBorder(BorderFactory.createTitledBorder("Order/Comments/Special Order"));
+                        } catch (java.text.ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        panel.add(resName);
+                        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+                        panel.add(resDate);
+                        panel.add(Box.createRigidArea(new Dimension(0,5)));
+                        panel.add(resTime);
+                        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+                        panel.add(resPhone);
+                        panel.add(Box.createRigidArea(new Dimension(0,5)));
+                        panel.add(resHead);
+                        panel.add(Box.createRigidArea(new Dimension(0,5)));
+                        panel.add(resOrder);
+
+                        int response = JOptionPane.showConfirmDialog(null,
+                                panel,
+                                "Reservation Info for " + tableList[i].getText(),
+                                JOptionPane.OK_CANCEL_OPTION,
+                                JOptionPane.PLAIN_MESSAGE);
+
+                        if (response == 0) {                                                // OK
+                            Utilities.updateFont(tableList[i], .03);
+                            tableList[i].setIcon(reserved);
+                            tableList[i].setForeground(Color.gray);
+                            clicked[i] = true;
+                        }
+
+//                        System.out.println("N: " + resName.getText());
+//                        System.out.println("D: " + resDate.getValue());
+//                        System.out.println("T: " + resTime.getValue());
+//                        System.out.println("#: " + resPhone.getValue());
+//                        System.out.println("H: " + resHead.getValue());
+                    } else {
+                        resName.setEditable(false);
+                        resDate.setEditable(false);
+                        resTime.setEditable(false);
+                        resPhone.setEditable(false);
+                        resHead.setEditable(false);
+                        resOrder.setEditable(false);
+
+//                        System.out.println(resName.getText());
+//                        System.out.println(Utilities.validateName(resName.getText()));
+
+                        String[] options = {"Edit", "Save", "Cancel", "Close Dialog"};
+                        int response = JOptionPane.showOptionDialog(null, panel, "Showing Reservation Info for " + tableList[i].getText(),
+                                0, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
+                        while (response == 0) {                                             // EDIT
+                            resName.setEditable(true);
+                            resDate.setEditable(true);
+                            resTime.setEditable(true);
+                            resPhone.setEditable(true);
+                            resHead.setEditable(true);
+                            resOrder.setEditable(true);
+                            response = JOptionPane.showOptionDialog(null, panel, "Showing Reservation Info for " + tableList[i].getText(),
+                                    0, JOptionPane.PLAIN_MESSAGE, null, options, options[2]);
+                        }
+
+                        if (response == 2) {                                                // CANCEL
+                            resName.setText("");
+                            resDate.setText("");
+                            resTime.setText("");
+                            resPhone.setText("");
+                            resHead.setText("");
+                            resOrder.setText("");
+
+                            Utilities.updateFont(tableList[i], .05);
+                            tableList[i].setIcon(null);
+                            tableList[i].setForeground(Color.black);
+                            clicked[i] = false;
+                        }
+                    } // Else
+                } // Get Source
+            } // Table Loop
+        }
+    } // ButtonListener
+
+    public static void main(String[] args) throws Exception {
         HostDisplay hDisplay = new HostDisplay();
     }
 }
