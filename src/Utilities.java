@@ -1,6 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Calendar;
+import java.util.regex.Pattern;
 
 public class Utilities {
     static int sWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();           // Screen Width
@@ -16,20 +19,22 @@ public class Utilities {
      * @param msg    String to set the Welcome message to
      */
     public static void startClock(final JLabel jLabel, final String msg) {
-        Thread updateClock = new Thread() {                                                     // New thread foe Dynamic time
-            public void run () {                                                                // Automatically run (void)
+        Thread updateClock = new Thread() {                                                     // New thread for Dynamic time
+            public void run () {
                 while (true) {
                     try {                                                                       /*** Time/Date suffix help: goo.gl/tGBKSC **/
                         Calendar cal = Calendar.getInstance();                                  // Get info from Calendar library
                         String time = String.format("%tr", cal);                                // Time format: HH:MM:SS AM|PM
                         String date = String.format("%tA, %tB %te, %tY", cal, cal, cal, cal);   // Date format: Sunday, February 1, 2015
 
-                        // Set Message, Time, and Date on new lines. Update Font
-                        jLabel.setText("<html><center>"+msg+"<br>"+time+"<br>"+date+"</center></html>");
+                        // Set Message, Time, and Date on new lines
+                        jLabel.setText("<html><center>"+msg+"<br>"
+                                +time+"<br>"
+                                +date+"</center></html>");
 
-                        sleep(1000);                                                            // Wait 1000ms = 1s before fetching time
+                        sleep(1000);                                                            // Wait 1s before re-fetching time
                     } catch (InterruptedException e) {
-                        e.printStackTrace();                                                    // Print Error/Exception Message
+                        e.printStackTrace();                                                    // Show Error/Exception Message
                     }
                 } // While
             } // Run
@@ -38,97 +43,106 @@ public class Utilities {
     } // Clock
 
     /**
-     * Change font size based on the screen resolution
-     * @param jBtn          JButton to update the font on
-     * @param screenCent    Percentage of screen resolution as font size
-     */
-    public static void updateFont(final JButton jBtn, double screenCent) {
-        int FontSz = (int) (Math.min(sWidth, sHeight)*screenCent);                              // xx% of minimum(width, height)
-        final Font screenFont = new Font("SansSerif", Font.BOLD, FontSz);                       // Update Look
-
-        jBtn.setFont(screenFont);
-    }
-
-    /**
-     * Change font size based on the screen resolution
-     * @param jCmp          JComponent to update the font on
+     * Change font size of a component based on the screen resolution
+     * @param jCmp          JComponent to update the font on (Button, Label, etc)
      * @param screenCent    Percentage of screen resolution as font size
      */
     public static void updateFont(final JComponent jCmp, double screenCent) {
-        int FontSz = (int) (Math.min(sWidth, sHeight)*screenCent);                              // xx% of minimum(width, height)
-        final Font screenFont = new Font("SansSerif", Font.BOLD, FontSz);                       // Update Look
-
+        int FontSz = (int) (Math.min(sWidth, sHeight)*screenCent);
+        final Font screenFont = new Font("SansSerif", Font.BOLD, FontSz);
         jCmp.setFont(screenFont);
     }
 
     /**
-     * Change font size based on the screen resolution
-     * @param jLbl          JLabel to update the font on
+     * Change font size of component(s) based on the screen resolution
      * @param screenCent    Percentage of screen resolution as font size
+     * @param jCmp          JComponent(s) to update the font on (Button, Label, etc)
      */
-    public static void updateFont(final JLabel jLbl, double screenCent) {
-        int FontSz = (int) (Math.min(sWidth, sHeight)*screenCent);                              // xx% of minimum(width, height)
-        final Font screenFont = new Font("SansSerif", Font.BOLD, FontSz);                       // Update Look
+    public static void multiUpdateFont(double screenCent, final JComponent... jCmp) {
+        int FontSz = (int) (Math.min(sWidth, sHeight)*screenCent);
+        final Font screenFont = new Font("SansSerif", Font.BOLD, FontSz);
+        for (JComponent cmp : jCmp) {
+            cmp.setFont(screenFont);
+        }
+    }
 
-        jLbl.setFont(screenFont);
+    /**
+     * Adds givens components to the container
+     * @param container     JContainer to add the components to (JFrame, JPanel)
+     * @param component     JComponents to add (JPanel, JButton, JLabel)
+     */
+    public static void multiAdd(Container container, Component... component) {
+        for (Component cmp : component) {
+            container.add(cmp);
+        }
+    }
+
+    /**
+     * Checks if a name is valid
+     * @param name          Name to validate
+     * @return              Result to valid or not
+     */
+    public static boolean validateName(final String name) {
+        String regex = "^[\\p{L} .'-]+$";                                                       // http://goo.gl/GZfsnH
+        return Pattern.matches(regex, name);
     }
 
     /**
      * Initialize Back and Quit (Buttons), and DayInfo on a frame
      * @param frame         Main JFrame to add the JPanel to
      * @param dayInfo       JPanel to add the objects to
-     * @param backBtn       Back Button
-     * @param quitBtn       Quit Button
-     * @param timeAndDate   JLabel w/ Time and date
+     * @param timeDate      JLabel w/ Time and date
      * @param screenCent    Percentage of screen resolution as font size
-     * @param gHeight       Height of the GridBagLayout
      * @param login         Check if it's for login screen (Back Button not needed)
      */
-    public static void startDayInfo(JFrame frame, JPanel dayInfo, JButton backBtn,
-                                    JButton quitBtn, String msg, JLabel timeAndDate,
-                                    double screenCent, int gHeight, boolean login) {
+    public static void startDayInfo(final JFrame frame, JPanel dayInfo, String msg, JLabel timeDate,
+                                    double screenCent, boolean login) {
         /** Set Window/Frame's Characteristics **/
+        frame.setLayout(new BorderLayout());
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);                                          // Keep window maximized
         frame.setLocationRelativeTo(null);                                                      // Position @ Center
         frame.setUndecorated(true);                                                             // Removes Title Bar (Disable Drag)
-        frame.setVisible(true);                                                                 // Show on Screen
-        frame.setResizable(false);                                                              // Size is NOT adjustable (Always Maximized)
 
-        /** Characteristics of GBL **/
-        GridBagLayout gbl_Layout = new GridBagLayout();
-        gbl_Layout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-        gbl_Layout.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
-        frame.setLayout(gbl_Layout);
+        dayInfo.setLayout(new GridBagLayout());
+        GridBagConstraints gbc_bkQtBtn = new GridBagConstraints();                              // Constraints to Back/Quit Buttons
+        gbc_bkQtBtn.weightx = 0.5;                                                              // Additional column space given
+        gbc_bkQtBtn.insets = new Insets(5,5,5,5);                                               // Padding on outside
 
+        JButton backBtn = new JButton("Back"), quitBtn = new JButton("Quit");                   // Back and Quit Buttons
         if (!login) {                                                                           // Login doesn't need back button
-            GridBagConstraints gbc_backBtn = new GridBagConstraints();                          // Add Constraints to Back Button
-            gbc_backBtn.gridx = 0;
-            gbc_backBtn.gridy = 0;
-            gbc_backBtn.gridwidth = 1;
-            gbc_backBtn.gridheight = 1;
-            gbc_backBtn.insets = new Insets(5, 5, 5, 5);
+        // Login Button
             updateFont(backBtn, .03);
-            frame.add(backBtn, gbc_backBtn);
+            gbc_bkQtBtn.anchor = GridBagConstraints.FIRST_LINE_START;                           // Align @ Top Left
+            dayInfo.add(backBtn, gbc_bkQtBtn);
+
+            backBtn.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) { frame.dispose(); }                 // Close window when Clicked
+            });
         }
 
-        GridBagConstraints gbc_quitBtn = new GridBagConstraints();                              // Add Constraints to Quit Button
-        gbc_quitBtn.gridx = 13;
-        gbc_quitBtn.gridy = 0;
-        gbc_quitBtn.insets = new Insets(5, 5, 5, 5);
+        // Quit Button
         updateFont(quitBtn, .03);
-        frame.add(quitBtn, gbc_quitBtn);
+        gbc_bkQtBtn.anchor = GridBagConstraints.FIRST_LINE_END;                                 // Align @ Top Right
+        dayInfo.add(quitBtn, gbc_bkQtBtn);
 
-        startClock(timeAndDate, msg);                                                           // Initiate Clock Function to get Time and Date
-        updateFont(timeAndDate, screenCent);                                                    // Update font (10% of minimum screen resolution
-        dayInfo.add(timeAndDate);
+        quitBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) { System.exit(0); }                      // Quit system when Clicked
+        });
 
-        GridBagConstraints gbc_dayInfo = new GridBagConstraints();                              // Add Constraints to Day Info Panel
-        gbc_dayInfo.gridx = 0;
-        gbc_dayInfo.gridy = 0;
-        gbc_dayInfo.gridwidth = 13;
-        gbc_dayInfo.gridheight = gHeight;
-        gbc_dayInfo.fill = GridBagConstraints.VERTICAL;
-        gbc_dayInfo.insets = new Insets(0, 0, 5, 0);
-        frame.add(dayInfo, gbc_dayInfo);
+        // Date and Time
+        GridBagConstraints gbc_timeDate = new GridBagConstraints();
+        gbc_timeDate.gridx = 0;                                                                 // Start X Cell (Top Left)
+        gbc_timeDate.gridy = 0;                                                                 // Start Y Cell (Top Left)
+        gbc_timeDate.gridwidth = 0;                                                             // Center Grid Width
+        gbc_timeDate.insets = new Insets(0,0,5,0);                                              // Bottom Padding
+        gbc_timeDate.fill = GridBagConstraints.HORIZONTAL;                                      // Expand Horizontally
+        gbc_timeDate.anchor = GridBagConstraints.PAGE_START;                                    // Align @ Top Center
+
+        startClock(timeDate, msg);                                                              // Initiate Clock w/ Greeting
+        updateFont(timeDate, screenCent);
+        timeDate.setHorizontalAlignment(0);                                                     // Center Date and Time (JLabel)
+
+        dayInfo.add(timeDate, gbc_timeDate);
+        frame.add(dayInfo, BorderLayout.NORTH);
     }
 }
