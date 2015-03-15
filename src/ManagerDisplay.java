@@ -14,7 +14,7 @@ public class ManagerDisplay extends JFrame {
     private JPanel inventoryClock = new JPanel();
     private JPanel inventoryCtrls = new JPanel();
     private JTable inventoryTable;
-    private JButton orderItem, updateItm, removeItm, checkAll;                         // Inventory Table Buttons
+    private JButton orderItem, cancelItem, removeItm, checkAll;                         // Inventory Table Buttons
 
     private JLabel timeDate = new JLabel(), timeDateInvtry = new JLabel();          // Dynamic Time & Date;
 
@@ -55,36 +55,36 @@ public class ManagerDisplay extends JFrame {
         inventoryPanel.setLayout(new BorderLayout());
         JLabel orderStatus = new JLabel("Order Status:");
 //        Utilities.updateFont(orderStatus, .025);
-        Utilities.multiUpdateFont(.02, updateItm = new JButton("Update"), removeItm = new JButton("Remove"),
-                checkAll = new JButton("Check All"), orderItem = new JButton("Order Item(s)"));
+        Utilities.multiUpdateFont(.02, removeItm = new JButton("Remove"), checkAll = new JButton("Check All"),
+                cancelItem = new JButton("Cancel Item(s)"), orderItem = new JButton("Order Item(s)"));
         Utilities.multiAdd(inventoryCtrls, removeItm, Box.createRigidArea(new Dimension(10, 0)),
-                updateItm, Box.createRigidArea(new Dimension(10, 0)),
-                checkAll, Box.createRigidArea(new Dimension(10, 0)), orderItem);
+                checkAll, Box.createRigidArea(new Dimension(10, 0)),
+                cancelItem, Box.createRigidArea(new Dimension(10, 0)), orderItem);
 
         //*********************************************************************//
         // Create, Populate, and Update Looks of Inventory Table
         //*********************************************************************//
         Object[][] inventoryData = {
-                {"001", "Eggs", "20", "10", "PENDING", false},
-                {"002", "Cheese", "05", "01", "ORDERED", false},
-                {"003", "Bagels", "25", "03", "PENDING", false},
-                {"004", "Bread", "25", "15", "CANCELED", false}
+                {"001", "Eggs", "20", "10", "Urgent", "PENDING", false, ""},
+                {"002", "Cheese", "05", "01", "", "ORDERED", false, ""},
+                {"003", "Bagels", "25", "03", "ORDER or DIE", "PENDING", false, ""},
+                {"004", "Bread", "25", "15", "Take Yo Time", "CANCELED", false, ""}
         };
         Object[] inventoryColumns = {"Order ID", "Item Description", "Quantity Needed",
-                "Quantity In Stock","Status", "Select Item", "Order Quantity"};
+                "Quantity In Stock","Status", "Notes", "Select Item", "Order Quantity"};
 
         inventoryTable = new JTable() {
             @Override
             public Class<?> getColumnClass(int col) {
-                if (col == 5) { return Boolean.class; }
+                if (col == 6) { return Boolean.class; }
                 return super.getColumnClass(col);
             }
             @Override
             public boolean isCellEditable(int row, int col) {
-                if (col == 5)
-                    return true;
                 if (col == 6)
-                    return ((Boolean) getValueAt(row, 5)).booleanValue();
+                    return true;
+                if (col == 7)
+                    return ((Boolean) getValueAt(row, 6)).booleanValue();
                 else
                     return false;
             }
@@ -103,6 +103,7 @@ public class ManagerDisplay extends JFrame {
         cButton.addActionListener(click);
         iButton.addActionListener(click);
         checkAll.addActionListener(click);
+        cancelItem.addActionListener(click);
         orderItem.addActionListener(click);
 
         /** Set Visible Last To Avoid Glitches/Flickering **/
@@ -125,33 +126,52 @@ public class ManagerDisplay extends JFrame {
                 else { selectAll = false; checkAll.setText("Check All");}
 
                 for (int line = 0; line < row; line++) {
-                    inventoryTable.setValueAt(selectAll, line, 5);
+                    inventoryTable.setValueAt(selectAll, line, 6);
                 }
+                inventoryTable.clearSelection();
             }
+            if (event.getSource() == cancelItem) {
+                int row = inventoryTable.getRowCount();
+                boolean check;
 
+                for (int line = 0; line < row; line++) {
+                    check = (Boolean) inventoryTable.getValueAt(line, 6);
+
+                    if (check) {
+                        DefaultTableModel model = (DefaultTableModel) inventoryTable.getModel();
+                        model.setValueAt("CANCELED", line, 5);
+                    }
+                }
+                selectAll = true;
+                checkAll.doClick();
+                inventoryTable.clearSelection();
+            }
             if (event.getSource() == orderItem) {
                 int row = inventoryTable.getRowCount();
                 boolean check;
 
                 for (int line = 0; line < row; line++) {
-                    check = (Boolean) inventoryTable.getValueAt(line, 5);
+                    check = (Boolean) inventoryTable.getValueAt(line, 6);
 
                     if (check) {
                         DefaultTableModel model = (DefaultTableModel) inventoryTable.getModel();
-                        Object value = model.getValueAt(line,6);
+                        Object value = model.getValueAt(line, 7);
                         if (value != null) {
                             System.out.println(value.toString());
-                        } else {
-                            model.setValueAt(model.getValueAt(line, 2), line, 6);
+                        } else {                                                    // If no Qty given , take ordered Qty
+                            model.setValueAt(model.getValueAt(line, 2), line, 7);
                             System.out.println(model.getValueAt(line, 2).toString());
                         }
-                        model.setValueAt("ORDERED", line, 4);
+                        model.setValueAt("ORDERED", line, 5);
                     }
                 }
+                selectAll = true;
+                checkAll.doClick();
+                inventoryTable.clearSelection();
             }
 
             if (event.getSource() == cButton) {
-                if (pwdVerifier.verifyPwd("manager")) {
+//                if (pwdVerifier.verifyPwd("manager")) {
                     JPanel panel = new JPanel();
                     panel.setLayout(new BoxLayout(panel, 1));
                     panel.add(new JLabel("Please choose a user:"));
@@ -180,7 +200,7 @@ public class ManagerDisplay extends JFrame {
                             "Password Changer",
                             JOptionPane.OK_CANCEL_OPTION,
                             JOptionPane.PLAIN_MESSAGE);
-                }
+//                }
             }
         }
     }
