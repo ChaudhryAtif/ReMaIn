@@ -86,7 +86,7 @@ public class TableButtonHandler {
     public void resetOrder(JTable table, JLabel tableMsg) {
         if (!isTableEmpty(table, tableMsg)) {
             DefaultTableModel model = (DefaultTableModel) table.getModel();
-            model.setValueAt("NEW", table.getSelectedRow(), 4);
+            model.setValueAt("NEW", table.getSelectedRow(), 5);
             table.clearSelection();
         }
     }
@@ -99,7 +99,7 @@ public class TableButtonHandler {
     public void startOrder(JTable table, JLabel tableMsg) {
         if (!isTableEmpty(table, tableMsg)) {
             DefaultTableModel model = (DefaultTableModel) table.getModel();
-            model.setValueAt("STARTED", table.getSelectedRow(), 4);
+            model.setValueAt("STARTED", table.getSelectedRow(), 5);
             table.clearSelection();
         }
     }
@@ -112,7 +112,7 @@ public class TableButtonHandler {
     public void readyOrder(JTable table, JLabel tableMsg) {
         if (!isTableEmpty(table, tableMsg)) {
             DefaultTableModel model = (DefaultTableModel) table.getModel();
-            model.setValueAt("READY", table.getSelectedRow(), 4);
+            model.setValueAt("READY", table.getSelectedRow(), 5);
             table.clearSelection();
         }
     }
@@ -125,7 +125,7 @@ public class TableButtonHandler {
     public void helpOrder(JTable table, JLabel tableMsg) {
         if (!isTableEmpty(table, tableMsg)) {
             DefaultTableModel model = (DefaultTableModel) table.getModel();
-            model.setValueAt("HELP", table.getSelectedRow(), 4);
+            model.setValueAt("HELP", table.getSelectedRow(), 5);
             table.clearSelection();
         }
     }
