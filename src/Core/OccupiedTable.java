@@ -1,8 +1,8 @@
-public class TakenTable extends Table {
+public class OccupiedTable extends Table {
     /*
     *    Constructor
     */
-    public TakenTable(int heads, String arrivalTime, String waiter) {
+    public OccupiedTable(int heads, String arrivalTime, String waiter) {
         this.heads = heads;
         this.arrivalTime = arrivalTime;
         this.waiter = waiter;
