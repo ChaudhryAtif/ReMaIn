@@ -57,9 +57,8 @@ public class CookDisplay extends JFrame {
             itemStock.setHorizontalAlignment(JTextField.CENTER);
             itemStock.setBorder(BorderFactory.createTitledBorder("In Stock"));
 
-            /**/
             itemNotes = new JFormattedTextField();
-            itemNotes.setColumns(50);
+            itemNotes.setColumns(20);
             itemNotes.setHorizontalAlignment(JTextField.CENTER);
             itemNotes.setBorder(BorderFactory.createTitledBorder("Notes"));
         } catch (java.text.ParseException e) {
@@ -84,12 +83,12 @@ public class CookDisplay extends JFrame {
         // Create, Populate, and Update Looks of Order Table
         //*********************************************************************//
         Object[][] orderData = {
-                {"001", "11", "Pizza, Juice, Fries, Soda", "11:10", "NEW"},
-                {"002", "07", "Juice, Fries, Soda, Pizza", "11:30", "STARTED"},
-                {"003", "09", "Fries, Soda, Pizza, Juice", "11:55", "READY"},
-                {"004", "08", "Soda, Pizza, Juice, Fries", "12:15", "HELP"},
+                {"001", "11", "Pizza, Juice, Fries, Soda", "11:10", "Extra Cheese", "NEW"},
+                {"002", "07", "Juice, Fries, Soda, Pizza", "11:30", "No Toppings", "STARTED"},
+                {"003", "09", "Fries, Soda, Pizza, Juice", "11:55", "Chicago Style", "READY"},
+                {"004", "08", "Soda, Pizza, Juice, Fries", "12:15", "", "HELP"},
         };
-        Object[] orderColumns = {"Order ID", "Table", "Order Detail", "Time Ordered", "Order Status"};
+        Object[] orderColumns = {"Order ID", "Table", "Order Detail", "Time Ordered", "Notes", "Order Status"};
         orderTable = new JTable() {
             public boolean isCellEditable(int r, int c) { return false; }
         };
@@ -102,7 +101,7 @@ public class CookDisplay extends JFrame {
 
         Utilities.multiUpdateFont(.02, addItm = new JButton("Add"), updateItm = new JButton("Update"),
                 removeItm = new JButton("Remove"), clearItm = new JButton("Clear Input"));
-        Utilities.multiAdd(inventoryCtrls, itemId, itemQty, itemName, itemStock,
+        Utilities.multiAdd(inventoryCtrls, itemId, itemQty, itemName, itemStock, itemNotes,
                 Box.createRigidArea(new Dimension(10, 0)), addItm,
                 Box.createRigidArea(new Dimension(10, 0)), updateItm,
                 Box.createRigidArea(new Dimension(10, 0)), removeItm,
@@ -112,12 +111,12 @@ public class CookDisplay extends JFrame {
         // Create, Populate, and Update Looks of Inventory Table
         //*********************************************************************//
         Object[][] inventoryData = {
-                {"001", "Eggs", "20", "10", "PENDING"},
-                {"002", "Cheese", "05", "01", "ORDERED"},
-                {"003", "Bagels", "25", "03", "PENDING"},
-                {"004", "Bread", "25", "15", "CANCELED"}
+                {"001", "Eggs", "20", "10", "Urgent", "PENDING"},
+                {"002", "Cheese", "05", "01", "", "ORDERED"},
+                {"003", "Bagels", "25", "03", "ORDER or DIE", "PENDING"},
+                {"004", "Bread", "25", "15", "Take Yo Time", "CANCELED"}
         };
-        Object[] inventoryColumns = {"Order ID", "Item Description", "Quantity Needed", "Quantity In Stock", "Status"};
+        Object[] inventoryColumns = {"Order ID", "Item Description", "Quantity Needed", "Quantity In Stock", "Notes", "Status"};
 
         inventoryTable = new JTable() {
             @Override
@@ -181,28 +180,30 @@ public class CookDisplay extends JFrame {
             //*********************************************************************//
             // Inventory Table
             //*********************************************************************//
+            JFormattedTextField[] jInputFields = {itemId, itemName, itemQty, itemStock, itemNotes};
+            
             if (event.getSource() == clearItm) {
-                tblBtnHndlr.clearTableInput(inventoryTable, tableMsg, itemId, itemName, itemQty, itemStock);
+                tblBtnHndlr.clearTableInput(inventoryTable, tableMsg, jInputFields);
             }
             if (event.getSource() == addItm) {
                 tableMsg.setText("");
                 if (!tblBtnHndlr.isInputEmpty(tableMsg, itemId, itemName, itemQty, itemStock)) {
-                    tblBtnHndlr.addRow(inventoryTable, new JLabel("inventoryTable"), itemId, itemName, itemQty, itemStock);
-                    tblBtnHndlr.clearTableInput(inventoryTable, tableMsg, itemId, itemName, itemQty, itemStock);
+                    tblBtnHndlr.addRow(inventoryTable, new JLabel("inventoryTable"), jInputFields);
+                    tblBtnHndlr.clearTableInput(inventoryTable, tableMsg, jInputFields);
                 }
             }
             if (event.getSource() == updateItm) {
                 tableMsg.setText("");
-                if (!tblBtnHndlr.isInputEmpty(tableMsg, itemId, itemName, itemQty, itemStock)
+                if (!tblBtnHndlr.isInputEmpty(tableMsg, jInputFields)
                         && !tblBtnHndlr.isTableEmpty(inventoryTable, tableMsg)) {
-                    tblBtnHndlr.updateRow(inventoryTable, tableMsg, itemId, itemName, itemQty, itemStock);
-                    tblBtnHndlr.clearTableInput(inventoryTable, tableMsg, itemId, itemName, itemQty, itemStock);
+                    tblBtnHndlr.updateRow(inventoryTable, tableMsg, jInputFields);
+                    tblBtnHndlr.clearTableInput(inventoryTable, tableMsg, jInputFields);
                 }
             }
             if (event.getSource() == removeItm) {
                 if (!tblBtnHndlr.isTableEmpty(inventoryTable, tableMsg)) {
                     tblBtnHndlr.removeRow(inventoryTable, tableMsg);
-                    tblBtnHndlr.clearTableInput(inventoryTable, tableMsg, itemId, itemName, itemQty, itemStock);
+                    tblBtnHndlr.clearTableInput(inventoryTable, tableMsg, jInputFields);
                 }
             }
         }
