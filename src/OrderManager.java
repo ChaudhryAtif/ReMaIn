@@ -5,16 +5,20 @@ public class OrderManager {
     /*
     *    Constructor
     */
-    public OrderManager() { }
+    public OrderManager() {
+    	orders = new ArrayList<Order>();
+    }
     
     /*
     *   Getters
     */
-    public ArrayList getOrdersByTable() {
+    public ArrayList<Order> getOrdersByTable() {
         Collections.sort(orders, Order.comparatorByTable());
+        return orders;
     }
-    public ArrayList getOrdersByTime() {
+    public ArrayList<Order> getOrdersByTime() {
         Collections.sort(orders, Order.comparatorByTime());
+        return orders;
     }
     
     /*
@@ -34,5 +38,5 @@ public class OrderManager {
     /*
     *   Private Variables
     */
-    private ArrayList orders = new ArrayList();
+    private ArrayList<Order> orders;
 }

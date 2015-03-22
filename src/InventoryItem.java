@@ -12,10 +12,10 @@ public class InventoryItem {
     /*
     *   Getters
     */
-    public getItem() { return item; }
-    public getQuantityNeeded() { return quantityNeeded; }
-    public getCurrentStock() { return currentStock; }
-    public getNotes() { return notes; }
+    public String getItem() { return item; }
+    public int getQuantityNeeded() { return quantityNeeded; }
+    public int getCurrentStock() { return currentStock; }
+    public String getNotes() { return notes; }
     
     /*
     *   Private Variables
