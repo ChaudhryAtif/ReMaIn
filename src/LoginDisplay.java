@@ -50,7 +50,7 @@ public class LoginDisplay extends JFrame {
     /**
      * ButtonListener implementation to respond to button clicks
      */
-    public class ButtonListener implements ActionListener {
+    private class ButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent event) {
             if (event.getSource() == cook) {
 //                if (pwdVerifier.verifyPwd("cook")) {                        // If the password is correct, open Display

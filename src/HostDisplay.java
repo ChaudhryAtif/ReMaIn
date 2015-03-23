@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import javax.swing.text.AbstractDocument;
 
 public class HostDisplay extends JFrame {
     private JPanel dayInfo = new JPanel(), tables = new JPanel();           // Top (dayInfo), Bottom (tables) sections
@@ -84,9 +85,10 @@ public class HostDisplay extends JFrame {
                         panel.setLayout(new BoxLayout(panel, 1));
 
                         try {                                                                   // Due to MaskFormatter
-                            resName = new JTextField();
+                            resName = new JTextField(); 
                             resName.setDocument(new InputLimit(20));
                             resName.setBorder(BorderFactory.createTitledBorder("Name"));
+                            ((AbstractDocument) resName.getDocument()).setDocumentFilter(new LetterDocumentFilter()); // filters type contents
 
                             resDate = new JFormattedTextField(new MaskFormatter("##/##/####"));
                             resDate.setToolTipText("Date format:mm/dd/yyyy");
@@ -149,11 +151,13 @@ public class HostDisplay extends JFrame {
 
 //                        System.out.println(resName.getText());
 //                        System.out.println(Utilities.validateName(resName.getText()));
-
-                        String[] options = {"Edit", "Save", "Cancel", "Close Dialog"};
+                        
+                        
+                        String[] options = {"Edit", "Save", "Cancel Reservation", "Close Dialog", "nothing"};
                         int response = JOptionPane.showOptionDialog(null, panel, "Showing Reservation Info for " + tableList[i].getText(),
                                 0, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
-                        while (response == 0) {                                             // EDIT
+                      	
+                        if (response == 0) {                                             // EDIT
                             resName.setEditable(true);
                             resDate.setEditable(true);
                             resTime.setEditable(true);
@@ -163,6 +167,7 @@ public class HostDisplay extends JFrame {
                             response = JOptionPane.showOptionDialog(null, panel, "Showing Reservation Info for " + tableList[i].getText(),
                                     0, JOptionPane.PLAIN_MESSAGE, null, options, options[2]);
                         }
+                        
 
                         if (response == 2) {                                                // CANCEL
                             resName.setText("");
@@ -176,7 +181,9 @@ public class HostDisplay extends JFrame {
                             tableList[i].setIcon(null);
                             tableList[i].setForeground(Color.black);
                             clicked[i] = false;
+                           
                         }
+                        
                     } // Else
                 } // Get Source
             } // Table Loop
@@ -184,6 +191,6 @@ public class HostDisplay extends JFrame {
     } // ButtonListener
 
     public static void main(String[] args) throws Exception {
-        HostDisplay hDisplay = new HostDisplay();
+        new HostDisplay();
     }
 }
