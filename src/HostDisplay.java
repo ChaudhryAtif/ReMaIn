@@ -153,7 +153,7 @@ public class HostDisplay extends JFrame {
 //                        System.out.println(Utilities.validateName(resName.getText()));
                         
                         
-                        String[] options = {"Edit", "Save", "Cancel Reservation", "Close Dialog", "nothing"};
+                        String[] options = {"Edit", "Save", "Cancel Reservation", "Close Dialog"};
                         int response = JOptionPane.showOptionDialog(null, panel, "Showing Reservation Info for " + tableList[i].getText(),
                                 0, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
                       	
