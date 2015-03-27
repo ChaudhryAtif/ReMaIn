@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class LoginDisplay extends JFrame {
     private JPanel dayInfo = new JPanel();                                  // Top Half of Frame
@@ -33,7 +34,7 @@ public class LoginDisplay extends JFrame {
         Utilities.multiUpdateFont(.1, cook, host, waiter, manager);
 
         // Add Buttons (users) to Users Panel, and Users to Frame
-        Utilities.multiAdd(users, cook, host, waiter, manager);
+        Utilities.multiAdd(users, waiter, host, cook, manager);
         add(users, BorderLayout.CENTER);
 
         // Add Listeners for all the Buttons;
@@ -44,7 +45,7 @@ public class LoginDisplay extends JFrame {
 
         /** Set Visible Last To Avoid Glitches/Flickering **/
         setVisible(true);
-        setResizable(false);                                                // Size is NOT adjustable (Always Maximized)
+        setResizable(false);
     }
 
     /**
@@ -52,24 +53,26 @@ public class LoginDisplay extends JFrame {
      */
     public class ButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent event) {
+            pwdVerifier.readFile(new File("UserPass.txt"));
+
+            if (event.getSource() == manager) {
+//                if (pwdVerifier.verifyPwd("manager")) {                        // If the password is correct, open Display
+                new ManagerDisplay();
+//                }
+            }
             if (event.getSource() == cook) {
-//                if (pwdVerifier.verifyPwd("cook")) {                        // If the password is correct, open Display
-                    CookDisplay cDisplay = new CookDisplay();
+//                if (pwdVerifier.verifyPwd("cook")) {
+                    new CookDisplay();
 //                }
             }
             if (event.getSource() == host) {
 //                if (pwdVerifier.verifyPwd("host")) {
-                    HostDisplay hDisplay = new HostDisplay();
+                    new HostDisplay();
 //                }
             }
             if (event.getSource() == waiter) {
 //                if (pwdVerifier.verifyPwd("waiter")) {
-                    WaiterDisplay wDisplay = new WaiterDisplay();
-//                }
-            }
-            if (event.getSource() == manager) {
-//                if (pwdVerifier.verifyPwd("manager")) {
-                    ManagerDisplay mDisplay = new ManagerDisplay();
+                    new WaiterDisplay();
 //                }
             }
         }
