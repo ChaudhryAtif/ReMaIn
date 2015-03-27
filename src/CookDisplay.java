@@ -6,13 +6,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.NumberFormat;
 
 public class CookDisplay extends JFrame {
     private JPanel dayInfo = new JPanel(), onCall = new JPanel();                   // Top and Bottom Panels
-    private JLabel timeDate = new JLabel(), tableMsg = new JLabel();                // Dynamic Time & Date; And Table Message
+    private JLabel timeDate = new JLabel(), tableMsg = new JLabel();                // timeDate: Dynamic Time & Date
 
     private JTabbedPane tabbedPane = new JTabbedPane();
-    private JPanel tableCtrls = new JPanel(), inventoryCtrls = new JPanel();        // Table's Button Control panel
+    private JPanel tableCtrls = new JPanel(), inventoryCtrls = new JPanel();
 
     private JPanel inventory = new JPanel();
     private JTable orderTable, inventoryTable;
@@ -36,8 +37,13 @@ public class CookDisplay extends JFrame {
         // Initialize Control Inputs and Buttons for Order & Inventory Table
         //*********************************************************************//
         try {                                                                       // Due to MaskFormatter
-            // Inventory Table - Set Format, Width, Alignment, and Border
-            itemId = new JFormattedTextField(new MaskFormatter("###"));
+            // Inventory Table Controls - Set Format, Width, Alignment, and Border
+            NumberFormat numFormat = NumberFormat.getNumberInstance();
+            numFormat.setMinimumIntegerDigits(1);
+            numFormat.setMaximumIntegerDigits(3);
+            numFormat.setMaximumFractionDigits(0);
+
+            itemId = new JFormattedTextField(numFormat);
             itemId.setColumns(5);
             itemId.setHorizontalAlignment(JTextField.CENTER);
             itemId.setBorder(BorderFactory.createTitledBorder("Item ID"));
@@ -82,13 +88,13 @@ public class CookDisplay extends JFrame {
         //*********************************************************************//
         // Create, Populate, and Update Looks of Order Table
         //*********************************************************************//
+        Object[] orderColumns = {"Order ID", "Table", "Order Detail", "Time Ordered", "Notes", "Order Status"};
         Object[][] orderData = {
                 {"001", "11", "Pizza, Juice, Fries, Soda", "11:10", "Extra Cheese", "NEW"},
                 {"002", "07", "Juice, Fries, Soda, Pizza", "11:30", "No Toppings", "STARTED"},
                 {"003", "09", "Fries, Soda, Pizza, Juice", "11:55", "Chicago Style", "READY"},
                 {"004", "08", "Soda, Pizza, Juice, Fries", "12:15", "", "HELP"},
         };
-        Object[] orderColumns = {"Order ID", "Table", "Order Detail", "Time Ordered", "Notes", "Order Status"};
         orderTable = new JTable() {
             public boolean isCellEditable(int r, int c) { return false; }
         };
@@ -96,7 +102,7 @@ public class CookDisplay extends JFrame {
         orderTable.setModel(new DefaultTableModel(orderData, orderColumns));
 
         onCall.add(tableCtrls, BorderLayout.NORTH);
-        onCall.add(new JScrollPane(orderTable), BorderLayout.CENTER);                       // Add Scroll feature
+        onCall.add(new JScrollPane(orderTable), BorderLayout.CENTER);
         //*********************************************************************//
 
         Utilities.multiUpdateFont(.02, addItm = new JButton("Add"), updateItm = new JButton("Update"),
@@ -110,13 +116,13 @@ public class CookDisplay extends JFrame {
         //*********************************************************************//
         // Create, Populate, and Update Looks of Inventory Table
         //*********************************************************************//
+        Object[] inventoryColumns = {"Order ID", "Item Description", "Quantity Needed", "Quantity In Stock", "Notes", "Status"};
         Object[][] inventoryData = {
                 {"001", "Eggs", "20", "10", "Urgent", "PENDING"},
                 {"002", "Cheese", "05", "01", "", "ORDERED"},
                 {"003", "Bagels", "25", "03", "ORDER or DIE", "PENDING"},
                 {"004", "Bread", "25", "15", "Take Yo Time", "CANCELED"}
         };
-        Object[] inventoryColumns = {"Order ID", "Item Description", "Quantity Needed", "Quantity In Stock", "Notes", "Status"};
 
         inventoryTable = new JTable() {
             @Override
@@ -137,7 +143,7 @@ public class CookDisplay extends JFrame {
         tabbedPane.add("<html><body leftmargin=15 topmargin=18 marginwidth=15 marginheight=15>Inventory</body></html>", inventory);
         add(tabbedPane, BorderLayout.CENTER);
 
-        Utilities.updateFont(tableMsg, .015);
+        Utilities.updateFont(tableMsg, .02);
         tableMsg.setForeground(Color.red);
         tableMsg.setHorizontalAlignment(JLabel.CENTER);
         add(tableMsg, BorderLayout.SOUTH);
@@ -181,7 +187,7 @@ public class CookDisplay extends JFrame {
             // Inventory Table
             //*********************************************************************//
             JFormattedTextField[] jInputFields = {itemId, itemName, itemQty, itemStock, itemNotes};
-            
+
             if (event.getSource() == clearItm) {
                 tblBtnHndlr.clearTableInput(inventoryTable, tableMsg, jInputFields);
             }
