@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 public class WaiterDisplay extends JFrame {
     private JPanel dayInfo = new JPanel();                                          // Top Panel
@@ -30,14 +31,14 @@ public class WaiterDisplay extends JFrame {
     private JButton addOrd, updateOrd, removeOrd, clearOrd;
 
     // Food Table Controls
-    private JFormattedTextField foodTableNo;
+    private JFormattedTextField foodTableNo, foodHeadServing, foodNotes;
     private JButton addFood, updateFood, removeFood, clearFood;
 
     /** Table ComboBox? **/
     private JComboBox waiterCBox = new JComboBox();
     private JComboBox foodCBox = new JComboBox();
 
-    private ButtonListener click = new ButtonListener();                            // Listener for Buttons
+    private ButtonListener click = new ButtonListener();
 
     private JPanel tables = new JPanel();
     private JButton[] tableList = new JButton[12];
@@ -56,7 +57,12 @@ public class WaiterDisplay extends JFrame {
         // Initialize Control Inputs and Buttons for Order & Food Table
         //*********************************************************************//
         try {                                                                       // Due to MaskFormatter
-            orderId = new JFormattedTextField(new MaskFormatter("###"));
+            NumberFormat numFormat = NumberFormat.getNumberInstance();
+            numFormat.setMinimumIntegerDigits(1);
+            numFormat.setMaximumIntegerDigits(3);
+            numFormat.setMaximumFractionDigits(0);
+
+            orderId = new JFormattedTextField(numFormat);
             orderId.setColumns(5);
             orderId.setHorizontalAlignment(JTextField.CENTER);
             orderId.setBorder(BorderFactory.createTitledBorder("Order ID"));
@@ -70,6 +76,11 @@ public class WaiterDisplay extends JFrame {
             foodTableNo.setColumns(5);
             foodTableNo.setHorizontalAlignment(JTextField.CENTER);
             foodTableNo.setBorder(BorderFactory.createTitledBorder("Table"));
+
+            foodHeadServing = new JFormattedTextField(new MaskFormatter("#"));
+            foodHeadServing.setColumns(10);
+            foodHeadServing.setHorizontalAlignment(JTextField.CENTER);
+            foodHeadServing.setBorder(BorderFactory.createTitledBorder("Heads Serving"));
 
             orderInfo = new JFormattedTextField();
             orderInfo.setColumns(25);
@@ -85,6 +96,11 @@ public class WaiterDisplay extends JFrame {
             orderNotes.setColumns(25);
             orderNotes.setHorizontalAlignment(JTextField.CENTER);
             orderNotes.setBorder(BorderFactory.createTitledBorder("Order Notes"));
+
+            foodNotes = new JFormattedTextField();
+            foodNotes.setColumns(25);
+            foodNotes.setHorizontalAlignment(JTextField.CENTER);
+            foodNotes.setBorder(BorderFactory.createTitledBorder("Food Notes"));
         } catch (java.text.ParseException e) {
             e.printStackTrace();
         }
@@ -116,7 +132,7 @@ public class WaiterDisplay extends JFrame {
         orderTable.setModel(new DefaultTableModel(orderData, orderColumns));
 
         manageOrders.add(orderCtrls, BorderLayout.NORTH);
-        manageOrders.add(new JScrollPane(orderTable), BorderLayout.CENTER);                       // Add Scroll feature
+        manageOrders.add(new JScrollPane(orderTable), BorderLayout.CENTER);
         //*********************************************************************//
 
         foodStatus.setLayout(new BorderLayout());
@@ -126,7 +142,7 @@ public class WaiterDisplay extends JFrame {
 
         Utilities.multiUpdateFont(.02, addFood = new JButton("Add"), updateFood = new JButton("Update"),
                 removeFood = new JButton("Remove"), clearFood = new JButton("Clear Input"));
-        Utilities.multiAdd(foodCtrls, waiterCBox, foodTableNo, foodCBox,
+        Utilities.multiAdd(foodCtrls, waiterCBox, foodTableNo, foodHeadServing, foodNotes, foodCBox,
                 Box.createRigidArea(new Dimension(10, 0)), addFood,
                 Box.createRigidArea(new Dimension(10, 0)), updateFood,
                 Box.createRigidArea(new Dimension(10, 0)), removeFood,
@@ -137,10 +153,11 @@ public class WaiterDisplay extends JFrame {
         // Create, Populate, and Update Looks of Food Table
         //*********************************************************************//
         Object[][] foodData = {
-                {"Max", "11", "Desert"},
-                {"Connie", "02", "Appetizer"}
+                {"Max", "11", "3", "", "Desert"},
+                {"Connie", "02", "5", "", "Appetizer"},
+                {"Maxie", "05", "2", "", "Soup"}
         };
-        Object[] foodColumns = {"Waiter", "Table", "Food Status"};
+        Object[] foodColumns = {"Waiter", "Table", "Heads Serving", "Notes", "Food Status"};
 
 
         foodTable = new JTable() {
@@ -172,7 +189,7 @@ public class WaiterDisplay extends JFrame {
         for (int i=1; i < 12; i++) {
             tableList[i] = new JButton("Table " + new DecimalFormat("00").format(i));           // Create button w/ Name
             Utilities.updateFont(tableList[i], .05);
-            tableList[i].addActionListener(click);                                              // Add ActionListener
+            tableList[i].addActionListener(click);
 
             if (i < 5) { tableRowOne.add(tableList[i]);                                         // 1st Row: 1-4
             } else if (i < 8) { tableRowTwo.add(tableList[i]);                                  // 2nd Row: 5-7
@@ -182,9 +199,7 @@ public class WaiterDisplay extends JFrame {
         // Add Rows to Table Panel
         tables.setLayout(new GridLayout(0, 3, 0, 0));
 
-        tables.add(tableRowOne);
-        tables.add(tableRowTwo);
-        tables.add(tableRowThree);
+        Utilities.multiAdd(tables, tableRowOne, tableRowTwo, tableRowThree);
         tablesView.add(tables);
         //*********************************************************************//
         //*********************************************************************//
@@ -228,9 +243,11 @@ public class WaiterDisplay extends JFrame {
 
     private void foodTableMouseClicked(MouseEvent evt) {
         DefaultTableModel model = (DefaultTableModel) foodTable.getModel();
-//        water.setText(model.getValueAt(foodTable.getSelectedRow(), 0).toString());
+        waiterCBox.setSelectedItem(model.getValueAt(foodTable.getSelectedRow(), 0).toString());
         foodTableNo.setText(model.getValueAt(foodTable.getSelectedRow(), 1).toString());
-//        food.setText(model.getValueAt(foodTable.getSelectedRow(), 2).toString());
+        foodHeadServing.setText(model.getValueAt(foodTable.getSelectedRow(), 2).toString());
+        foodNotes.setText(model.getValueAt(foodTable.getSelectedRow(), 3).toString());
+        foodCBox.setSelectedItem(model.getValueAt(foodTable.getSelectedRow(), 4).toString());
     }
 
     /**
