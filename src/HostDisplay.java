@@ -16,8 +16,8 @@ public class HostDisplay extends JFrame {
 
     private ImageIcon reserved;
 
-    private JLabel timeDate = new JLabel();                                 // Dynamic Time & Date;
-    private ButtonListener click = new ButtonListener();                    // Listener for Buttons
+    private JLabel timeDate = new JLabel();                                 // timeDate: Dynamic Time & Date;
+    private ButtonListener click = new ButtonListener();
 
     public HostDisplay() {
         setupHDisplay();
@@ -27,7 +27,6 @@ public class HostDisplay extends JFrame {
         // Add Back and Quit Buttons, as well as Time and Date
         Utilities.startDayInfo(this, dayInfo, "Welcome, Hoster!", timeDate, .09, false);
 
-        // Create + Set Table Row(s) Layout
         JPanel tableRowOne = new JPanel();
         JPanel tableRowTwo = new JPanel();
         JPanel tableRowThree = new JPanel();
@@ -39,7 +38,7 @@ public class HostDisplay extends JFrame {
         for (int i=1; i < 12; i++) {
             tableList[i] = new JButton("Table " + new DecimalFormat("00").format(i));           // Create button w/ Name
             Utilities.updateFont(tableList[i], .05);
-            tableList[i].addActionListener(click);                                              // Add ActionListener
+            tableList[i].addActionListener(click);
 
             if (i < 5) { tableRowOne.add(tableList[i]);                                         // 1st Row: 1-4
             } else if (i < 8) { tableRowTwo.add(tableList[i]);                                  // 2nd Row: 5-7
@@ -56,23 +55,23 @@ public class HostDisplay extends JFrame {
 
         // Reserved Picture
         try {
-            reserved = new ImageIcon(ImageIO.read(new URL("http://icons.iconarchive.com/icons/blackvariant/button-ui-system-apps/128/X11-icon.png")));
-        } catch(MalformedURLException mue) {
-            mue.printStackTrace();
-        } catch(IOException ioe) {
-            ioe.printStackTrace();
+            reserved = new ImageIcon(ImageIO.read(new URL("http://goo.gl/J2IJ6v")));
+        } catch(MalformedURLException e) {
+            e.printStackTrace();
+        } catch(IOException e) {
+            e.printStackTrace();
         }
 
         /** Set Visible Last To Avoid Glitches/Flickering **/
-        setVisible(true);                                                                       // Show on Screen
-        setResizable(false);                                                                    // Size is NOT adjustable (Always Maximized)
+        setVisible(true);
+        setResizable(false);
     }
 
     /**
      * ButtonListener implementation to respond to button clicks
      */
     private class ButtonListener implements ActionListener {
-        JPanel panel;
+        JPanel resPanel;
         JTextField resName, resOrder;
         JFormattedTextField resDate, resTime, resPhone, resHead;
 
@@ -80,8 +79,8 @@ public class HostDisplay extends JFrame {
             for (int i=1; i<12; i++) {
                 if (event.getSource() == tableList[i]) {
                     if (!clicked[i]) {
-                        panel = new JPanel();
-                        panel.setLayout(new BoxLayout(panel, 1));
+                        resPanel = new JPanel();
+                        resPanel.setLayout(new BoxLayout(resPanel, 1));
 
                         try {                                                                   // Due to MaskFormatter
                             resName = new JTextField();
@@ -109,20 +108,14 @@ public class HostDisplay extends JFrame {
                             e.printStackTrace();
                         }
 
-                        panel.add(resName);
-                        panel.add(Box.createRigidArea(new Dimension(0, 5)));
-                        panel.add(resDate);
-                        panel.add(Box.createRigidArea(new Dimension(0,5)));
-                        panel.add(resTime);
-                        panel.add(Box.createRigidArea(new Dimension(0, 5)));
-                        panel.add(resPhone);
-                        panel.add(Box.createRigidArea(new Dimension(0,5)));
-                        panel.add(resHead);
-                        panel.add(Box.createRigidArea(new Dimension(0,5)));
-                        panel.add(resOrder);
+                        Utilities.multiAdd(resPanel, resName, Box.createRigidArea(new Dimension(10, 0)),
+                                resDate, Box.createRigidArea(new Dimension(10, 0)),
+                                resTime, Box.createRigidArea(new Dimension(10, 0)),
+                                resPhone, Box.createRigidArea(new Dimension(10, 0)),
+                                resHead, Box.createRigidArea(new Dimension(10, 0)), resOrder);
 
                         int response = JOptionPane.showConfirmDialog(null,
-                                panel,
+                                resPanel,
                                 "Reservation Info for " + tableList[i].getText(),
                                 JOptionPane.OK_CANCEL_OPTION,
                                 JOptionPane.PLAIN_MESSAGE);
@@ -151,8 +144,9 @@ public class HostDisplay extends JFrame {
 //                        System.out.println(Utilities.validateName(resName.getText()));
 
                         String[] options = {"Edit", "Save", "Cancel", "Close Dialog"};
-                        int response = JOptionPane.showOptionDialog(null, panel, "Showing Reservation Info for " + tableList[i].getText(),
+                        int response = JOptionPane.showOptionDialog(null, resPanel, "Showing Reservation Info for " + tableList[i].getText(),
                                 0, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
+
                         while (response == 0) {                                             // EDIT
                             resName.setEditable(true);
                             resDate.setEditable(true);
@@ -160,7 +154,7 @@ public class HostDisplay extends JFrame {
                             resPhone.setEditable(true);
                             resHead.setEditable(true);
                             resOrder.setEditable(true);
-                            response = JOptionPane.showOptionDialog(null, panel, "Showing Reservation Info for " + tableList[i].getText(),
+                            response = JOptionPane.showOptionDialog(null, resPanel, "Showing Reservation Info for " + tableList[i].getText(),
                                     0, JOptionPane.PLAIN_MESSAGE, null, options, options[2]);
                         }
 
@@ -184,6 +178,6 @@ public class HostDisplay extends JFrame {
     } // ButtonListener
 
     public static void main(String[] args) throws Exception {
-        HostDisplay hDisplay = new HostDisplay();
+        new HostDisplay();
     }
 }
