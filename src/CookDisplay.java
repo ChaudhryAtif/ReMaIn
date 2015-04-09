@@ -89,12 +89,12 @@ public class CookDisplay extends JFrame {
         // Create, Populate, and Update Looks of Order Table
         //*********************************************************************//
         Object[] orderColumns = {"Order ID", "Table", "Order Detail", "Time Ordered", "Notes", "Order Status"};
-        Object[][] orderData = {
+        Object[][] orderData = OrderManager.getOrders();/*{
                 {"001", "11", "Pizza, Juice, Fries, Soda", "11:10", "Extra Cheese", "NEW"},
                 {"002", "07", "Juice, Fries, Soda, Pizza", "11:30", "No Toppings", "STARTED"},
                 {"003", "09", "Fries, Soda, Pizza, Juice", "11:55", "Chicago Style", "READY"},
                 {"004", "08", "Soda, Pizza, Juice, Fries", "12:15", "", "HELP"},
-        };
+        };*/
         orderTable = new JTable() {
             public boolean isCellEditable(int r, int c) { return false; }
         };
@@ -117,12 +117,12 @@ public class CookDisplay extends JFrame {
         // Create, Populate, and Update Looks of Inventory Table
         //*********************************************************************//
         Object[] inventoryColumns = {"Order ID", "Item Description", "Quantity Needed", "Quantity In Stock", "Notes", "Status"};
-        Object[][] inventoryData = {
+        Object[][] inventoryData = InventoryManager.getInventoryItems(); /*{
                 {"001", "Eggs", "20", "10", "Urgent", "PENDING"},
                 {"002", "Cheese", "05", "01", "", "ORDERED"},
                 {"003", "Bagels", "25", "03", "ORDER or DIE", "PENDING"},
                 {"004", "Bread", "25", "15", "Take Yo Time", "CANCELED"}
-        };
+        };*/
 
         inventoryTable = new JTable() {
             @Override
@@ -202,13 +202,13 @@ public class CookDisplay extends JFrame {
                 tableMsg.setText("");
                 if (!tblBtnHndlr.isInputEmpty(tableMsg, jInputFields)
                         && !tblBtnHndlr.isTableEmpty(inventoryTable, tableMsg)) {
-                    tblBtnHndlr.updateRow(inventoryTable, tableMsg, jInputFields);
+                    tblBtnHndlr.updateRow(inventoryTable, tableMsg, new JLabel("inventoryTable"), jInputFields);
                     tblBtnHndlr.clearTableInput(inventoryTable, tableMsg, jInputFields);
                 }
             }
             if (event.getSource() == removeItm) {
                 if (!tblBtnHndlr.isTableEmpty(inventoryTable, tableMsg)) {
-                    tblBtnHndlr.removeRow(inventoryTable, tableMsg);
+                    tblBtnHndlr.removeRow(inventoryTable, tableMsg, new JLabel("inventoryTable"));
                     tblBtnHndlr.clearTableInput(inventoryTable, tableMsg, jInputFields);
                 }
             }

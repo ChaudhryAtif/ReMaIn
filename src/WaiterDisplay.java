@@ -117,13 +117,13 @@ public class WaiterDisplay extends JFrame {
         //*********************************************************************//
         // Create, Populate, and Update Looks of Order Table
         //*********************************************************************//
-        Object[][] orderData = {
+        Object[][] orderData = OrderManager.getOrders();/*{
                 {"001", "11", "Pizza, Juice, Fries, Soda", "11:10", "Extra Cheese", "NEW"},
                 {"002", "07", "Juice, Fries, Soda, Pizza", "11:30", "No Toppings", "STARTED"},
                 {"003", "09", "Fries, Soda, Pizza, Juice", "11:55", "Chicago Style", "READY"},
                 {"004", "08", "Soda, Pizza, Juice, Fries", "12:15", "", "HELP"},
                 {"005", "10", "Pizza, Juice, Fries, Soda", "12:45", "", ""}
-        };
+        };*/
         Object[] orderColumns = {"Order ID", "Table", "Order Detail", "Time Ordered", "Notes", "Order Status"};
         orderTable = new JTable() {
             public boolean isCellEditable(int r, int c) { return false; }
@@ -272,13 +272,13 @@ public class WaiterDisplay extends JFrame {
             if (event.getSource() == updateOrd) {
                 tableMsg.setText("");
                 if (!tblBtnHndlr.isInputEmpty(tableMsg, orderId, orderTableNo, orderInfo, orderTime)) {
-                    tblBtnHndlr.updateRow(orderTable, tableMsg, jInputFields);
+                    tblBtnHndlr.updateRow(orderTable, tableMsg, new JLabel("orderTable"), jInputFields);
                     tblBtnHndlr.clearTableInput(orderTable, tableMsg, jInputFields);
                 }
             }
             if (event.getSource() == removeOrd) {
                 if (!tblBtnHndlr.isTableEmpty(orderTable, tableMsg)) {
-                    tblBtnHndlr.removeRow(orderTable, tableMsg);
+                    tblBtnHndlr.removeRow(orderTable, tableMsg, new JLabel("orderTable"));
                     tblBtnHndlr.clearTableInput(orderTable, tableMsg, jInputFields);
                 }
             }

@@ -86,7 +86,10 @@ public class TableButtonHandler {
     public void resetOrder(JTable table, JLabel tableMsg) {
         if (!isTableEmpty(table, tableMsg)) {
             DefaultTableModel model = (DefaultTableModel) table.getModel();
-            model.setValueAt("NEW", table.getSelectedRow(), 5);
+            String ID = (String) model.getValueAt(table.getSelectedRow(), 0);
+            String status = "NEW";
+            model.setValueAt(status, table.getSelectedRow(), 5);
+            OrderManager.setStatus(ID, status);
             table.clearSelection();
         }
     }
@@ -99,7 +102,10 @@ public class TableButtonHandler {
     public void startOrder(JTable table, JLabel tableMsg) {
         if (!isTableEmpty(table, tableMsg)) {
             DefaultTableModel model = (DefaultTableModel) table.getModel();
-            model.setValueAt("STARTED", table.getSelectedRow(), 5);
+            String ID = (String) model.getValueAt(table.getSelectedRow(), 0);
+            String status = "STARTED";
+            model.setValueAt(status, table.getSelectedRow(), 5);
+            OrderManager.setStatus(ID, status);
             table.clearSelection();
         }
     }
@@ -112,7 +118,10 @@ public class TableButtonHandler {
     public void readyOrder(JTable table, JLabel tableMsg) {
         if (!isTableEmpty(table, tableMsg)) {
             DefaultTableModel model = (DefaultTableModel) table.getModel();
-            model.setValueAt("READY", table.getSelectedRow(), 5);
+            String ID = (String) model.getValueAt(table.getSelectedRow(), 0);
+            String status = "READY";
+            model.setValueAt(status, table.getSelectedRow(), 5);
+            OrderManager.setStatus(ID, status);
             table.clearSelection();
         }
     }
@@ -125,7 +134,10 @@ public class TableButtonHandler {
     public void helpOrder(JTable table, JLabel tableMsg) {
         if (!isTableEmpty(table, tableMsg)) {
             DefaultTableModel model = (DefaultTableModel) table.getModel();
-            model.setValueAt("HELP", table.getSelectedRow(), 5);
+            String ID = (String) model.getValueAt(table.getSelectedRow(), 0);
+            String status = "HELP";
+            model.setValueAt(status, table.getSelectedRow(), 5);
+            OrderManager.setStatus(ID, status);
             table.clearSelection();
         }
     }
@@ -154,8 +166,10 @@ public class TableButtonHandler {
         }
         if (tableName.getText().equals("orderTable")) {
             tableValues[col] = "NEW";
+            OrderManager.addOrder(tableValues);
         } else {
             tableValues[col] = "PENDING";
+            InventoryManager.addInventoryItem(tableValues);
         }
 
         model.addRow(tableValues);
@@ -165,15 +179,29 @@ public class TableButtonHandler {
      * Gets and Updates values of the selected table's row from the inputFields
      * @param table         JTable of the selected row
      * @param tableMsg      JLabel (to use for isTableEmpty)
+     * @param tableName     JLabel to check if it's order or inventory table (for status)
      * @param inputFields   JTextField(s) to get the value from
      */
-    public void updateRow(JTable table, JLabel tableMsg, JTextField... inputFields) {
+    public void updateRow(JTable table, JLabel tableMsg, JLabel tableName, JTextField... inputFields) {
         if (!isTableEmpty(table, tableMsg)) {
             int col = 0;
+            String ID = "";
             DefaultTableModel model = (DefaultTableModel) table.getModel();
+            String tableValues[] = new String[inputFields.length + 1];
             for (JTextField field : inputFields) {
+            	if (col == 0) { ID = field.getText(); }
                 model.setValueAt(field.getText(), table.getSelectedRow(), col);
+                tableValues[col] = field.getText();
                 col++;
+            }
+            
+            if (ID != "" ) {
+            	if (tableName.getText().equals("orderTable")) {
+            		OrderManager.updateOrder(ID, tableValues);
+            	}
+            	else {
+            		InventoryManager.updateItem(ID, tableValues);
+            	}
             }
         }
     }
@@ -182,9 +210,17 @@ public class TableButtonHandler {
      * Removes the selected row from the table
      * @param table         JTable of the selected row
      * @param tableMsg      JLabel (to use for isTableEmpty)
+     * @param tableName     JLabel to check if it's order or inventory table (for status)
      */
-    public void removeRow(JTable table, JLabel tableMsg) {
+    public void removeRow(JTable table, JLabel tableMsg, JLabel tableName) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.removeRow(table.getSelectedRow());
+        String ID = (String) model.getValueAt(table.getSelectedRow(), 0);
+        if (tableName.getText().equals("orderTable")) {
+        	OrderManager.removeOrder(ID);
+        }
+        else {
+        	InventoryManager.removeInventoryItem(ID);
+        }
     }
 }

@@ -1,39 +1,56 @@
-import java.util.Comparator;
 
-public class Order extends Exception {
-    /*
-    *    Constructor
-    */
-    public Order(int orderID, String orderInfo, int tableNum, String waiter, String timePlaced, int heads, String additionalInfo) {
-        this.orderID = orderID;
-        this.orderInfo = orderInfo;
-        this.tableNum = tableNum;
-        this.waiter = waiter;
-        this.timePlaced = timePlaced;
-        this.heads = heads;
-        this.additionalInfo = additionalInfo;
-    }
-    
-    /*
-    *    Getters
-    */
-    public int getOrderID() { return orderID; }
-    public String getOrderInfo() { return orderInfo; }
-    public int getTableNum() { return tableNum; }
-    public String getWaiter() { return waiter; }
-    public String getTimePlaced() { return timePlaced; }
-    public int getHeads() { return heads; }
-    public String getAdditionalInfro() { return additionalInfo; }
-
-    /*
-    *    Private Variables
-    */
-    private int orderID;             // ID of the order
+public class Order {
+	
+	//*************************************************
+	// Private
+	//*************************************************
+	private String orderID;          // ID of the order
+    private String orderTableNo;     // Table associated with the order
     private String orderInfo;        // String that represents the order information
-    private int tableNum;            // Table associated with the order
+    private String orderTime;        // Time of the order (Requires military time in form 99:99)
+    private String orderNotes;       // Additional information about the order
     private String status;           // Status of the order
-    private String waiter;           // Waiter associated with the order
-    private String timePlaced;       // Time of the order (Requires military time in form 99:99)
-    private int heads;               // Number of customers in the order
-    private String additionalInfo;   // Additional information about the order
+    
+    //************************************************
+  	// Public 
+  	//************************************************  
+    /**
+     * Construct an Order
+     * @param tableValues 	An array of values for the Order
+     */
+	public Order(String tableValues[]) {
+		update(tableValues);
+	}
+    
+	/**
+	 * Update the values in the order
+	 * @param tableValues 	An array of values to update the order
+	 */
+	public void update(String tableValues[]) {
+		this.orderID = tableValues[0];
+	    this.orderInfo = tableValues[1];
+	    this.orderTableNo = tableValues[2];
+	    this.orderTime = tableValues[3];
+	    this.orderNotes = tableValues[4];
+	    this.status = tableValues[5];
+	}
+	
+	/**
+	 * Set the status of the Order
+	 * @param status		The new status of the Order
+	 */
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+    /**
+    * Getters
+    */
+    public String getOrderID() { return orderID; }
+    public String getOrderTableNo() { return orderTableNo; }
+    public String getOrderInfo() { return orderInfo; }
+    public String getOrderTime() { return orderTime; }
+    public String getOrderNotes() { return orderNotes; }
+    public String getStatus() { return status; }
+    
 }

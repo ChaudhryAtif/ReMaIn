@@ -1,33 +1,46 @@
 public class InventoryItem {
-    /*
-    *   Constructor
-    */
-    public InventoryItem(int ID, String item, int quantityNeeded, int currentStock, String notes, String status) {
-        this.item = item;
-        this.quantityNeeded = quantityNeeded;
-        this.currentStock = currentStock;
-        this.notes = notes;
-        this.ID = ID;
-        this.status = status;
+
+	//************************************************
+	// Private
+	//************************************************
+	private String itemID;
+    private String itemName;
+    private String itemQty;
+    private String itemStock;
+    private String itemNotes;
+    private String status;
+	
+	//************************************************
+	// Public 
+	//************************************************
+    /**
+     * Construct an InventoryItem
+     * @param tableValues 	An array of values for the item
+     */
+    public InventoryItem(String tableValues[]) {
+    	update(tableValues);
     }
     
-    /*
-    *   Getters
-    */
-    public int getID() { return ID; }
-    public String getItem() { return item; }
-    public int getQuantityNeeded() { return quantityNeeded; }
-    public int getCurrentStock() { return currentStock; }
-    public String getNotes() { return notes; }
-    public String getStatus() { return status; }
+    /**
+     * Update the item
+     * @param tableValues 	An array of values to update the item
+     */
+    public void update(String tableValues[]) {
+    	this.itemID = tableValues[0];
+    	this.itemName = tableValues[1];
+    	this.itemQty = tableValues[2];
+    	this.itemStock = tableValues[3];
+    	this.itemNotes = tableValues[4];
+    	this.status = tableValues[5];
+    }
     
-    /*
-    *   Private Variables
-    */
-    private int ID;
-    private String item;
-    private int quantityNeeded;
-    private int currentStock;
-    private String notes;
-    private String status;
+	/**
+	 * Getters
+	 */
+    public String getItemID() { return itemID; }
+    public String getItemName() { return itemName; }
+    public String getItemQty() { return itemQty; }
+    public String getItemStock() { return itemStock; }
+    public String getItemNotes() { return itemNotes; }
+    public String getStatus() { return status; }
 }
