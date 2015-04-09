@@ -5,7 +5,7 @@ public class OrderManager {
 	//************************************************
 	// Private
 	//************************************************
-    private static ArrayList<Order> orders;
+    private static ArrayList<Order> orders = new ArrayList<Order>();
     
 	private static Order getOrder(String orderID) {
     	for (Order order : orders) {

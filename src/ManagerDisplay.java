@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -64,12 +65,12 @@ public class ManagerDisplay extends JFrame {
         //*********************************************************************//
         // Create, Populate, and Update Looks of Inventory Table
         //*********************************************************************//
-        Object[][] inventoryData = {
+        Object[][] inventoryData = InventoryManager.getInventoryItems(); /*{
                 {"001", "Eggs", "20", "10", "Urgent", "PENDING", false},
                 {"002", "Cheese", "05", "01", "", "ORDERED", false},
                 {"003", "Bagels", "25", "03", "ORDER or DIE", "PENDING", false},
                 {"004", "Bread", "25", "15", "Take Yo Time", "CANCELED", false}
-        };
+        };*/
         Object[] inventoryColumns = {"Order ID", "Item Description", "Quantity Needed",
                 "Quantity In Stock","Status", "Notes", "Select Item", "Order Quantity"};
 

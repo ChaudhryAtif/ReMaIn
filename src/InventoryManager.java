@@ -5,7 +5,7 @@ public class InventoryManager {
 	//************************************************
 	// Private
 	//************************************************
-	private static ArrayList<InventoryItem> inventoryItems;
+	private static ArrayList<InventoryItem> inventoryItems = new ArrayList<InventoryItem>();
 	
 	private static InventoryItem getItem(String itemID) {
     	for (InventoryItem item : inventoryItems) {
