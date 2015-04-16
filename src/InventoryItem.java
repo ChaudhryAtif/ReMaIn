@@ -34,6 +34,14 @@ public class InventoryItem {
     	this.status = tableValues[5];
     }
     
+    /**
+	 * Set the status of the item
+	 * @param status		The new status of the item
+	 */
+	public void setStatus(String status) {
+		this.status = status;
+	}
+    
 	/**
 	 * Getters
 	 */

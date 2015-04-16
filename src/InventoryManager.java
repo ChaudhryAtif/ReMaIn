@@ -45,11 +45,21 @@ public class InventoryManager {
     }
     
     /**
+     * Set the status of the item
+     * @param itemID		The ID of the item to be changed
+     * @param status		The new status of the item
+     */
+    public static void setStatus(String itemID, String status) {
+    	InventoryItem item = getItem(itemID);
+    	if (item != null) { item.setStatus(status); }
+    }
+    
+    /**
      * Returns all of the InventoryItems
      * @return				All of the InventoryItems in the ArrayList
      */
     public static Object[][] getInventoryItems() {
-    	Object[][] items = {};
+    	Object[][] items = {{}};
     	int count = 0;
     	for (InventoryItem item : inventoryItems) {
     		items[count++] = new Object[]{item.getItemID(), item.getItemName(), item.getItemQty(), item.getItemStock(), item.getItemNotes(), item.getStatus()};

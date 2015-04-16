@@ -138,7 +138,9 @@ public class ManagerDisplay extends JFrame {
 
                     if (check) {
                         DefaultTableModel model = (DefaultTableModel) inventoryTable.getModel();
-                        model.setValueAt("CANCELED", line, 5);
+                        String status = "CANCELED";
+                        model.setValueAt(status, line, 5);
+                        InventoryManager.setStatus((String) model.getValueAt(inventoryTable.getSelectedRow(), 0), status);
                     }
                 }
                 selectAll = true;
@@ -161,7 +163,9 @@ public class ManagerDisplay extends JFrame {
                             model.setValueAt(model.getValueAt(line, 2), line, 7);
                             System.out.println(model.getValueAt(line, 2).toString());
                         }
-                        model.setValueAt("ORDERED", line, 5);
+                        String status = "ORDERED";
+                        model.setValueAt(status, line, 5);
+                        InventoryManager.setStatus((String) model.getValueAt(inventoryTable.getSelectedRow(), 0), status);
                     }
                 }
                 selectAll = true;
