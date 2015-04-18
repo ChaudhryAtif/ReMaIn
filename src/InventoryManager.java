@@ -59,11 +59,12 @@ public class InventoryManager {
      * @return				All of the InventoryItems in the ArrayList
      */
     public static Object[][] getInventoryItems() {
-    	Object[][] items = {{}};
+    	Object[][] items = new Object[inventoryItems.size()][6];
     	int count = 0;
     	for (InventoryItem item : inventoryItems) {
     		items[count++] = new Object[]{item.getItemID(), item.getItemName(), item.getItemQty(), item.getItemStock(), item.getItemNotes(), item.getStatus()};
     	}
+    	if (count == 0) return new Object[][]{};
     	return items;
     }
 }

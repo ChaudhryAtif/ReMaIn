@@ -214,7 +214,6 @@ public class TableButtonHandler {
      */
     public void removeRow(JTable table, JLabel tableMsg, JLabel tableName) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
-        model.removeRow(table.getSelectedRow());
         String ID = (String) model.getValueAt(table.getSelectedRow(), 0);
         if (tableName.getText().equals("orderTable")) {
         	OrderManager.removeOrder(ID);
@@ -222,5 +221,6 @@ public class TableButtonHandler {
         else {
         	InventoryManager.removeInventoryItem(ID);
         }
+        model.removeRow(table.getSelectedRow());
     }
 }

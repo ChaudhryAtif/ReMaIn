@@ -59,11 +59,12 @@ public class OrderManager {
      * @return				All of the Orders in the ArrayList
      */
     public static Object[][] getOrders() {
-    	Object[][] tempOrders = {{}};
+    	Object[][] tempOrders = new Object[orders.size()][6];
     	int count = 0;
     	for (Order order : orders) {
     		tempOrders[count++] = new Object[]{order.getOrderID(), order.getOrderTableNo(), order.getOrderInfo(), order.getOrderTime(), order.getOrderNotes(), order.getStatus()};
     	}
+    	if (count == 0) return new Object[][]{};
     	return tempOrders;
     }
 }
