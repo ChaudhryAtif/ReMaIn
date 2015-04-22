@@ -16,8 +16,6 @@ public class LoginDisplay extends JFrame {
     public LoginDisplay() {
         /** Add Quit Button, as well as Time and Date **/
         Utilities.startDayInfo(this, dayInfo, "Welcome!", timeDate, .11, true);
-        // TODO: Check for secured password file, if none, initiate users (cook, etc)
-        // TODO: Move passwords to a secure file                            // Pass Encryptor: http://goo.gl/dxfSrn
 
         // Create instances of User Class
         User cook_user = new User("Cook","cooks");
@@ -53,7 +51,7 @@ public class LoginDisplay extends JFrame {
      */
     public class ButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent event) {
-            pwdVerifier.readFile(new File("UserPass.txt"));
+//            pwdVerifier.readFile(new File("UserPass.txt"));
 
             if (event.getSource() == manager) {
 //                if (pwdVerifier.verifyPwd("manager")) {                        // If the password is correct, open Display
