@@ -137,12 +137,12 @@ public class WaiterDisplay extends JFrame {
 
         foodStatus.setLayout(new BorderLayout());
         waiterCBox.setModel(new DefaultComboBoxModel(new String[]{"Max", "Connor", "Connie", "Maxie"}));
-        foodCBox.setModel(new DefaultComboBoxModel(new String[] {"Appetizer", "Soup", "Dessert"}));
+        statusCBox.setModel(new DefaultComboBoxModel(new String[]{"Appetizer", "Soup", "Dessert"}));
 
 
         Utilities.multiUpdateFont(.02, addFood = new JButton("Add"), updateFood = new JButton("Update"),
                 removeFood = new JButton("Remove"), clearFood = new JButton("Clear Input"));
-        Utilities.multiAdd(foodCtrls, waiterCBox, foodTableNo, foodHeadServing, foodNotes, foodCBox,
+        Utilities.multiAdd(foodCtrls, waiterCBox, foodTableNo, foodHeadServing, foodNotes, statusCBox,
                 Box.createRigidArea(new Dimension(10, 0)), addFood,
                 Box.createRigidArea(new Dimension(10, 0)), updateFood,
                 Box.createRigidArea(new Dimension(10, 0)), removeFood,
@@ -153,9 +153,9 @@ public class WaiterDisplay extends JFrame {
         // Create, Populate, and Update Looks of Food Table
         //*********************************************************************//
         Object[][] foodData = {
-                {"Max", "11", "3", "", "Desert"},
+                {"Max", "11", "3", "Test", "Dessert"},
                 {"Connie", "02", "5", "", "Appetizer"},
-                {"Maxie", "05", "2", "", "Soup"}
+                {"Maxie", "05", "2", "Working", "Soup"}
         };
         Object[] foodColumns = {"Waiter", "Table", "Heads Serving", "Notes", "Food Status"};
 
@@ -171,36 +171,36 @@ public class WaiterDisplay extends JFrame {
 
         //*********************************************************************//
         //*********************************************************************//
-
-        tablesView.setLayout(new GridLayout());
-
-        // Create + Set Table Row(s) Layout
-        JPanel tableRowOne = new JPanel();
-        JPanel tableRowTwo = new JPanel();
-        JPanel tableRowThree = new JPanel();
-        tableRowOne.setLayout(new GridLayout(4, 0, 0, 0));
-        tableRowTwo.setLayout(new GridLayout(3, 0, 0, 0));
-        tableRowThree.setLayout(new GridLayout(4, 0, 0, 0));
-
-        //*********************************************************************//
-        // Create, Populate, and Update Looks of Tables' Layout
-        //*********************************************************************//
-        // Create Table Buttons (x11), Add ActionListener to them and then Add them to Rows
-        for (int i=1; i < 12; i++) {
-            tableList[i] = new JButton("Table " + new DecimalFormat("00").format(i));           // Create button w/ Name
-            Utilities.updateFont(tableList[i], .05);
-            tableList[i].addActionListener(click);
-
-            if (i < 5) { tableRowOne.add(tableList[i]);                                         // 1st Row: 1-4
-            } else if (i < 8) { tableRowTwo.add(tableList[i]);                                  // 2nd Row: 5-7
-            } else tableRowThree.add(tableList[i]);                                             // 3rd Row: 8-11
-        }
-
-        // Add Rows to Table Panel
-        tables.setLayout(new GridLayout(0, 3, 0, 0));
-
-        Utilities.multiAdd(tables, tableRowOne, tableRowTwo, tableRowThree);
-        tablesView.add(tables);
+//
+//        tablesView.setLayout(new GridLayout());
+//
+//        // Create + Set Table Row(s) Layout
+//        JPanel tableRowOne = new JPanel();
+//        JPanel tableRowTwo = new JPanel();
+//        JPanel tableRowThree = new JPanel();
+//        tableRowOne.setLayout(new GridLayout(4, 0, 0, 0));
+//        tableRowTwo.setLayout(new GridLayout(3, 0, 0, 0));
+//        tableRowThree.setLayout(new GridLayout(4, 0, 0, 0));
+//
+//        //*********************************************************************//
+//        // Create, Populate, and Update Looks of Tables' Layout
+//        //*********************************************************************//
+//        // Create Table Buttons (x11), Add ActionListener to them and then Add them to Rows
+//        for (int i=1; i < 12; i++) {
+//            tableList[i] = new JButton("Table " + new DecimalFormat("00").format(i));           // Create button w/ Name
+//            Utilities.updateFont(tableList[i], .05);
+//            tableList[i].addActionListener(click);
+//
+//            if (i < 5) { tableRowOne.add(tableList[i]);                                         // 1st Row: 1-4
+//            } else if (i < 8) { tableRowTwo.add(tableList[i]);                                  // 2nd Row: 5-7
+//            } else tableRowThree.add(tableList[i]);                                             // 3rd Row: 8-11
+//        }
+//
+//        // Add Rows to Table Panel
+//        tables.setLayout(new GridLayout(0, 3, 0, 0));
+//
+//        Utilities.multiAdd(tables, tableRowOne, tableRowTwo, tableRowThree);
+//        tablesView.add(tables);
         //*********************************************************************//
         //*********************************************************************//
         //*********************************************************************//
@@ -208,7 +208,7 @@ public class WaiterDisplay extends JFrame {
         tabbedPane.setFont(new Font("SansSerif", Font.BOLD, 25));
         tabbedPane.add("<html><body leftmargin=15 topmargin=18 marginwidth=15 marginheight=15>Manage Orders</body></html>", manageOrders);
         tabbedPane.add("<html><body leftmargin=15 topmargin=18 marginwidth=15 marginheight=15>Food Status</body></html>", foodStatus);
-        tabbedPane.add("<html><body leftmargin=15 topmargin=18 marginwidth=15 marginheight=15>Table View</body></html>", tablesView);
+//        tabbedPane.add("<html><body leftmargin=15 topmargin=18 marginwidth=15 marginheight=15>Table View</body></html>", tablesView);
         add(tabbedPane, BorderLayout.CENTER);
 
         Utilities.updateFont(tableMsg, .015);
@@ -236,9 +236,9 @@ public class WaiterDisplay extends JFrame {
             public void mouseClicked(MouseEvent evt) { foodTableMouseClicked(evt); }
         });
 
-        /** Set Visible Last To Avoid Glitches/Flickering **/
-        setVisible(true);                                                                 // Show on Screen
-        setResizable(false);                                                              // Size is NOT adjustable (Always Maximized)
+        /** Set These Last To Avoid Glitches/Flickering **/
+        setVisible(true);
+        setResizable(false);                                                              // (Always Maximized)
     }
 
     private void foodTableMouseClicked(MouseEvent evt) {
@@ -247,7 +247,7 @@ public class WaiterDisplay extends JFrame {
         foodTableNo.setText(model.getValueAt(foodTable.getSelectedRow(), 1).toString());
         foodHeadServing.setText(model.getValueAt(foodTable.getSelectedRow(), 2).toString());
         foodNotes.setText(model.getValueAt(foodTable.getSelectedRow(), 3).toString());
-        foodCBox.setSelectedItem(model.getValueAt(foodTable.getSelectedRow(), 4).toString());
+        statusCBox.setSelectedItem(model.getValueAt(foodTable.getSelectedRow(), 4).toString());
     }
 
     /**
@@ -259,9 +259,6 @@ public class WaiterDisplay extends JFrame {
             //*********************************************************************//
             // Order Table
             //*********************************************************************//
-            if (event.getSource() == clearOrd) {
-                tblBtnHndlr.clearTableInput(orderTable, tableMsg, jInputFields);
-            }
             if (event.getSource() == addOrd) {
                 tableMsg.setText("");
                 if (!tblBtnHndlr.isInputEmpty(tableMsg, orderId, orderTableNo, orderInfo, orderTime)) {
@@ -281,6 +278,35 @@ public class WaiterDisplay extends JFrame {
                     tblBtnHndlr.removeRow(orderTable, tableMsg, new JLabel("orderTable"));
                     tblBtnHndlr.clearTableInput(orderTable, tableMsg, jInputFields);
                 }
+            }
+            if (event.getSource() == clearOrd) {
+                tblBtnHndlr.clearTableInput(orderTable, tableMsg, jInputFields);
+            }
+
+            //*********************************************************************//
+            // Food Table
+            //*********************************************************************//
+            if (event.getSource() == addFood) {
+                tableMsg.setText("");
+                if (!tblBtnHndlr.isInputEmpty(tableMsg, foodTableNo, foodHeadServing)) {
+                    tblBtnHndlr.addFood(foodTable, tableMsg, waiterCBox, statusCBox, foodTableNo, foodHeadServing, foodNotes);
+                }
+            }
+            if (event.getSource() == updateFood) {
+                tableMsg.setText("");
+                if (!tblBtnHndlr.isInputEmpty(tableMsg, foodTableNo, foodHeadServing)) {
+                    tblBtnHndlr.updateFood(foodTable, tableMsg, waiterCBox, statusCBox, foodTableNo, foodHeadServing, foodNotes);
+                }
+
+            }
+            if (event.getSource() == removeFood) {
+                if (!tblBtnHndlr.isTableEmpty(foodTable, tableMsg)) {
+                    tblBtnHndlr.removeRow(orderTable, tableMsg, new JLabel("orderTable"));
+                    tblBtnHndlr.clearFood(foodTable, tableMsg, waiterCBox, statusCBox, foodTableNo, foodHeadServing, foodNotes);
+                }
+            }
+            if (event.getSource() == clearFood) {
+                tblBtnHndlr.clearFood(foodTable, tableMsg, waiterCBox, statusCBox, foodTableNo, foodHeadServing, foodNotes);
             }
         }
     }
