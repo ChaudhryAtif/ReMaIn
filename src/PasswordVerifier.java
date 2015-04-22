@@ -20,7 +20,6 @@ public class PasswordVerifier {
     public void readFile(File file) {
         try {
             Scanner scanner = new Scanner(file);
-
             while (scanner.hasNext()) { tokens = scanner.nextLine().split(","); }
         } catch (IOException e) {
             e.printStackTrace();
@@ -42,12 +41,12 @@ public class PasswordVerifier {
         }
 
         pwd.setDocument(new InputLimit(10));
-        pwd.addAncestorListener(new RequestFocusListener(false));           // Move focus to PwdField
+        pwd.addAncestorListener(new RequestFocusListener(false));
         String givenPwd;
         do {
-            pwd.setText("");                                                // Reset Pass
+            pwd.setText("");
             diagResp = JOptionPane.showConfirmDialog(null, pwd, "Enter Password", JOptionPane.OK_CANCEL_OPTION);
-            givenPwd = getSecurePass(pwd.getPassword());                     // Convert given Pass to string
+            givenPwd = getSecurePass(pwd.getPassword());                    // Given Pass to string
 
             if (diagResp != JOptionPane.OK_OPTION) { return false; }        // If cancel/close is clicked, exit pwd prompt
         } while (!orgPwd.equals(givenPwd));
