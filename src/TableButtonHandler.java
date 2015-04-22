@@ -47,7 +47,7 @@ public class TableButtonHandler {
     }
 
     /**
-     * Clears the inputFields (and tableMsg) of the given table
+     * Clears the selection, inputFields (and tableMsg) of the given table
      * @param table         JTable to clear the fields of
      * @param tableMsg      JLabel to clear
      * @param inputFields   JTextfield(s) to be cleared
@@ -207,6 +207,53 @@ public class TableButtonHandler {
     }
 
     /**
+     * Adds a row to the table, with given information; Clears fields and selection when done
+     * @param table         JTable to add the row to
+     * @param tableMsg      JLabel to report any error
+     * @param waiterBox     List of waiter names
+     * @param statusBox     List of food statuses
+     * @param tableNo       Table No
+     * @param headServing   Head count
+     * @param notes         Additional Notes
+     */
+    public void addFood(JTable table, JLabel tableMsg, JComboBox waiterBox, JComboBox statusBox,
+                           JTextField tableNo, JTextField headServing, JTextField notes) {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        String[] tableValues = {
+                waiterBox.getSelectedItem().toString(),
+                tableNo.getText(),
+                headServing.getText(),
+                notes.getText(),
+                statusBox.getSelectedItem().toString()
+        };
+        model.addRow(tableValues);
+
+        clearFood(table, tableMsg, waiterBox, statusBox, tableNo, headServing, notes);
+    }
+
+    /**
+     * Gets and Updates values of the selected table's row from given fields; Clears fields and selection when done
+     * @param table         JTable to add the row to
+     * @param tableMsg      JLabel to report any error
+     * @param waiterBox     List of waiter names
+     * @param statusBox     List of food statuses
+     * @param tableNo       Table No
+     * @param headServing   Head count
+     * @param notes         Additional Notes
+     */
+    public void updateFood(JTable table, JLabel tableMsg, JComboBox waiterBox, JComboBox statusBox,
+                           JTextField tableNo, JTextField headServing, JTextField notes) {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setValueAt(waiterBox.getSelectedItem(), table.getSelectedRow(), 0);
+        model.setValueAt(tableNo.getText(), table.getSelectedRow(), 1);
+        model.setValueAt(headServing.getText(), table.getSelectedRow(), 2);
+        model.setValueAt(notes.getText(), table.getSelectedRow(), 3);
+        model.setValueAt(statusBox.getSelectedItem(), table.getSelectedRow(), 4);
+
+        clearFood(table, tableMsg, waiterBox, statusBox, tableNo, headServing, notes);
+    }
+
+    /**
      * Removes the selected row from the table
      * @param table         JTable of the selected row
      * @param tableMsg      JLabel (to use for isTableEmpty)
@@ -220,6 +267,25 @@ public class TableButtonHandler {
         }
         else {
         	InventoryManager.removeInventoryItem(ID);
+        }
+        model.removeRow(table.getSelectedRow());
+    }
+	
+    /**
+     * Clears the selection, inputFields (and tableMsg) of the given table
+     * @param table         JTable to add the row to
+     * @param tableMsg      JLabel to report any error
+     * @param waiterBox     List of waiter names
+     * @param statusBox     List of food statuses
+     * @param inputFields   JTextfield(s) to be cleared
+     */
+    public void clearFood(JTable table, JLabel tableMsg, JComboBox waiterBox, JComboBox statusBox, JTextField... inputFields) {
+        tableMsg.setText("");
+        table.clearSelection();
+        waiterBox.setSelectedIndex(0);
+        statusBox.setSelectedIndex(0);
+        for (JTextField field : inputFields) {
+            field.setText("");
         }
         model.removeRow(table.getSelectedRow());
     }
