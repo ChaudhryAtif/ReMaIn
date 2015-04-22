@@ -161,7 +161,7 @@ public class CookDisplay extends JFrame {
 
         inventoryTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
-                tblBtnHndlr.setTableInput(inventoryTable, itemId, itemName, itemQty, itemStock);
+                tblBtnHndlr.setTableInput(inventoryTable, itemId, itemName, itemQty, itemStock, itemNotes);
             }
         });
 
