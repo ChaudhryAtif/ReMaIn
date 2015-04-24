@@ -89,7 +89,7 @@ public class TableButtonHandler {
             String ID = (String) model.getValueAt(table.getSelectedRow(), 0);
             String status = "NEW";
             model.setValueAt(status, table.getSelectedRow(), 5);
-            OrderManager.setStatus(ID, status);
+//$            OrderManager.setStatus(ID, status);
             table.clearSelection();
         }
     }
@@ -105,7 +105,7 @@ public class TableButtonHandler {
             String ID = (String) model.getValueAt(table.getSelectedRow(), 0);
             String status = "STARTED";
             model.setValueAt(status, table.getSelectedRow(), 5);
-            OrderManager.setStatus(ID, status);
+//$            OrderManager.setStatus(ID, status);
             table.clearSelection();
         }
     }
@@ -121,7 +121,7 @@ public class TableButtonHandler {
             String ID = (String) model.getValueAt(table.getSelectedRow(), 0);
             String status = "READY";
             model.setValueAt(status, table.getSelectedRow(), 5);
-            OrderManager.setStatus(ID, status);
+//$            OrderManager.setStatus(ID, status);
             table.clearSelection();
         }
     }
@@ -137,7 +137,7 @@ public class TableButtonHandler {
             String ID = (String) model.getValueAt(table.getSelectedRow(), 0);
             String status = "HELP";
             model.setValueAt(status, table.getSelectedRow(), 5);
-            OrderManager.setStatus(ID, status);
+//$            OrderManager.setStatus(ID, status);
             table.clearSelection();
         }
     }
@@ -166,10 +166,10 @@ public class TableButtonHandler {
         }
         if (tableName.getText().equals("orderTable")) {
             tableValues[col] = "NEW";
-            OrderManager.addOrder(tableValues);
+//$            OrderManager.addOrder(tableValues);
         } else {
             tableValues[col] = "PENDING";
-            InventoryManager.addInventoryItem(tableValues);
+//$            InventoryManager.addInventoryItem(tableValues);
         }
 
         model.addRow(tableValues);
@@ -194,8 +194,8 @@ public class TableButtonHandler {
                 tableValues[col] = field.getText();
                 col++;
             }
-            
-            if (ID != "" ) {
+//$            
+/*            if (ID != "" ) {
             	if (tableName.getText().equals("orderTable")) {
             		OrderManager.updateOrder(ID, tableValues);
             	}
@@ -203,7 +203,7 @@ public class TableButtonHandler {
             		InventoryManager.updateItem(ID, tableValues);
             	}
             }
-        }
+*/        }
     }
 
     /**
@@ -261,14 +261,15 @@ public class TableButtonHandler {
      */
     public void removeRow(JTable table, JLabel tableMsg, JLabel tableName) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
-        String ID = (String) model.getValueAt(table.getSelectedRow(), 0);
+//$
+/*       String ID = (String) model.getValueAt(table.getSelectedRow(), 0);
         if (tableName.getText().equals("orderTable")) {
         	OrderManager.removeOrder(ID);
         }
         else {
         	InventoryManager.removeInventoryItem(ID);
         }
-        model.removeRow(table.getSelectedRow());
+*/        model.removeRow(table.getSelectedRow());
     }
 	
     /**
@@ -287,6 +288,5 @@ public class TableButtonHandler {
         for (JTextField field : inputFields) {
             field.setText("");
         }
-        model.removeRow(table.getSelectedRow());
     }
 }
