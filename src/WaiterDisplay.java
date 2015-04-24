@@ -36,7 +36,7 @@ public class WaiterDisplay extends JFrame {
 
     /** Table ComboBox? **/
     private JComboBox waiterCBox = new JComboBox();
-    private JComboBox foodCBox = new JComboBox();
+    private JComboBox statusCBox = new JComboBox();
 
     private ButtonListener click = new ButtonListener();
 
@@ -117,13 +117,14 @@ public class WaiterDisplay extends JFrame {
         //*********************************************************************//
         // Create, Populate, and Update Looks of Order Table
         //*********************************************************************//
-        Object[][] orderData = OrderManager.getOrders();/*{
+//$		Object[][] orderData = OrderManager.getOrders();
+        Object[][] orderData = {
                 {"001", "11", "Pizza, Juice, Fries, Soda", "11:10", "Extra Cheese", "NEW"},
                 {"002", "07", "Juice, Fries, Soda, Pizza", "11:30", "No Toppings", "STARTED"},
                 {"003", "09", "Fries, Soda, Pizza, Juice", "11:55", "Chicago Style", "READY"},
                 {"004", "08", "Soda, Pizza, Juice, Fries", "12:15", "", "HELP"},
-                {"005", "10", "Pizza, Juice, Fries, Soda", "12:45", "", ""}
-        };*/
+                {"005", "10", "Pizza, Juice, Fries, Soda", "12:45", "", "NEW"}
+        };
         Object[] orderColumns = {"Order ID", "Table", "Order Detail", "Time Ordered", "Notes", "Order Status"};
         orderTable = new JTable() {
             public boolean isCellEditable(int r, int c) { return false; }
