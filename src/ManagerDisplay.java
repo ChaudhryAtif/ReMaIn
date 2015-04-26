@@ -3,6 +3,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class ManagerDisplay extends JFrame {
     private JPanel dayInfo = new JPanel(), control = new JPanel();                  // Top (dayInfo), Bottom (control) Sections
@@ -14,12 +15,12 @@ public class ManagerDisplay extends JFrame {
     private JPanel inventoryClock = new JPanel();
     private JPanel inventoryCtrls = new JPanel();
     private JTable inventoryTable;
-    private JButton orderItem, cancelItem, removeItm, checkAll;                         // Inventory Table Buttons
+    private JButton orderItem, cancelItem, removeItm, checkAll;                     // Inventory Table Buttons
 
-    private JLabel timeDate = new JLabel(), timeDateInvtry = new JLabel();          // Dynamic Time & Date;
+    private JLabel timeDate = new JLabel(), timeDateInvtry = new JLabel();          // timeDate: Dynamic Time & Date;
 
     private JButton rButton, cButton, iButton;
-    private ButtonListener click = new ButtonListener();                    // Listener for Buttons
+    private ButtonListener click = new ButtonListener();
     private PasswordVerifier pwdVerifier = new PasswordVerifier();
 
     public static final String[] users = { "Cook", "Host", "Waiter", "Manager" };
@@ -39,12 +40,10 @@ public class ManagerDisplay extends JFrame {
         control.setLayout(new GridLayout(3, 1));
         JPanel manButtons = new JPanel(new GridLayout());
 
-        Utilities.updateFont(rButton = new JButton("Revenue"), .065);
-        Utilities.updateFont(cButton = new JButton("User Controls"), .065);
-        Utilities.updateFont(iButton = new JButton("Inventory"), .065);
-        manButtons.add(rButton);
-        manButtons.add(cButton);
-        manButtons.add(iButton);
+        Utilities.multiUpdateFont(.065,
+//                rButton = new JButton("Revenue"),
+                cButton = new JButton("User Controls"), iButton = new JButton("Inventory"));
+        Utilities.multiAdd(manButtons, cButton, iButton);
         control.add(manButtons);
         add(control, BorderLayout.CENTER);
 
@@ -55,20 +54,22 @@ public class ManagerDisplay extends JFrame {
         inventoryPanel.setLayout(new BorderLayout());
         JLabel orderStatus = new JLabel("Order Status:");
 //        Utilities.updateFont(orderStatus, .025);
-        Utilities.multiUpdateFont(.02, removeItm = new JButton("Remove"), checkAll = new JButton("Check All"),
+        Utilities.multiUpdateFont(.03, removeItm = new JButton("Remove"), checkAll = new JButton("Select All/None"),
                 cancelItem = new JButton("Cancel Item(s)"), orderItem = new JButton("Order Item(s)"));
-        Utilities.multiAdd(inventoryCtrls, removeItm, Box.createRigidArea(new Dimension(10, 0)),
+        Utilities.multiAdd(inventoryCtrls,
+//                removeItm, Box.createRigidArea(new Dimension(10, 0)),
                 checkAll, Box.createRigidArea(new Dimension(10, 0)),
                 cancelItem, Box.createRigidArea(new Dimension(10, 0)), orderItem);
 
         //*********************************************************************//
         // Create, Populate, and Update Looks of Inventory Table
         //*********************************************************************//
+//$		Object[][] inventoryData = InventoryManager.getInventoryItems();
         Object[][] inventoryData = {
-                {"001", "Eggs", "20", "10", "Urgent", "PENDING", false, ""},
-                {"002", "Cheese", "05", "01", "", "ORDERED", false, ""},
-                {"003", "Bagels", "25", "03", "ORDER or DIE", "PENDING", false, ""},
-                {"004", "Bread", "25", "15", "Take Yo Time", "CANCELED", false, ""}
+                {"001", "Eggs", "20", "10", "Urgent", "PENDING", false},
+                {"002", "Cheese", "05", "01", "", "ORDERED", false},
+                {"003", "Bagels", "25", "03", "ORDER or DIE", "PENDING", false},
+                {"004", "Bread", "25", "15", "Take Yo Time", "CANCELED", false}
         };
         Object[] inventoryColumns = {"Order ID", "Item Description", "Quantity Needed",
                 "Quantity In Stock","Status", "Notes", "Select Item", "Order Quantity"};
@@ -94,7 +95,6 @@ public class ManagerDisplay extends JFrame {
 
         inventoryPanel.add(inventoryCtrls, BorderLayout.NORTH);
         inventoryPanel.add(new JScrollPane(inventoryTable), BorderLayout.CENTER);
-
         inventoryFrame.add(inventoryPanel, BorderLayout.CENTER);
 
         //#####
@@ -107,8 +107,8 @@ public class ManagerDisplay extends JFrame {
         orderItem.addActionListener(click);
 
         /** Set Visible Last To Avoid Glitches/Flickering **/
-        setVisible(true);                                                                 // Show on Screen
-        setResizable(false);                                                              // Size is NOT adjustable (Always Maximized)
+        setVisible(true);
+        setResizable(false);
     }
 
     /**
@@ -122,9 +122,8 @@ public class ManagerDisplay extends JFrame {
             }
             if (event.getSource() == checkAll) {
                 int row = inventoryTable.getRowCount();
-                if (!selectAll) { selectAll = true; checkAll.setText("Check None");}
-                else { selectAll = false; checkAll.setText("Check All");}
 
+                selectAll = !selectAll;
                 for (int line = 0; line < row; line++) {
                     inventoryTable.setValueAt(selectAll, line, 6);
                 }
@@ -139,7 +138,9 @@ public class ManagerDisplay extends JFrame {
 
                     if (check) {
                         DefaultTableModel model = (DefaultTableModel) inventoryTable.getModel();
-                        model.setValueAt("CANCELED", line, 5);
+                        String status = "CANCELED";
+                        model.setValueAt(status, line, 5);
+//$                        InventoryManager.setStatus((String) model.getValueAt(inventoryTable.getSelectedRow(), 0), status);
                     }
                 }
                 selectAll = true;
@@ -156,13 +157,15 @@ public class ManagerDisplay extends JFrame {
                     if (check) {
                         DefaultTableModel model = (DefaultTableModel) inventoryTable.getModel();
                         Object value = model.getValueAt(line, 7);
-                        if (value != null) {
+                        if (value != null || value == "") {
                             System.out.println(value.toString());
                         } else {                                                    // If no Qty given , take ordered Qty
                             model.setValueAt(model.getValueAt(line, 2), line, 7);
                             System.out.println(model.getValueAt(line, 2).toString());
                         }
-                        model.setValueAt("ORDERED", line, 5);
+                        String status = "ORDERED";
+                        model.setValueAt(status, line, 5);
+//$                        InventoryManager.setStatus((String) model.getValueAt(inventoryTable.getSelectedRow(), 0), status);
                     }
                 }
                 selectAll = true;
@@ -171,15 +174,17 @@ public class ManagerDisplay extends JFrame {
             }
 
             if (event.getSource() == cButton) {
+
+                pwdVerifier.readFile(new File("UserPass.txt"));
 //                if (pwdVerifier.verifyPwd("manager")) {
                     JPanel panel = new JPanel();
                     panel.setLayout(new BoxLayout(panel, 1));
                     panel.add(new JLabel("Please choose a user:"));
                     JComboBox userList = new JComboBox(users);
 
-                    JPasswordField oldPass = new JPasswordField();
-                    oldPass.setDocument(new InputLimit(10));
-                    oldPass.setBorder(BorderFactory.createTitledBorder("Enter Old Password (10 max):"));
+//                    JPasswordField oldPass = new JPasswordField();
+//                    oldPass.setDocument(new InputLimit(10));
+//                    oldPass.setBorder(BorderFactory.createTitledBorder("Enter Old Password (10 max):"));
                     JPasswordField newPassA = new JPasswordField();
                     newPassA.setDocument(new InputLimit(10));
                     newPassA.setBorder(BorderFactory.createTitledBorder("Enter New Password (10 max):"));
@@ -187,13 +192,11 @@ public class ManagerDisplay extends JFrame {
                     newPassB.setDocument(new InputLimit(10));
                     newPassB.setBorder(BorderFactory.createTitledBorder("Repeat New Password (10 max):"));
 
-                    panel.add(userList);
-                    panel.add(Box.createRigidArea(new Dimension(0,25)));
-                    panel.add(oldPass);
-                    panel.add(Box.createRigidArea(new Dimension(0,5)));
-                    panel.add(newPassA);
-                    panel.add(Box.createRigidArea(new Dimension(0,5)));
-                    panel.add(newPassB);
+
+                    Utilities.multiAdd(panel, userList, Box.createRigidArea(new Dimension(0,25)),
+//                            oldPass, Box.createRigidArea(new Dimension(0,5)),
+                            newPassA,
+                            Box.createRigidArea(new Dimension(0,5)), newPassB);
 
                     JOptionPane.showConfirmDialog(null,
                             panel,

@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class LoginDisplay extends JFrame {
     private JPanel dayInfo = new JPanel();                                  // Top Half of Frame
@@ -15,8 +16,6 @@ public class LoginDisplay extends JFrame {
     public LoginDisplay() {
         /** Add Quit Button, as well as Time and Date **/
         Utilities.startDayInfo(this, dayInfo, "Welcome!", timeDate, .11, true);
-        // TODO: Check for secured password file, if none, initiate users (cook, etc)
-        // TODO: Move passwords to a secure file                            // Pass Encryptor: http://goo.gl/dxfSrn
 
         // Create instances of User Class
         User cook_user = new User("Cook","cooks");
@@ -33,7 +32,7 @@ public class LoginDisplay extends JFrame {
         Utilities.multiUpdateFont(.1, cook, host, waiter, manager);
 
         // Add Buttons (users) to Users Panel, and Users to Frame
-        Utilities.multiAdd(users, cook, host, waiter, manager);
+        Utilities.multiAdd(users, waiter, host, cook, manager);
         add(users, BorderLayout.CENTER);
 
         // Add Listeners for all the Buttons;
@@ -44,32 +43,34 @@ public class LoginDisplay extends JFrame {
 
         /** Set Visible Last To Avoid Glitches/Flickering **/
         setVisible(true);
-        setResizable(false);                                                // Size is NOT adjustable (Always Maximized)
+        setResizable(false);
     }
 
     /**
      * ButtonListener implementation to respond to button clicks
      */
-    private class ButtonListener implements ActionListener {
+    public class ButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent event) {
+//            pwdVerifier.readFile(new File("UserPass.txt"));
+
+            if (event.getSource() == manager) {
+//                if (pwdVerifier.verifyPwd("manager")) {                        // If the password is correct, open Display
+                new ManagerDisplay();
+//                }
+            }
             if (event.getSource() == cook) {
-//                if (pwdVerifier.verifyPwd("cook")) {                        // If the password is correct, open Display
-                    CookDisplay cDisplay = new CookDisplay();
+//                if (pwdVerifier.verifyPwd("cook")) {
+                    new CookDisplay();
 //                }
             }
             if (event.getSource() == host) {
 //                if (pwdVerifier.verifyPwd("host")) {
-                    HostDisplay hDisplay = new HostDisplay();
+                    new HostDisplay();
 //                }
             }
             if (event.getSource() == waiter) {
 //                if (pwdVerifier.verifyPwd("waiter")) {
-                    WaiterDisplay wDisplay = new WaiterDisplay();
-//                }
-            }
-            if (event.getSource() == manager) {
-//                if (pwdVerifier.verifyPwd("manager")) {
-                    ManagerDisplay mDisplay = new ManagerDisplay();
+                    new WaiterDisplay();
 //                }
             }
         }

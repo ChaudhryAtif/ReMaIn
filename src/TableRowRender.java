@@ -11,7 +11,7 @@ public class TableRowRender extends DefaultTableCellRenderer {
         Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
         cellComponent.setBackground(Color.white);
-        if (table.getColumnCount() >= 5 && table.getValueAt(row, 5) != null) {
+        if (table.getColumnCount() > 5 && table.getValueAt(row, 5) != null) {
             String cellVal = table.getValueAt(row, 5).toString();
             if (cellVal.equalsIgnoreCase("NEW")) { cellComponent.setBackground(Color.white);
             } else if (cellVal.equalsIgnoreCase("STARTED") || cellVal.equalsIgnoreCase("PENDING")) {

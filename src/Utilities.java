@@ -6,8 +6,8 @@ import java.util.Calendar;
 import java.util.regex.Pattern;
 
 public class Utilities {
-    static int sWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();           // Screen Width
-    static int sHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();         // Screen Height
+    static int sWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+    static int sHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
     /** Get Functions for Screen Width and Height **/
     public static int getSWidth() { return sWidth; }
@@ -21,22 +21,22 @@ public class Utilities {
     public static void startClock(final JLabel jLabel, final String msg) {
         Thread updateClock = new Thread() {                                                     // New thread for Dynamic time
             public void run () {
-                while (true) {
-                    try {                                                                       /*** Time/Date suffix help: goo.gl/tGBKSC **/
-                        Calendar cal = Calendar.getInstance();                                  // Get info from Calendar library
-                        String time = String.format("%tr", cal);                                // Time format: HH:MM:SS AM|PM
+                try {                                                                           /** Time/Date suffix help: goo.gl/tGBKSC **/
+                    while (true) {
+                        Calendar cal = Calendar.getInstance();
+                        String time = String.format("%tr", cal);                                // Time format: HH:MM:SS AM || PM
                         String date = String.format("%tA, %tB %te, %tY", cal, cal, cal, cal);   // Date format: Sunday, February 1, 2015
 
-                        // Set Message, Time, and Date on new lines
-                        jLabel.setText("<html><center>"+msg+"<br>"
-                                +time+"<br>"
-                                +date+"</center></html>");
+                        // Set Message, Time, and Date on separate lines
+                        jLabel.setText("<html><center>" + msg + "<br>"
+                                + time + "<br>"
+                                + date + "</center></html>");
 
                         sleep(1000);                                                            // Wait 1s before re-fetching time
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();                                                    // Show Error/Exception Message
                     }
-                } // While
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             } // Run
         }; // Thread
         updateClock.start();                                                                    // Start threading (updating time in seconds)
@@ -56,25 +56,21 @@ public class Utilities {
     /**
      * Change font size of component(s) based on the screen resolution
      * @param screenCent    Percentage of screen resolution as font size
-     * @param jCmp          JComponent(s) to update the font on (Button, Label, etc)
+     * @param components    JComponent(s) to update the font on (Button, Label, etc)
      */
-    public static void multiUpdateFont(double screenCent, final JComponent... jCmp) {
+    public static void multiUpdateFont(double screenCent, final Component... components) {
         int FontSz = (int) (Math.min(sWidth, sHeight)*screenCent);
         final Font screenFont = new Font("SansSerif", Font.BOLD, FontSz);
-        for (JComponent cmp : jCmp) {
-            cmp.setFont(screenFont);
-        }
+        for (Component cmp : components) { cmp.setFont(screenFont); }
     }
 
     /**
      * Adds givens components to the container
      * @param container     JContainer to add the components to (JFrame, JPanel)
-     * @param component     JComponents to add (JPanel, JButton, JLabel)
+     * @param components    JComponent(s) to add (JPanel, JButton, JLabel)
      */
-    public static void multiAdd(Container container, Component... component) {
-        for (Component cmp : component) {
-            container.add(cmp);
-        }
+    public static void multiAdd(Container container, Component... components) {
+        for (Component cmp : components) { container.add(cmp); }
     }
 
     /**
@@ -99,16 +95,17 @@ public class Utilities {
                                     double screenCent, boolean login) {
         /** Set Window/Frame's Characteristics **/
         frame.setLayout(new BorderLayout());
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);                                          // Keep window maximized
-        frame.setLocationRelativeTo(null);                                                      // Position @ Center
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);                                          // Maximize window
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);                             // Disable ALT+F4 Close
+//        frame.setLocationRelativeTo(null);                                                      // Position @ Center
         frame.setUndecorated(true);                                                             // Removes Title Bar (Disable Drag)
 
         dayInfo.setLayout(new GridBagLayout());
-        GridBagConstraints gbc_bkQtBtn = new GridBagConstraints();                              // Constraints to Back/Quit Buttons
+        GridBagConstraints gbc_bkQtBtn = new GridBagConstraints();
         gbc_bkQtBtn.weightx = 0.5;                                                              // Additional column space given
-        gbc_bkQtBtn.insets = new Insets(5,5,5,5);                                               // Padding on outside
+        gbc_bkQtBtn.insets = new Insets(5,5,5,5);                                               // Outside padding
 
-        JButton backBtn = new JButton("Back"), quitBtn = new JButton("Quit");                   // Back and Quit Buttons
+        JButton backBtn = new JButton("Back"), quitBtn = new JButton("Quit");
         if (!login) {                                                                           // Login doesn't need back button
         // Login Button
             updateFont(backBtn, .03);
@@ -131,16 +128,16 @@ public class Utilities {
 
         // Date and Time
         GridBagConstraints gbc_timeDate = new GridBagConstraints();
-        gbc_timeDate.gridx = 0;                                                                 // Start X Cell (Top Left)
-        gbc_timeDate.gridy = 0;                                                                 // Start Y Cell (Top Left)
-        gbc_timeDate.gridwidth = 0;                                                             // Center Grid Width
+        gbc_timeDate.gridx = 0;                                                                 // Top Left
+        gbc_timeDate.gridy = 0;                                                                 // Top Left
+        gbc_timeDate.gridwidth = 0;                                                             // Center
         gbc_timeDate.insets = new Insets(0,0,5,0);                                              // Bottom Padding
         gbc_timeDate.fill = GridBagConstraints.HORIZONTAL;                                      // Expand Horizontally
         gbc_timeDate.anchor = GridBagConstraints.PAGE_START;                                    // Align @ Top Center
 
-        startClock(timeDate, msg);                                                              // Initiate Clock w/ Greeting
         updateFont(timeDate, screenCent);
-        timeDate.setHorizontalAlignment(0);                                                     // Center Date and Time (JLabel)
+        startClock(timeDate, msg);                                                              // Initiate Clock w/ Greeting
+        timeDate.setHorizontalAlignment(0);                                                     // Center
 
         dayInfo.add(timeDate, gbc_timeDate);
         frame.add(dayInfo, BorderLayout.NORTH);
