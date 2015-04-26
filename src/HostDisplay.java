@@ -16,6 +16,7 @@ public class HostDisplay extends JFrame {
     private boolean[] clicked = new boolean[12];
 
     private ImageIcon reserved;
+    private ImageIcon occupied;
 
     private JLabel timeDate = new JLabel();                                 // Dynamic Time & Date;
     private ButtonListener click = new ButtonListener();                    // Listener for Buttons
@@ -58,6 +59,7 @@ public class HostDisplay extends JFrame {
         // Reserved Picture
         try {
             reserved = new ImageIcon(ImageIO.read(new URL("http://icons.iconarchive.com/icons/blackvariant/button-ui-system-apps/128/X11-icon.png")));
+            occupied = new ImageIcon(ImageIO.read(new URL("http://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/128/Actions-dialog-ok-apply-icon.png")));
         } catch(MalformedURLException mue) {
             mue.printStackTrace();
         } catch(IOException ioe) {
@@ -80,109 +82,213 @@ public class HostDisplay extends JFrame {
         public void actionPerformed(ActionEvent event) {
             for (int i=1; i<12; i++) {
                 if (event.getSource() == tableList[i]) {
-                    if (!clicked[i]) {
+                    if (!clicked[i]) 
+                    {
                         panel = new JPanel();
                         panel.setLayout(new BoxLayout(panel, 1));
-
-                        try {                                                                   // Due to MaskFormatter
-                            resName = new JTextField(); 
-                            resName.setDocument(new InputLimit(20));
-                            resName.setBorder(BorderFactory.createTitledBorder("Name"));
-                            ((AbstractDocument) resName.getDocument()).setDocumentFilter(new LetterDocumentFilter()); // filters type contents
-
-                            resDate = new JFormattedTextField(new MaskFormatter("##/##/####"));
-                            resDate.setToolTipText("Date format:mm/dd/yyyy");
-                            resDate.setBorder(BorderFactory.createTitledBorder("Date"));
-
-                            resTime = new JFormattedTextField(new MaskFormatter("##:## ??"));
-                            resTime.setToolTipText("Time Format: hh:mm am/pm");
-                            resTime.setBorder(BorderFactory.createTitledBorder("Time"));
-
-                            resPhone = new JFormattedTextField(new MaskFormatter("(###) ###-####"));
-                            resPhone.setBorder(BorderFactory.createTitledBorder("Phone Number"));
-
-                            resHead = new JFormattedTextField(new MaskFormatter("#"));
-                            resHead.setBorder(BorderFactory.createTitledBorder("Number of Heads"));
-
-                            resOrder = new JTextField();
-                            resOrder.setDocument(new InputLimit(30));
-                            resOrder.setBorder(BorderFactory.createTitledBorder("Order/Comments/Special Order"));
-                        } catch (java.text.ParseException e) {
-                            e.printStackTrace();
-                        }
-
-                        panel.add(resName);
-                        panel.add(Box.createRigidArea(new Dimension(0, 5)));
-                        panel.add(resDate);
-                        panel.add(Box.createRigidArea(new Dimension(0,5)));
-                        panel.add(resTime);
-                        panel.add(Box.createRigidArea(new Dimension(0, 5)));
-                        panel.add(resPhone);
-                        panel.add(Box.createRigidArea(new Dimension(0,5)));
-                        panel.add(resHead);
-                        panel.add(Box.createRigidArea(new Dimension(0,5)));
-                        panel.add(resOrder);
-
-                        int response = JOptionPane.showConfirmDialog(null,
-                                panel,
-                                "Reservation Info for " + tableList[i].getText(),
-                                JOptionPane.OK_CANCEL_OPTION,
-                                JOptionPane.PLAIN_MESSAGE);
-
-                        if (response == 0) {                                                // OK
-                            Utilities.updateFont(tableList[i], .03);
-                            tableList[i].setIcon(reserved);
+                        
+                        JLabel text = new JLabel("Choose Activity", SwingConstants.CENTER); 
+                        String[] activities = {"Table Occupied", "Table Clear", "Make Reservation"};
+                        
+                    	int answer = JOptionPane.showOptionDialog(null, text, tableList[i].getText(),
+                                0, JOptionPane.PLAIN_MESSAGE, null, activities, activities[0]);
+                    	if (answer == 0)
+                    	{
+                        	Utilities.updateFont(tableList[i], .03);
+                            tableList[i].setIcon(occupied);
                             tableList[i].setForeground(Color.gray);
-                            clicked[i] = true;
-                        }
-
-//                        System.out.println("N: " + resName.getText());
-//                        System.out.println("D: " + resDate.getValue());
-//                        System.out.println("T: " + resTime.getValue());
-//                        System.out.println("#: " + resPhone.getValue());
-//                        System.out.println("H: " + resHead.getValue());
-                    } else {
-                        resName.setEditable(false);
-                        resDate.setEditable(false);
-                        resTime.setEditable(false);
-                        resPhone.setEditable(false);
-                        resHead.setEditable(false);
-                        resOrder.setEditable(false);
-
-//                        System.out.println(resName.getText());
-//                        System.out.println(Utilities.validateName(resName.getText()));
-                        
-                        
-                        String[] options = {"Edit", "Save", "Cancel Reservation", "Close Dialog"};
-                        int response = JOptionPane.showOptionDialog(null, panel, "Showing Reservation Info for " + tableList[i].getText(),
-                                0, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
-                      	
-                        if (response == 0) {                                             // EDIT
-                            resName.setEditable(true);
-                            resDate.setEditable(true);
-                            resTime.setEditable(true);
-                            resPhone.setEditable(true);
-                            resHead.setEditable(true);
-                            resOrder.setEditable(true);
-                            response = JOptionPane.showOptionDialog(null, panel, "Showing Reservation Info for " + tableList[i].getText(),
-                                    0, JOptionPane.PLAIN_MESSAGE, null, options, options[2]);
-                        }
-                        
-
-                        if (response == 2) {                                                // CANCEL
-                            resName.setText("");
-                            resDate.setText("");
-                            resTime.setText("");
-                            resPhone.setText("");
-                            resHead.setText("");
-                            resOrder.setText("");
-
+                    	}
+                    	if (answer == 1)
+                    	{
                             Utilities.updateFont(tableList[i], .05);
                             tableList[i].setIcon(null);
                             tableList[i].setForeground(Color.black);
-                            clicked[i] = false;
-                           
-                        }
+                    	}
+                    	if (answer == 2)
+                    	{
+	                        try {                                                                   // Due to MaskFormatter
+	                            resName = new JTextField(); 
+	                            resName.setDocument(new InputLimit(20));
+	                            resName.setBorder(BorderFactory.createTitledBorder("Name"));
+	                            ((AbstractDocument) resName.getDocument()).setDocumentFilter(new LetterDocumentFilter()); // filters type contents
+	
+	                            resDate = new JFormattedTextField(new MaskFormatter("##/##/####"));
+	                            resDate.setToolTipText("Date format:mm/dd/yyyy");
+	                            resDate.setBorder(BorderFactory.createTitledBorder("Date"));
+	
+	                            resTime = new JFormattedTextField(new MaskFormatter("##:## ??"));
+	                            resTime.setToolTipText("Time Format: hh:mm am/pm");
+	                            resTime.setBorder(BorderFactory.createTitledBorder("Time"));
+	
+	                            resPhone = new JFormattedTextField(new MaskFormatter("(###) ###-####"));
+	                            resPhone.setBorder(BorderFactory.createTitledBorder("Phone Number"));
+	
+	                            resHead = new JFormattedTextField(new MaskFormatter("#"));
+	                            resHead.setBorder(BorderFactory.createTitledBorder("Number of Heads"));
+	
+	                            resOrder = new JTextField();
+	                            resOrder.setDocument(new InputLimit(30));
+	                            resOrder.setBorder(BorderFactory.createTitledBorder("Order/Comments/Special Order"));
+	                        } catch (java.text.ParseException e) {
+	                            e.printStackTrace();
+	                        }
+	
+	                        panel.add(resName);
+	                        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+	                        panel.add(resDate);
+	                        panel.add(Box.createRigidArea(new Dimension(0,5)));
+	                        panel.add(resTime);
+	                        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+	                        panel.add(resPhone);
+	                        panel.add(Box.createRigidArea(new Dimension(0,5)));
+	                        panel.add(resHead);
+	                        panel.add(Box.createRigidArea(new Dimension(0,5)));
+	                        panel.add(resOrder);
+	                        
+	                        JButton cancelButton = new JButton("Cancel");
+	                        cancelButton.addActionListener(new ActionListener() {
+	                       	 
+	                            public void actionPerformed(ActionEvent e)
+	                            {
+	                                Window w = SwingUtilities.getWindowAncestor(cancelButton);
+	
+	                                if (w != null)
+	                                  w.setVisible(false);
+	                            }
+	                        });
+	                        
+	                        JButton okayButton = new JButton("Okay");
+	                        int index1 = i; 						// i need to be in the scope for the action listener
+	                        okayButton.addActionListener(new ActionListener() {
+	                          	 
+	                            public void actionPerformed(ActionEvent e)
+	                            {
+	                            	if (resName.getText().equals("") || resDate.getText().equals("") || resTime.getText().equals("") 
+	                            			|| resPhone.getText().equals("") || resHead.getText().equals(""))
+	                            	{
+	                            		JOptionPane.showMessageDialog(null, "Error: Must fill in all fields.",
+	                            				"Error", JOptionPane.ERROR_MESSAGE);
+	                            	}
+	                            	else
+	                            	{
+	                            		resName.setEditable(false);
+	                            		resDate.setEditable(false);
+	                            		resTime.setEditable(false);
+	                            		resPhone.setEditable(false);
+	                            		resHead.setEditable(false);
+	                            		resOrder.setEditable(false);
+	                            		
+		                            	Utilities.updateFont(tableList[index1], .03);
+			                            tableList[index1].setIcon(reserved);
+			                            tableList[index1].setForeground(Color.gray);
+			                            clicked[index1] = true;
+			                    		
+			                            Window w = SwingUtilities.getWindowAncestor(okayButton);
+			
+			                            if (w != null)
+			                            	w.setVisible(false);
+	                            	}
+	                            }
+	                        });
+	                        
+	                        JButton[] cancelOkayButtons = {okayButton, cancelButton};
+	                        JOptionPane.showOptionDialog(null, panel, tableList[i].getText(),
+	                                0, JOptionPane.PLAIN_MESSAGE, null, cancelOkayButtons, cancelOkayButtons[1]);
+                        
+                    	} // if answer
+                    } // If
+                    else 
+                    {
+                        
+                        // Open fields so you they can be edited/changed
+                        JButton editBtn = new JButton("Edit");			 
+                        editBtn.addActionListener(new ActionListener() {
+                        	 
+                            public void actionPerformed(ActionEvent e)
+                            {
+                              resName.setEditable(true);
+                              resDate.setEditable(true);
+                              resTime.setEditable(true);
+                              resPhone.setEditable(true);
+                              resHead.setEditable(true);
+                              resOrder.setEditable(true);
+                            }
+                        }); 
+                        
+                        // Button to save changes (more of a user button to keep from confusion)
+                        JButton saveBtn = new JButton("Save");
+                        saveBtn.addActionListener(new ActionListener() {
+                        	
+                        	public void actionPerformed(ActionEvent e)
+                        	{
+                            	if (resName.getText().equals("") || resDate.getText().equals("") || resTime.getText().equals("") 
+                            			|| resPhone.getText().equals("") || resHead.getText().equals(""))
+                            	{
+                            		JOptionPane.showMessageDialog(null, "Error: Must fill in all fields.",
+                            				"Error", JOptionPane.ERROR_MESSAGE);
+                            	}
+                            	else
+                            	{
+	                                Window w = SwingUtilities.getWindowAncestor(saveBtn);
+	
+	                                if (w != null)
+	                                  w.setVisible(false);
+                            	}
+                        	}
+                        });
+                        
+                        // Button to cancel reservation and set table back to null
+                        JButton cancelBtn = new JButton("Cancel Reservation");
+                        int index2 = i; 						// i need to be in the scope for the action listener
+                        cancelBtn.addActionListener(new ActionListener() {
+                        	
+                        	public void actionPerformed(ActionEvent e)
+                        	{
+                                resName.setText("");
+                                resDate.setText("");
+                                resTime.setText("");
+                                resPhone.setText("");
+                                resHead.setText("");
+                                resOrder.setText("");
+
+                                Utilities.updateFont(tableList[index2], .05);
+                                tableList[index2].setIcon(null);
+                                tableList[index2].setForeground(Color.black);
+                                clicked[index2] = false;
+                                
+                                Window w = SwingUtilities.getWindowAncestor(cancelBtn);
+
+                                if (w != null)
+                                  w.setVisible(false);
+                        	}
+                        });
+                        
+                        // Button to close dialog
+                        JButton closeBtn = new JButton("Close Dialog");
+                        closeBtn.addActionListener(new ActionListener() {
+                        	
+                        	public void actionPerformed(ActionEvent e)
+                        	{
+                            	if (resName.getText().equals("") || resDate.getText().equals("") || resTime.getText().equals("") 
+                            			|| resPhone.getText().equals("") || resHead.getText().equals(""))
+                            	{
+                            		JOptionPane.showMessageDialog(null, "Error: Must fill in all fields.",
+                            				"Error", JOptionPane.ERROR_MESSAGE);
+                            	}
+                            	else
+                            	{
+	                                Window w = SwingUtilities.getWindowAncestor(cancelBtn);
+	
+	                                if (w != null)
+	                                  w.setVisible(false);
+                            	}
+                        	}
+                        });
+                        
+                        // Set buttons and create dialog
+                        JButton[] options = {editBtn, saveBtn, cancelBtn, closeBtn};
+                        JOptionPane.showOptionDialog(null, panel, "Showing Reservation Info for " + tableList[i].getText(),
+                                0, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
                         
                     } // Else
                 } // Get Source
