@@ -18,8 +18,8 @@ public class HostDisplay extends JFrame {
     private ImageIcon reserved;
     private ImageIcon occupied;
 
-    private JLabel timeDate = new JLabel();                                 // timeDate: Dynamic Time & Date;
-    private ButtonListener click = new ButtonListener();
+    private JLabel timeDate = new JLabel();                                 // Dynamic Time & Date;
+    private ButtonListener click = new ButtonListener();                    // Listener for Buttons
 
     public HostDisplay() {
         setupHDisplay();
@@ -29,6 +29,7 @@ public class HostDisplay extends JFrame {
         // Add Back and Quit Buttons, as well as Time and Date
         Utilities.startDayInfo(this, dayInfo, "Welcome, Hoster!", timeDate, .09, false);
 
+        // Create + Set Table Row(s) Layout
         JPanel tableRowOne = new JPanel();
         JPanel tableRowTwo = new JPanel();
         JPanel tableRowThree = new JPanel();
@@ -40,7 +41,7 @@ public class HostDisplay extends JFrame {
         for (int i=1; i < 12; i++) {
             tableList[i] = new JButton("Table " + new DecimalFormat("00").format(i));           // Create button w/ Name
             Utilities.updateFont(tableList[i], .05);
-            tableList[i].addActionListener(click);
+            tableList[i].addActionListener(click);                                              // Add ActionListener
 
             if (i < 5) { tableRowOne.add(tableList[i]);                                         // 1st Row: 1-4
             } else if (i < 8) { tableRowTwo.add(tableList[i]);                                  // 2nd Row: 5-7
@@ -57,39 +58,30 @@ public class HostDisplay extends JFrame {
 
         // Reserved Picture
         try {
-<<<<<<< HEAD
             reserved = new ImageIcon(ImageIO.read(new URL("http://icons.iconarchive.com/icons/blackvariant/button-ui-system-apps/128/X11-icon.png")));
             occupied = new ImageIcon(ImageIO.read(new URL("http://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/128/Actions-dialog-ok-apply-icon.png")));
         } catch(MalformedURLException mue) {
             mue.printStackTrace();
         } catch(IOException ioe) {
             ioe.printStackTrace();
-=======
-            reserved = new ImageIcon(ImageIO.read(new URL("http://goo.gl/J2IJ6v")));
-        } catch(MalformedURLException e) {
-            e.printStackTrace();
-        } catch(IOException e) {
-            e.printStackTrace();
->>>>>>> origin/master
         }
 
         /** Set Visible Last To Avoid Glitches/Flickering **/
-        setVisible(true);
-        setResizable(false);
+        setVisible(true);                                                                       // Show on Screen
+        setResizable(false);                                                                    // Size is NOT adjustable (Always Maximized)
     }
 
     /**
      * ButtonListener implementation to respond to button clicks
      */
     private class ButtonListener implements ActionListener {
-        JPanel resPanel;
+        JPanel panel;
         JTextField resName, resOrder;
         JFormattedTextField resDate, resTime, resPhone, resHead;
 
         public void actionPerformed(ActionEvent event) {
             for (int i=1; i<12; i++) {
                 if (event.getSource() == tableList[i]) {
-<<<<<<< HEAD
                     if (!clicked[i]) 
                     {
                         panel = new JPanel();
@@ -108,96 +100,6 @@ public class HostDisplay extends JFrame {
                     	}
                     	if (answer == 1)
                     	{
-=======
-                    if (!clicked[i]) {
-                        resPanel = new JPanel();
-                        resPanel.setLayout(new BoxLayout(resPanel, 1));
-
-                        try {                                                                   // Due to MaskFormatter
-                            resName = new JTextField();
-                            resName.setDocument(new InputLimit(20));
-                            resName.setBorder(BorderFactory.createTitledBorder("Name"));
-
-                            resDate = new JFormattedTextField(new MaskFormatter("##/##/####"));
-                            resDate.setToolTipText("Date format:mm/dd/yyyy");
-                            resDate.setBorder(BorderFactory.createTitledBorder("Date"));
-
-                            resTime = new JFormattedTextField(new MaskFormatter("##:## ??"));
-                            resTime.setToolTipText("Time Format: hh:mm am/pm");
-                            resTime.setBorder(BorderFactory.createTitledBorder("Time"));
-
-                            resPhone = new JFormattedTextField(new MaskFormatter("(###) ###-####"));
-                            resPhone.setBorder(BorderFactory.createTitledBorder("Phone Number"));
-
-                            resHead = new JFormattedTextField(new MaskFormatter("#"));
-                            resHead.setBorder(BorderFactory.createTitledBorder("Number of Heads"));
-
-                            resOrder = new JTextField();
-                            resOrder.setDocument(new InputLimit(30));
-                            resOrder.setBorder(BorderFactory.createTitledBorder("Order/Comments/Special Order"));
-                        } catch (java.text.ParseException e) {
-                            e.printStackTrace();
-                        }
-
-                        Utilities.multiAdd(resPanel, resName, Box.createRigidArea(new Dimension(10, 0)),
-                                resDate, Box.createRigidArea(new Dimension(10, 0)),
-                                resTime, Box.createRigidArea(new Dimension(10, 0)),
-                                resPhone, Box.createRigidArea(new Dimension(10, 0)),
-                                resHead, Box.createRigidArea(new Dimension(10, 0)), resOrder);
-
-                        int response = JOptionPane.showConfirmDialog(null,
-                                resPanel,
-                                "Reservation Info for " + tableList[i].getText(),
-                                JOptionPane.OK_CANCEL_OPTION,
-                                JOptionPane.PLAIN_MESSAGE);
-
-                        if (response == 0) {                                                // OK
-                            Utilities.updateFont(tableList[i], .03);
-                            tableList[i].setIcon(reserved);
-                            tableList[i].setForeground(Color.gray);
-                            clicked[i] = true;
-                        }
-
-//                        System.out.println("N: " + resName.getText());
-//                        System.out.println("D: " + resDate.getValue());
-//                        System.out.println("T: " + resTime.getValue());
-//                        System.out.println("#: " + resPhone.getValue());
-//                        System.out.println("H: " + resHead.getValue());
-                    } else {
-                        resName.setEditable(false);
-                        resDate.setEditable(false);
-                        resTime.setEditable(false);
-                        resPhone.setEditable(false);
-                        resHead.setEditable(false);
-                        resOrder.setEditable(false);
-
-//                        System.out.println(resName.getText());
-//                        System.out.println(Utilities.validateName(resName.getText()));
-
-                        String[] options = {"Edit", "Save", "Cancel", "Close Dialog"};
-                        int response = JOptionPane.showOptionDialog(null, resPanel, "Showing Reservation Info for " + tableList[i].getText(),
-                                0, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
-
-                        while (response == 0) {                                             // EDIT
-                            resName.setEditable(true);
-                            resDate.setEditable(true);
-                            resTime.setEditable(true);
-                            resPhone.setEditable(true);
-                            resHead.setEditable(true);
-                            resOrder.setEditable(true);
-                            response = JOptionPane.showOptionDialog(null, resPanel, "Showing Reservation Info for " + tableList[i].getText(),
-                                    0, JOptionPane.PLAIN_MESSAGE, null, options, options[2]);
-                        }
-
-                        if (response == 2) {                                                // CANCEL
-                            resName.setText("");
-                            resDate.setText("");
-                            resTime.setText("");
-                            resPhone.setText("");
-                            resHead.setText("");
-                            resOrder.setText("");
-
->>>>>>> origin/master
                             Utilities.updateFont(tableList[i], .05);
                             tableList[i].setIcon(null);
                             tableList[i].setForeground(Color.black);
