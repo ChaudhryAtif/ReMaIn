@@ -23,6 +23,7 @@ public class OrderManager {
     */
     public static void addOrder(String tableValues[]) {
     	orders.add(new Order(tableValues));
+    	//OrderDB.insert(tableValues);
     }
     
     /**
@@ -32,7 +33,10 @@ public class OrderManager {
      */
     public static void updateOrder(String orderID, String tableValues[]) {
     	Order order = getOrder(orderID);
-    	if (order != null) { order.update(tableValues); }
+    	if (order != null) {
+    		order.update(tableValues);
+    		//OrderDB.modify(new Integer(orderID), tableValues);
+    	}
     }
     
     /**
@@ -51,7 +55,10 @@ public class OrderManager {
      */
     public static void setStatus(String orderID, String status) {
     	Order order = getOrder(orderID);
-    	if (order != null) { order.setStatus(status); }
+    	if (order != null) {
+    		order.setStatus(status);
+    		//OrderDB.singleModify(new Integer(orderID), 5, status);
+    	}
     }
     
     /**
@@ -59,6 +66,7 @@ public class OrderManager {
      * @return				All of the Orders in the ArrayList
      */
     public static Object[][] getOrders() {
+    	//orders = OrderDB.getAll();
     	Object[][] tempOrders = new Object[orders.size()][6];
     	int count = 0;
     	for (Order order : orders) {
