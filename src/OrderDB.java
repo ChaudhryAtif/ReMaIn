@@ -18,6 +18,15 @@ public class OrderDB {
 		}
 	}
 	
+	public static void close() {
+		try {
+			myConn.close();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void insert(String tableValues[]) {
 		String query = " INSERT INTO orders VALUES (?, ?, ?, ?, ?, ?)";
 		try {
@@ -51,13 +60,17 @@ public class OrderDB {
 			ArrayList<Order> orders = new ArrayList<Order>();
 			
 			while (results.next()) {
-				String myList[] = new String[]{}; 
+				String myList[] = new String[]{};
+				for (int i = 0; i < 6; i++) { // 6 columns in the table
+					myList[i] = results.getString(i);
+				}
+				/*
 				myList[0] = results.getString("id");
 	            myList[1] = results.getString("table");
 	            myList[2] = results.getString("order_detail");
 	            myList[3] = results.getString("time_ordered");
 	            myList[4] = results.getString("notes");
-	            myList[5] = results.getString("order_status");
+	            myList[5] = results.getString("order_status");*/
 	            orders.add(new Order(myList));
 			}
 			return orders;
@@ -66,15 +79,6 @@ public class OrderDB {
 			exc.printStackTrace();
 		}
 		return null;
-	}
-	
-	public static void close() {
-		try {
-			myConn.close();
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public static void singleModify(int id, int field, String value) {

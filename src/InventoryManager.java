@@ -23,6 +23,7 @@ public class InventoryManager {
 	 */
     public static void addInventoryItem(String tableValues[]) {
         inventoryItems.add(new InventoryItem(tableValues));
+        //InventoryDB.insert(tableValues);
     }
     
     /**
@@ -33,6 +34,7 @@ public class InventoryManager {
     public static void updateItem(String itemID, String tableValues[]) {
     	InventoryItem item = getItem(itemID);
     	if (item != null) { item.update(tableValues); }
+    	//InventoryDB.modify(new Integer(itemID), tableValues);
     }
     
     /**
@@ -51,7 +53,10 @@ public class InventoryManager {
      */
     public static void setStatus(String itemID, String status) {
     	InventoryItem item = getItem(itemID);
-    	if (item != null) { item.setStatus(status); }
+    	if (item != null) {
+    		item.setStatus(status);
+    		//InventoryDB.singleModify(new Integer(itemID), 5, status);
+    	}
     }
     
     /**
@@ -59,6 +64,7 @@ public class InventoryManager {
      * @return				All of the InventoryItems in the ArrayList
      */
     public static Object[][] getInventoryItems() {
+    	inventoryItems = InventoryDB.getAll();
     	Object[][] items = new Object[inventoryItems.size()][6];
     	int count = 0;
     	for (InventoryItem item : inventoryItems) {
