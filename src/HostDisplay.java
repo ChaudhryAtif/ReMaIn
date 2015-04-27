@@ -233,13 +233,6 @@ public class HostDisplay extends JFrame {
                             	}
                             	else
                             	{
-                            		resName.setEditable(false);
-                            		resDate.setEditable(false);
-                            		resTime.setEditable(false);
-                            		resPhone.setEditable(false);
-                            		resHead.setEditable(false);
-                            		resOrder.setEditable(false);
-                            		
 	                                Window w = SwingUtilities.getWindowAncestor(saveBtn);
 	
 	                                if (w != null)
@@ -288,13 +281,6 @@ public class HostDisplay extends JFrame {
                             	}
                             	else
                             	{
-                            		resName.setEditable(false);
-                            		resDate.setEditable(false);
-                            		resTime.setEditable(false);
-                            		resPhone.setEditable(false);
-                            		resHead.setEditable(false);
-                            		resOrder.setEditable(false);
-                            		
 	                                Window w = SwingUtilities.getWindowAncestor(cancelBtn);
 	
 	                                if (w != null)
