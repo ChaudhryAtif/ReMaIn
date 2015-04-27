@@ -160,18 +160,18 @@ public class HostDisplay extends JFrame {
                             });
 
                             // Okay button to confirm reservation and that all fields are filled
-                            final JButton okayButton = new JButton("Okay");
+                            final JButton reserveButton = new JButton("Reserve");
                             final int index1 = i; 						// i need to be in the scope for the action listener
-                            okayButton.addActionListener(new ActionListener() {
+                            reserveButton.addActionListener(new ActionListener() {
 
                                 public void actionPerformed(ActionEvent e)
                                 {
-                                    if (resName.getText().equals("") || resDate.getText().equals("") || resTime.getText().equals("")
-                                            || resPhone.getText().equals("") || resHead.getText().equals(""))
+                                    if (resName.getText().equals("") || resDate.getText().equals("  /  /    ") || resTime.getText().equals("  :     ")
+                                    		|| resPhone.getText().equals("(   )    -    ") || resHead.getText().equals(" "))
                                     {
                                         JOptionPane.showMessageDialog(null, "Error: Must fill in all fields.",
                                                 "Error", JOptionPane.ERROR_MESSAGE);
-                                    }
+                                    }  
                                     else
                                     {
                                         resName.setEditable(false);
@@ -186,7 +186,7 @@ public class HostDisplay extends JFrame {
                                         tableList[index1].setForeground(Color.gray);
                                         clicked[index1] = true;
 
-                                        Window w = SwingUtilities.getWindowAncestor(okayButton);
+                                        Window w = SwingUtilities.getWindowAncestor(reserveButton);
 
                                         if (w != null)
                                             w.setVisible(false);
@@ -195,7 +195,7 @@ public class HostDisplay extends JFrame {
                             });
 
                             // create dialog
-                            JButton[] cancelOkayButtons = {okayButton, cancelButton};
+                            JButton[] cancelOkayButtons = {reserveButton, cancelButton};
                             JOptionPane.showOptionDialog(null, resPanel, tableList[i].getText(),
                                     0, JOptionPane.PLAIN_MESSAGE, null, cancelOkayButtons, cancelOkayButtons[1]);
 
