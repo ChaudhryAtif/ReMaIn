@@ -21,7 +21,38 @@ public class HostDisplay extends JFrame {
     private JLabel timeDate = new JLabel();                                 // timeDate: Dynamic Time & Date;
     private ButtonListener click = new ButtonListener();
 
+    private String[] table1Data = {"1","Reserved","Connor", "12/12/1212", "12:03 am", "(222) 222-2222", "2", "nothing"};
+    private String[] table2Data = {"2","Occupied","", "", "", "", "", ""};
+    private String[] table3Data = {"3","Reserved","Jordan", "13/13/1313", "13:03 am", "(333) 333-3333", "3", "Brennan is stupid"};
+    private String[] table4Data = {"4","Reserved","Max", "14/14/1414", "14:03 am", "(444) 444-4444", "4", "Databases are cool"};
+    private String[] table5Data = {"5", "","", "", "", "", "", ""};
+    private String[] table6Data = {"6","Reserved","Atif", "15/15/1515", "15:03 am", "(555) 555-5555", "5", "Incoherent babble"};
+    private String[] table7Data = {"7","Reserved","Brennan", "16/16/1616", "16:03 am", "(666) 666-6666", "6", "Jordo is better"};
+    private String[] table8Data = {"8","Reserved","Scannell", "17/17/1717", "17:03 am", "(777) 777-7777", "7", "Languages"};
+    private String[] table9Data = {"9","Reserved","Sukhodolsky", "18/18/1818", "18:03 am", "(888) 888-8888", "8", "For Mother Russia"};
+    private String[] table10Data = {"10","Reserved","Chambers", "19/19/1919", "19:03 am", "(999) 999-9999", "9", "Data Structures Blow"};
+    private String[] table11Data = {"11","Reserved","Goldwasser", "11/11/1111", "11:03 am", "(111) 111-1111", "1", "FUCK ALGORITHMS"};
+    private String[][] reservationData = {table1Data, table2Data, table3Data, table4Data, table5Data, table6Data,
+            table7Data, table8Data, table9Data, table10Data, table11Data};
+
+//    private String[][] reservationData = new String[8][12];
+
+
+//     public String[][] getResData() {
+//         return reservationData;
+//     }
+// 
+//     // To work on the set function, Comment out line 35+36, and uncomment line 38 and 55
+//     public void setResData(String[]... tableData) {     // Takes one or more String arrays (hopefully 11 :) )
+//         int table = 0;
+//         for (String[] resInfo : tableData) {
+//             reservationData[table] = resInfo;
+//             table++;
+//         }
+//     }
+
     public HostDisplay() {
+        //setResData(table1Data, table2Data, table3Data, table4Data, table5Data, table6Data, table7Data, table8Data, table9Data, table10Data, table11Data);
         setupHDisplay();
     }
 
@@ -36,8 +67,20 @@ public class HostDisplay extends JFrame {
         tableRowTwo.setLayout(new GridLayout(3, 0, 0, 0));
         tableRowThree.setLayout(new GridLayout(4, 0, 0, 0));
 
+        // Reserved Picture
+        try {
+            reserved = new ImageIcon(ImageIO.read(new URL("http://goo.gl/J2IJ6v")));
+            occupied = new ImageIcon(ImageIO.read(new URL("http://goo.gl/U6L1lv")));
+        } catch(MalformedURLException e) {
+            e.printStackTrace();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+
         // Create Table Buttons (x11), Add ActionListener to them and Add them to Table Rows
-        for (int i=1; i < 12; i++) {
+        for (int i=1; i < 12; i++)
+        {
             tableList[i] = new JButton("Table " + new DecimalFormat("00").format(i));           // Create button w/ Name
             Utilities.updateFont(tableList[i], .05);
             tableList[i].addActionListener(click);
@@ -45,6 +88,25 @@ public class HostDisplay extends JFrame {
             if (i < 5) { tableRowOne.add(tableList[i]);                                         // 1st Row: 1-4
             } else if (i < 8) { tableRowTwo.add(tableList[i]);                                  // 2nd Row: 5-7
             } else tableRowThree.add(tableList[i]);                                             // 3rd Row: 8-11
+
+            // Get table status
+            String[] tableData = reservationData[i-1];
+            if (tableData[1].equals("Reserved"))
+            {
+                // Change to x mark for reserved table
+                Utilities.updateFont(tableList[i], .03);
+                tableList[i].setIcon(reserved);
+                tableList[i].setForeground(Color.gray);
+            }
+
+            else if (tableData[1].equals("Occupied"))
+            {
+                // Change to check mark for people seated at table
+                Utilities.updateFont(tableList[i], .03);
+                tableList[i].setIcon(occupied);
+                tableList[i].setForeground(Color.gray);
+            }
+
         }
 
         // Add Rows to Table Panel
@@ -55,16 +117,6 @@ public class HostDisplay extends JFrame {
         tables.add(tableRowThree);
         add(tables, BorderLayout.CENTER);
 
-        // Reserved Picture
-        try {
-            reserved = new ImageIcon(ImageIO.read(new URL("http://goo.gl/J2IJ6v")));
-            occupied = new ImageIcon(ImageIO.read(new URL("http://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/128/Actions-dialog-ok-apply-icon.png")));
-        } catch(MalformedURLException e) {
-            e.printStackTrace();
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-
         /** Set Visible Last To Avoid Glitches/Flickering **/
         setVisible(true);
         setResizable(false);
@@ -73,78 +125,99 @@ public class HostDisplay extends JFrame {
     /**
      * ButtonListener implementation to respond to button clicks
      */
-    private class ButtonListener implements ActionListener {
+    private class ButtonListener implements ActionListener
+    {
         JPanel resPanel;
         JTextField resName, resOrder;
         JFormattedTextField resDate, resTime, resPhone, resHead;
 
-        public void actionPerformed(ActionEvent event) {
-            for (int i=1; i<12; i++) {
-                if (event.getSource() == tableList[i]) {
-                    if (!clicked[i])
+        public void actionPerformed(ActionEvent event)
+        {
+            for (int tableNo=1; tableNo<12; tableNo++)
+            {
+                resPanel = new JPanel();
+                resPanel.setLayout(new BoxLayout(resPanel, 1));
+
+                try
+                {                                                                   // Due to MaskFormatter
+                    resName = new JTextField();
+                    resName.setDocument(new InputLimit(20));
+                    resName.setBorder(BorderFactory.createTitledBorder("Name"));
+                    ((AbstractDocument) resName.getDocument()).setDocumentFilter(new LetterDocumentFilter()); // filters type contents
+
+                    resDate = new JFormattedTextField(new MaskFormatter("##/##/####"));
+                    resDate.setToolTipText("Date format:mm/dd/yyyy");
+                    resDate.setBorder(BorderFactory.createTitledBorder("Date"));
+
+                    resTime = new JFormattedTextField(new MaskFormatter("##:## ??"));
+                    resTime.setToolTipText("Time Format: hh:mm am/pm");
+                    resTime.setBorder(BorderFactory.createTitledBorder("Time"));
+
+                    resPhone = new JFormattedTextField(new MaskFormatter("(###) ###-####"));
+                    resPhone.setBorder(BorderFactory.createTitledBorder("Phone Number"));
+
+                    resHead = new JFormattedTextField(new MaskFormatter("#"));
+                    resHead.setBorder(BorderFactory.createTitledBorder("Number of Heads"));
+
+                    resOrder = new JTextField();
+                    resOrder.setDocument(new InputLimit(30));
+                    resOrder.setBorder(BorderFactory.createTitledBorder("Order/Comments/Special Order"));
+                }
+                catch (java.text.ParseException e) {e.printStackTrace();}
+
+                Utilities.multiAdd(resPanel, resName, Box.createRigidArea(new Dimension(10, 0)),
+                        resDate, Box.createRigidArea(new Dimension(10, 0)),
+                        resTime, Box.createRigidArea(new Dimension(10, 0)),
+                        resPhone, Box.createRigidArea(new Dimension(10, 0)),
+                        resHead, Box.createRigidArea(new Dimension(10, 0)), resOrder);
+
+                final String[] tableData = reservationData[tableNo-1];
+
+                // Check if table is reserved or not
+                if (tableData[1].equals("Reserved"))
+                    clicked[tableNo] = true;
+
+                if (event.getSource() == tableList[tableNo])
+                {
+                    if (!clicked[tableNo])
                     {
-                        resPanel = new JPanel();
-                        resPanel.setLayout(new BoxLayout(resPanel, 1));
 
                         // Arguments for OptionPane
                         JLabel text = new JLabel("Choose Activity", SwingConstants.CENTER);
-                        String[] activities = {"Table Occupied", "Table Clear", "Make Reservation"};
+                        String[] activities;
+                        if (tableList[tableNo].getIcon() == occupied)
+                        {
+                            activities =  new String[] {"Clear Table", "Make Reservation"};
+                        }
+                        else
+                        {
+                            activities = new String[] {"Occupy Table", "Make Reservation"};
+                        }
 
                         // Activity OptionPane
-                        int answer = JOptionPane.showOptionDialog(null, text, tableList[i].getText(),
+                        int answer = JOptionPane.showOptionDialog(null, text, tableList[tableNo].getText(),
                                 0, JOptionPane.PLAIN_MESSAGE, null, activities, activities[0]);
                         if (answer == 0)
                         {
-                            // Change to check mark for people seated at table
-                            Utilities.updateFont(tableList[i], .03);
-                            tableList[i].setIcon(occupied);
-                            tableList[i].setForeground(Color.gray);
+                            if (activities[0].equals("Occupy Table"))
+                            {
+                                tableData[1] = "Occupied";
+
+                                // Change to check mark for people seated at table
+                                Utilities.updateFont(tableList[tableNo], .03);
+                                tableList[tableNo].setIcon(occupied);
+                                tableList[tableNo].setForeground(Color.gray);
+                            }
+                            else if (activities[0].equals("Clear Table"))
+                            {
+                                // Set back to nothing for empty table
+                                Utilities.updateFont(tableList[tableNo], .05);
+                                tableList[tableNo].setIcon(null);
+                                tableList[tableNo].setForeground(Color.black);
+                            }
                         }
                         if (answer == 1)
                         {
-                            // check that table has people currently sitting at it and not reserved
-                            if (tableList[i].getIcon() == occupied)
-                            {
-                                // Set back to nothing for empty table
-                                Utilities.updateFont(tableList[i], .05);
-                                tableList[i].setIcon(null);
-                                tableList[i].setForeground(Color.black);
-                            }
-                        }
-                        if (answer == 2)
-                        {
-                            try {                                                                   // Due to MaskFormatter
-                                resName = new JTextField();
-                                resName.setDocument(new InputLimit(20));
-                                resName.setBorder(BorderFactory.createTitledBorder("Name"));
-                                ((AbstractDocument) resName.getDocument()).setDocumentFilter(new LetterDocumentFilter()); // filters type contents
-
-                                resDate = new JFormattedTextField(new MaskFormatter("##/##/####"));
-                                resDate.setToolTipText("Date format:mm/dd/yyyy");
-                                resDate.setBorder(BorderFactory.createTitledBorder("Date"));
-
-                                resTime = new JFormattedTextField(new MaskFormatter("##:## ??"));
-                                resTime.setToolTipText("Time Format: hh:mm am/pm");
-                                resTime.setBorder(BorderFactory.createTitledBorder("Time"));
-
-                                resPhone = new JFormattedTextField(new MaskFormatter("(###) ###-####"));
-                                resPhone.setBorder(BorderFactory.createTitledBorder("Phone Number"));
-
-                                resHead = new JFormattedTextField(new MaskFormatter("#"));
-                                resHead.setBorder(BorderFactory.createTitledBorder("Number of Heads"));
-
-                                resOrder = new JTextField();
-                                resOrder.setDocument(new InputLimit(30));
-                                resOrder.setBorder(BorderFactory.createTitledBorder("Order/Comments/Special Order"));
-                            } catch (java.text.ParseException e) {
-                                e.printStackTrace();
-                            }
-
-                            Utilities.multiAdd(resPanel, resName, Box.createRigidArea(new Dimension(10, 0)),
-                                    resDate, Box.createRigidArea(new Dimension(10, 0)),
-                                    resTime, Box.createRigidArea(new Dimension(10, 0)),
-                                    resPhone, Box.createRigidArea(new Dimension(10, 0)),
-                                    resHead, Box.createRigidArea(new Dimension(10, 0)), resOrder);
 
                             // Cancel button to stop making reservation
                             final JButton cancelButton = new JButton("Cancel");
@@ -161,48 +234,113 @@ public class HostDisplay extends JFrame {
 
                             // Okay button to confirm reservation and that all fields are filled
                             final JButton reserveButton = new JButton("Reserve");
-                            final int index1 = i; 						// i need to be in the scope for the action listener
+                            final int index = tableNo; 						// it needs to be in the scope for the action listener
                             reserveButton.addActionListener(new ActionListener() {
 
                                 public void actionPerformed(ActionEvent e)
                                 {
-                                    if (resName.getText().equals("") || resDate.getText().equals("  /  /    ") || resTime.getText().equals("  :     ")
-                                    		|| resPhone.getText().equals("(   )    -    ") || resHead.getText().equals(" "))
+                                    if (resName.getText().trim().equals("") || resDate.getText().equals("  /  /    ") || resTime.getText().equals("  :     ")
+                                            || resPhone.getText().equals("(   )    -    ") || resHead.getText().equals(" "))
                                     {
                                         JOptionPane.showMessageDialog(null, "Error: Must fill in all fields.",
                                                 "Error", JOptionPane.ERROR_MESSAGE);
-                                    }  
+                                    }
                                     else
                                     {
+                                        // Cannot edit fields until button clicked
                                         resName.setEditable(false);
                                         resDate.setEditable(false);
                                         resTime.setEditable(false);
                                         resPhone.setEditable(false);
                                         resHead.setEditable(false);
                                         resOrder.setEditable(false);
+                                        // save all values to array for table
+                                        tableData[0] = String.valueOf(index);
+                                        tableData[1] = "Reserved";
+                                        tableData[2] = resName.getText();
+                                        tableData[3] = resDate.getText();
+                                        tableData[4] = resTime.getText();
+                                        tableData[5] = resPhone.getText();
+                                        tableData[6] = resHead.getText();
+                                        tableData[7] = resOrder.getText();
 
-                                        Utilities.updateFont(tableList[index1], .03);
-                                        tableList[index1].setIcon(reserved);
-                                        tableList[index1].setForeground(Color.gray);
-                                        clicked[index1] = true;
+                                        Utilities.updateFont(tableList[index], .03);
+                                        tableList[index].setIcon(reserved);
+                                        tableList[index].setForeground(Color.gray);
+                                        clicked[index] = true;
 
                                         Window w = SwingUtilities.getWindowAncestor(reserveButton);
 
                                         if (w != null)
                                             w.setVisible(false);
-                                    }
-                                }
-                            });
+                                    } // Else
+                                } // actionPerformed
+                            }); // addActionListener
 
                             // create dialog
                             JButton[] cancelOkayButtons = {reserveButton, cancelButton};
-                            JOptionPane.showOptionDialog(null, resPanel, tableList[i].getText(),
-                                    0, JOptionPane.PLAIN_MESSAGE, null, cancelOkayButtons, cancelOkayButtons[1]);
+                            JOptionPane.showOptionDialog(null, resPanel, tableList[tableNo].getText(),
+                                    0, JOptionPane.PLAIN_MESSAGE, null, cancelOkayButtons, cancelOkayButtons[0]);
 
                         } // if answer 2
                     } // if
                     else
                     {
+                        // Set uneditable since it isn't done before this
+                        resName.setEditable(false);
+                        resDate.setEditable(false);
+                        resTime.setEditable(false);
+                        resPhone.setEditable(false);
+                        resHead.setEditable(false);
+                        resOrder.setEditable(false);
+                        
+                        // Populate fields from saved Arrays
+                        resName.setText(tableData[2]);
+                        resDate.setText(tableData[3]);
+                        resTime.setText(tableData[4]);
+                        resPhone.setText(tableData[5]);
+                        resHead.setText(tableData[6]);
+                        resOrder.setText(tableData[7]);
+
+                        final int index = tableNo; // it needs to be in the scope for the action listener
+
+                        // Button to save changes (more of a user button to keep from confusion)
+                        final JButton doneBtn = new JButton("Done");
+                        doneBtn.addActionListener(new ActionListener() {
+
+                            public void actionPerformed(ActionEvent e)
+                            {
+                                if (resName.getText().trim().equals("") || resDate.getText().equals("  /  /    ") || resTime.getText().equals("  :     ")
+                                        || resPhone.getText().equals("(   )    -    ") || resHead.getText().equals(" "))
+                                {
+                                    JOptionPane.showMessageDialog(null, "Error: Must fill in all fields.",
+                                            "Error", JOptionPane.ERROR_MESSAGE);
+                                }
+                                else
+                                {
+                                    resName.setEditable(false);
+                                    resDate.setEditable(false);
+                                    resTime.setEditable(false);
+                                    resPhone.setEditable(false);
+                                    resHead.setEditable(false);
+                                    resOrder.setEditable(false);
+
+                                    tableData[0] = String.valueOf(index);
+                                    tableData[1] = "Reserved";
+                                    tableData[2] = resName.getText();
+                                    tableData[3] = resDate.getText();
+                                    tableData[4] = resTime.getText();
+                                    tableData[5] = resPhone.getText();
+                                    tableData[6] = resHead.getText();
+                                    tableData[7] = resOrder.getText();
+
+                                    Window w = SwingUtilities.getWindowAncestor(doneBtn);
+
+                                    if (w != null)
+                                        w.setVisible(false);
+                                }
+                            }
+                        });
 
                         // Open fields so you they can be edited/changed
                         JButton editBtn = new JButton("Edit");
@@ -219,53 +357,25 @@ public class HostDisplay extends JFrame {
                             }
                         });
 
-                        // Button to save changes (more of a user button to keep from confusion)
-                        final JButton saveBtn = new JButton("Save");
-                        saveBtn.addActionListener(new ActionListener() {
-
-                            public void actionPerformed(ActionEvent e)
-                            {
-                                if (resName.getText().equals("") || resDate.getText().equals("") || resTime.getText().equals("")
-                                        || resPhone.getText().equals("") || resHead.getText().equals(""))
-                                {
-                                    JOptionPane.showMessageDialog(null, "Error: Must fill in all fields.",
-                                            "Error", JOptionPane.ERROR_MESSAGE);
-                                }
-                                else
-                                {
-                                    resName.setEditable(false);
-                                    resDate.setEditable(false);
-                                    resTime.setEditable(false);
-                                    resPhone.setEditable(false);
-                                    resHead.setEditable(false);
-                                    resOrder.setEditable(false);
-                                	
-                                    Window w = SwingUtilities.getWindowAncestor(saveBtn);
-
-                                    if (w != null)
-                                        w.setVisible(false);
-                                }
-                            }
-                        });
-
                         // Button to cancel reservation and set table back to null
                         final JButton cancelBtn = new JButton("Cancel Reservation");
-                        final int index2 = i; 						// i need to be in the scope for the action listener
                         cancelBtn.addActionListener(new ActionListener() {
 
                             public void actionPerformed(ActionEvent e)
                             {
-                                resName.setText("");
-                                resDate.setText("");
-                                resTime.setText("");
-                                resPhone.setText("");
-                                resHead.setText("");
-                                resOrder.setText("");
+                                // Set Array back to empty values
+                                tableData[1] = "";
+                                tableData[2] = "";
+                                tableData[3] = "";
+                                tableData[4] = "";
+                                tableData[5] = "";
+                                tableData[6] = "";
+                                tableData[7] = "";
 
-                                Utilities.updateFont(tableList[index2], .05);
-                                tableList[index2].setIcon(null);
-                                tableList[index2].setForeground(Color.black);
-                                clicked[index2] = false;
+                                Utilities.updateFont(tableList[index], .05);
+                                tableList[index].setIcon(null);
+                                tableList[index].setForeground(Color.black);
+                                clicked[index] = false;
 
                                 Window w = SwingUtilities.getWindowAncestor(cancelBtn);
 
@@ -274,45 +384,16 @@ public class HostDisplay extends JFrame {
                             }
                         });
 
-                        // Button to close dialog
-                        JButton closeBtn = new JButton("Close Dialog");
-                        closeBtn.addActionListener(new ActionListener() {
-
-                            public void actionPerformed(ActionEvent e)
-                            {
-                                if (resName.getText().equals("") || resDate.getText().equals("") || resTime.getText().equals("")
-                                        || resPhone.getText().equals("") || resHead.getText().equals(""))
-                                {
-                                    JOptionPane.showMessageDialog(null, "Error: Must fill in all fields.",
-                                            "Error", JOptionPane.ERROR_MESSAGE);
-                                }
-                                else
-                                {
-                                    resName.setEditable(false);
-                                    resDate.setEditable(false);
-                                    resTime.setEditable(false);
-                                    resPhone.setEditable(false);
-                                    resHead.setEditable(false);
-                                    resOrder.setEditable(false);
-                                	
-                                    Window w = SwingUtilities.getWindowAncestor(cancelBtn);
-
-                                    if (w != null)
-                                        w.setVisible(false);
-                                }
-                            }
-                        });
-
                         // Set buttons and create dialog
-                        JButton[] options = {editBtn, saveBtn, cancelBtn, closeBtn};
-                        JOptionPane.showOptionDialog(null, resPanel, "Showing Reservation Info for " + tableList[i].getText(),
-                                0, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
+                        JButton[] options = {doneBtn, editBtn, cancelBtn};
+                        JOptionPane.showOptionDialog(null, resPanel, "Showing Reservation Info for " + tableList[tableNo].getText(),
+                                0, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 
                     } // Else
                 } // Get Source
             } // Table Loop
-        }
-    } // ButtonListener
+        } // ButtonListener
+    }
 
     public static void main(String[] args) throws Exception {
         new HostDisplay();
