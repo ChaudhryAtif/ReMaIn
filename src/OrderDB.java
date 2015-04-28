@@ -52,6 +52,25 @@ public class OrderDB {
 		}
 	}
 	
+	public static void singleModify(int id, int field, String value) {
+		String query = "update orders set "+field+"= ? where id= ?";
+		try {
+			PreparedStatement preparedStmt = myConn.prepareStatement(query);
+			if (field == 0 || field == 2) {
+				preparedStmt.setInt(1, new Integer(value));
+			}
+			else {
+				preparedStmt.setString(1, value);
+			}
+			preparedStmt.setInt(2, id);
+	
+			preparedStmt.executeUpdate();
+		}
+		catch (Exception exc){
+			exc.printStackTrace();
+		}
+	}
+	
 	public static ArrayList<Order> getAll() {
 		String query = "SELECT * FROM orders";
 		try {
@@ -81,22 +100,17 @@ public class OrderDB {
 		return null;
 	}
 	
-	public static void singleModify(int id, int field, String value) {
-		String query = "update orders set "+field+"= ? where id= ?";
+	public static void remove(int id) {
+		String query = "DELETE FROM orders WHERE id=?";
 		try {
-			PreparedStatement preparedStmt = myConn.prepareStatement(query);
-			if (field == 0 || field == 2) {
-				preparedStmt.setInt(1, new Integer(value));
-			}
-			else {
-				preparedStmt.setString(1, value);
-			}
-			preparedStmt.setInt(2, id);
+		PreparedStatement preparedStmt = myConn.prepareStatement(query);
+		preparedStmt.setInt(1, id);
 	
-			preparedStmt.executeUpdate();
+  		preparedStmt.execute();
 		}
 		catch (Exception exc){
 			exc.printStackTrace();
 		}
 	}
+	
 }

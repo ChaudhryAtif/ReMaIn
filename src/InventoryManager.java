@@ -43,7 +43,10 @@ public class InventoryManager {
      */
     public static void removeInventoryItem(String itemID) {
     	InventoryItem item = getItem(itemID);
-        if (item != null) { inventoryItems.remove(item); }
+        if (item != null) {
+        	inventoryItems.remove(item);
+        	//InventoryDB.remove(new Integer(itemID));
+        }
     }
     
     /**

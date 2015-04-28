@@ -18,6 +18,15 @@ public class InventoryDB {
 		}
 	}
 	
+	public static void close() {
+		try {
+			myConn.close();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void insert(String tableValues[]) {
 		String query = " INSERT INTO inventory VALUES (?, ?, ?, ?, ?, ?)";
 		try {
@@ -43,6 +52,25 @@ public class InventoryDB {
 		}
 	}
 	
+	public static void singleModify(int id, int field, String value) {
+		String query = "update inventory set "+field+"= ? where id= ?";
+		try {
+			PreparedStatement preparedStmt = myConn.prepareStatement(query);
+			if (field == 0 || field == 2 || field == 3) {
+				preparedStmt.setInt(1, new Integer(value));
+			}
+			else {
+				preparedStmt.setString(1, value);
+			}
+			preparedStmt.setInt(2, id);
+	
+			preparedStmt.executeUpdate();
+		}
+		catch (Exception exc){
+			exc.printStackTrace();
+		}
+	}
+	
 	public static ArrayList<InventoryItem> getAll() {
 		String query = "SELECT * FROM inventory";
 		try {
@@ -65,31 +93,17 @@ public class InventoryDB {
 		return null;
 	}
 	
-	public static void close() {
+	public static void remove(int id) {
+		String query = "DELETE FROM inventory WHERE id=?";
 		try {
-			myConn.close();
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+		PreparedStatement preparedStmt = myConn.prepareStatement(query);
+		preparedStmt.setInt(1, id);
 	
-	public static void singleModify(int id, int field, String value) {
-		String query = "update inventory set "+field+"= ? where id= ?";
-		try {
-			PreparedStatement preparedStmt = myConn.prepareStatement(query);
-			if (field == 0 || field == 2 || field == 3) {
-				preparedStmt.setInt(1, new Integer(value));
-			}
-			else {
-				preparedStmt.setString(1, value);
-			}
-			preparedStmt.setInt(2, id);
-	
-			preparedStmt.executeUpdate();
+  		preparedStmt.execute();
 		}
 		catch (Exception exc){
 			exc.printStackTrace();
 		}
 	}
+	
 }

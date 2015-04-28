@@ -45,7 +45,10 @@ public class OrderManager {
     */
     public static void removeOrder(String orderID) {
     	Order order = getOrder(orderID);
-    	if (order != null) { orders.remove(order); }
+    	if (order != null) {
+    		orders.remove(order);
+    		//OrderDB.remove(new Integer(orderID));
+    	}
     }
     
     /**
