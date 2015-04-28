@@ -28,9 +28,9 @@ public class TableDB {
 		}
 	}
 	
-	public static void modify(int tableNumber, String tableValues[]) {
-		for (int i = 0; i < tableValues.length; i++) {
-			singleModify(tableNumber, i, tableValues[i]);
+	public static void modifyReservation(int tableNumber, String[] tableValues) {
+		for (int i = 2; i < tableValues.length; i++) {
+			singleModify(tableNumber, i, tableValues[i-2]);
 		}
 	}
 	
