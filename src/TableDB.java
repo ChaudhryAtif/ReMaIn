@@ -38,7 +38,6 @@ public class TableDB {
 		String query = "update orders set "+field+"= ? where id= ?";
 		try {
 			PreparedStatement preparedStmt = myConn.prepareStatement(query);
-			if (field == 0 || field == 2) {	//////////////////////////////// UPDATE THIS IF
 				preparedStmt.setInt(1, new Integer(value));
 			}
 			else {
