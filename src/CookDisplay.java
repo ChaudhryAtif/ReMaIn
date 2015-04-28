@@ -89,13 +89,13 @@ public class CookDisplay extends JFrame {
         // Create, Populate, and Update Looks of Order Table
         //*********************************************************************//
         Object[] orderColumns = {"Order ID", "Table", "Order Detail", "Time Ordered", "Notes", "Order Status"};
-//$        Object[][] orderData = OrderManager.getOrders();
-		Object[][] orderData = {
+        Object[][] orderData = OrderManager.getOrders();
+		/*Object[][] orderData = {
                 {"001", "11", "Pizza, Juice, Fries, Soda", "11:10", "Extra Cheese", "NEW"},
                 {"002", "07", "Juice, Fries, Soda, Pizza", "11:30", "No Toppings", "STARTED"},
                 {"003", "09", "Fries, Soda, Pizza, Juice", "11:55", "Chicago Style", "READY"},
                 {"004", "08", "Soda, Pizza, Juice, Fries", "12:15", "", "HELP"},
-        };
+        };*/
         orderTable = new JTable() {
             public boolean isCellEditable(int r, int c) { return false; }
         };
@@ -118,13 +118,13 @@ public class CookDisplay extends JFrame {
         // Create, Populate, and Update Looks of Inventory Table
         //*********************************************************************//
         Object[] inventoryColumns = {"Order ID", "Item Description", "Quantity Needed", "Quantity In Stock", "Notes", "Status"};
-//$        Object[][] inventoryData = InventoryManager.getInventoryItems();
-		Object[][] inventoryData = {
+        Object[][] inventoryData = InventoryManager.getInventoryItems();
+		/*Object[][] inventoryData = {
                 {"001", "Eggs", "20", "10", "Urgent", "PENDING"},
                 {"002", "Cheese", "05", "01", "", "ORDERED"},
                 {"003", "Bagels", "25", "03", "ORDER or DIE", "PENDING"},
                 {"004", "Bread", "25", "15", "Take Yo Time", "CANCELED"}
-        };
+        };*/
 
         inventoryTable = new JTable() {
             @Override

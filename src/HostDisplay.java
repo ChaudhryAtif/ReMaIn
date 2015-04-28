@@ -34,7 +34,7 @@ public class HostDisplay extends JFrame {
 //    private String[] table11Data = {"", "", "", "", "", "", "", ""};
 
     // Populated by Connie
-    private String[] table1Data = {"1","Reserved","Connor", "12/12/1212", "12:03 am", "(222) 222-2222", "2", "nothing"};
+    /*private String[] table1Data = {"1","Reserved","Connor", "12/12/1212", "12:03 am", "(222) 222-2222", "2", "nothing"};
     private String[] table2Data = {"2","Occupied","", "", "", "", "", ""};
     private String[] table3Data = {"3","Reserved","Jordan", "13/13/1313", "13:03 am", "(333) 333-3333", "3", "Brennan is ehh"};
     private String[] table4Data = {"4","Reserved","Max", "14/14/1414", "14:03 am", "(444) 444-4444", "4", "Databases are cool"};
@@ -47,16 +47,16 @@ public class HostDisplay extends JFrame {
     private String[] table11Data = {"11","Reserved","Goldwasser", "11/11/1111", "11:03 am", "(111) 111-1111", "1", "ALGORITHMS"};
     private String[][] reservationData = {table1Data, table2Data, table3Data, table4Data, table5Data, table6Data,
             table7Data, table8Data, table9Data, table10Data, table11Data};
-
+*/
 //    private String[][] reservationData = new String[11][8];
-
+    private String[][] reservationData = TableManager.getTables();
 
     public String[][] getResData() {
         return reservationData;
     }
 
     public void setResData(String[]... tableData) {
-        int table = 0;
+        int table = 1; //$
         for (String[] resInfo : tableData) {
             reservationData[table] = resInfo;
             table++;
@@ -100,7 +100,7 @@ public class HostDisplay extends JFrame {
             } else tableRowThree.add(tableList[tableNo]);                                             // 3rd Row: 8-11
 
             // Get table status
-            String[] tableData = reservationData[tableNo-1];
+            String[] tableData = reservationData[tableNo]; //$
             if (tableData[1].equals("Reserved")) {
                 // Change to x mark for reserved table
                 Utilities.updateFont(tableList[tableNo], .03);
@@ -174,7 +174,7 @@ public class HostDisplay extends JFrame {
                         resPhone, Box.createRigidArea(new Dimension(10, 0)),
                         resHead, Box.createRigidArea(new Dimension(10, 0)), resOrder);
 
-                final String[] tableData = reservationData[tableNo-1];
+                final String[] tableData = reservationData[tableNo];//$
 
                 // Check if table is reserved or not
                 if (tableData[1].equals("Reserved"))
@@ -202,12 +202,18 @@ public class HostDisplay extends JFrame {
                                 Utilities.updateFont(tableList[tableNo], .03);
                                 tableList[tableNo].setIcon(occupied);
                                 tableList[tableNo].setForeground(Color.gray);
+                                
+                                // Update the core code
+                                TableManager.setStatus(tableNo, "Occupied");
                             }
                             else if (activities[0].equals("Clear Table")) {
                                 // Set back to nothing for empty table
                                 Utilities.updateFont(tableList[tableNo], .05);
                                 tableList[tableNo].setIcon(null);
                                 tableList[tableNo].setForeground(Color.black);
+                                
+                                // Update the core code
+                                TableManager.setStatus(tableNo, "Cleared");
                             }
                         }
                         if (answer == 1) {
@@ -255,6 +261,11 @@ public class HostDisplay extends JFrame {
                                         tableList[index].setIcon(reserved);
                                         tableList[index].setForeground(Color.gray);
                                         clicked[index] = true;
+                                        
+                                        // Update the core code
+                                        TableManager.setStatus(index, "Reserved");
+                                        TableManager.setReservationInfo(new Integer(tableData[0]), tableData[2],
+                                        		tableData[3], tableData[4], tableData[5], tableData[6], tableData[7]);
 
                                         Window w = SwingUtilities.getWindowAncestor(reserveButton);
 
@@ -313,6 +324,11 @@ public class HostDisplay extends JFrame {
                                     tableData[5] = resPhone.getText();
                                     tableData[6] = resHead.getText();
                                     tableData[7] = resOrder.getText();
+                                    
+                                    // Update the core code
+                                    TableManager.setStatus(index, "Reserved");
+                                    TableManager.setReservationInfo(new Integer(tableData[0]), tableData[2],
+                                    		tableData[3], tableData[4], tableData[5], tableData[6], tableData[7]);
 
                                     Window w = SwingUtilities.getWindowAncestor(doneBtn);
 
@@ -352,6 +368,8 @@ public class HostDisplay extends JFrame {
                                 tableList[index].setIcon(null);
                                 tableList[index].setForeground(Color.black);
                                 clicked[index] = false;
+                                
+                                TableManager.setStatus(index, "Cleared");
 
                                 Window win = SwingUtilities.getWindowAncestor(cancelBtn);
 

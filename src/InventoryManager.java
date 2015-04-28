@@ -67,7 +67,7 @@ public class InventoryManager {
      * @return				All of the InventoryItems in the ArrayList
      */
     public static Object[][] getInventoryItems() {
-    	inventoryItems = InventoryDB.getAll();
+    	//inventoryItems = InventoryDB.getAll();
     	Object[][] items = new Object[inventoryItems.size()][6];
     	int count = 0;
     	for (InventoryItem item : inventoryItems) {

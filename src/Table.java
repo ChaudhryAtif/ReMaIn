@@ -1,5 +1,6 @@
 public class Table {
     
+	private String tableNumber;
 	private String status;		// The status of the table: Cleared, Occupied, or Reserved
 	private String resName;
 	private String resDate;
@@ -8,7 +9,8 @@ public class Table {
 	private String resHeads;
 	private String resNotes;
 
-	public Table(String status) {
+	public Table(String tableNumber, String status) {
+		this.tableNumber = tableNumber;
 		this.status = status;
 		this.resName = "";
 		this.resDate = "";
@@ -32,6 +34,7 @@ public class Table {
 		this.resNotes = resNotes;
 	}
 	
+	public String getTableNumber() { return tableNumber; }
 	public String getStatus() { return status; }
 	public String getResName() { return resName; }
 	public String getResDate() { return resDate; }
