@@ -28,8 +28,8 @@ public class Order {
 	 */
 	public void update(String tableValues[]) {
 		this.orderID = tableValues[0];
-	    this.orderInfo = tableValues[1];
-	    this.orderTableNo = tableValues[2];
+		this.orderTableNo = tableValues[1];
+	    this.orderInfo = tableValues[2];
 	    this.orderTime = tableValues[3];
 	    this.orderNotes = tableValues[4];
 	    this.status = tableValues[5];

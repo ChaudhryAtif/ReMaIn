@@ -22,8 +22,8 @@ public class InventoryManager {
 	 * @param tableValues 	An array of values for the item being added
 	 */
     public static void addInventoryItem(String tableValues[]) {
-        inventoryItems.add(new InventoryItem(tableValues));
-        //InventoryDB.insert(tableValues);
+        //inventoryItems.add(new InventoryItem(tableValues));
+        InventoryDB.insert(tableValues);
     }
     
     /**
@@ -33,8 +33,9 @@ public class InventoryManager {
      */
     public static void updateItem(String itemID, String tableValues[]) {
     	InventoryItem item = getItem(itemID);
-    	if (item != null) { item.update(tableValues); }
-    	//InventoryDB.modify(new Integer(itemID), tableValues);
+    	if (item != null) {
+    		InventoryDB.modify(new Integer(itemID), tableValues);
+    	}
     }
     
     /**
@@ -44,8 +45,8 @@ public class InventoryManager {
     public static void removeInventoryItem(String itemID) {
     	InventoryItem item = getItem(itemID);
         if (item != null) {
-        	inventoryItems.remove(item);
-        	//InventoryDB.remove(new Integer(itemID));
+        	//inventoryItems.remove(item);
+        	InventoryDB.remove(new Integer(itemID));
         }
     }
     
@@ -57,8 +58,8 @@ public class InventoryManager {
     public static void setStatus(String itemID, String status) {
     	InventoryItem item = getItem(itemID);
     	if (item != null) {
-    		item.setStatus(status);
-    		//InventoryDB.singleModify(new Integer(itemID), 5, status);
+    		//item.setStatus(status);
+    		InventoryDB.singleModify(new Integer(itemID), "status", status);
     	}
     }
     
@@ -67,7 +68,7 @@ public class InventoryManager {
      * @return				All of the InventoryItems in the ArrayList
      */
     public static Object[][] getInventoryItems() {
-    	//inventoryItems = InventoryDB.getAll();
+    	inventoryItems = InventoryDB.getAll();
     	Object[][] items = new Object[inventoryItems.size()][6];
     	int count = 0;
     	for (InventoryItem item : inventoryItems) {

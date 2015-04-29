@@ -22,8 +22,8 @@ public class OrderManager {
     * @param tableValues 	An array of values to be added to the order
     */
     public static void addOrder(String tableValues[]) {
-    	orders.add(new Order(tableValues));
-    	//OrderDB.insert(tableValues);
+    	//orders.add(new Order(tableValues));
+    	OrderDB.insert(tableValues);
     }
     
     /**
@@ -33,9 +33,9 @@ public class OrderManager {
      */
     public static void updateOrder(String orderID, String tableValues[]) {
     	Order order = getOrder(orderID);
-    	if (order != null) {
-    		order.update(tableValues);
-    		//OrderDB.modify(new Integer(orderID), tableValues);
+    	if (orderID != null) {
+    		//order.update(tableValues);
+    		OrderDB.modify(new Integer(orderID), tableValues);
     	}
     }
     
@@ -46,8 +46,8 @@ public class OrderManager {
     public static void removeOrder(String orderID) {
     	Order order = getOrder(orderID);
     	if (order != null) {
-    		orders.remove(order);
-    		//OrderDB.remove(new Integer(orderID));
+    		//orders.remove(order);
+    		OrderDB.remove(new Integer(orderID));
     	}
     }
     
@@ -59,8 +59,8 @@ public class OrderManager {
     public static void setStatus(String orderID, String status) {
     	Order order = getOrder(orderID);
     	if (order != null) {
-    		order.setStatus(status);
-    		//OrderDB.singleModify(new Integer(orderID), 5, status);
+    		//order.setStatus(status);
+    		OrderDB.singleModify(new Integer(orderID), "order_status", status);
     	}
     }
     
@@ -69,7 +69,7 @@ public class OrderManager {
      * @return				All of the Orders in the ArrayList
      */
     public static Object[][] getOrders() {
-    	//orders = OrderDB.getAll();
+    	orders = OrderDB.getAll();
     	Object[][] tempOrders = new Object[orders.size()][6];
     	int count = 0;
     	for (Order order : orders) {
@@ -77,5 +77,6 @@ public class OrderManager {
     	}
     	if (count == 0) return new Object[][]{};
     	return tempOrders;
+	//return orders;
     }
 }

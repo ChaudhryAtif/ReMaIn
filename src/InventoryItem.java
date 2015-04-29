@@ -27,8 +27,8 @@ public class InventoryItem {
      */
     public void update(String tableValues[]) {
     	this.itemID = tableValues[0];
-    	this.itemName = tableValues[1];
-    	this.itemQty = tableValues[2];
+    	this.itemQty = tableValues[1];
+    	this.itemName = tableValues[2];
     	this.itemStock = tableValues[3];
     	this.itemNotes = tableValues[4];
     	this.status = tableValues[5];
