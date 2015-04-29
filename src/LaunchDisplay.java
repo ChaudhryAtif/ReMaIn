@@ -7,9 +7,6 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.Arrays;
 
-/**
- * Created by Owner on 3/17/2015.
- */
 public class LaunchDisplay extends JFrame {
     private JPanel greetPanel = new JPanel(new BorderLayout()), setupPanel = new JPanel(new BorderLayout());
     private JPanel userPanel, setupCtrls = new JPanel();
@@ -18,6 +15,7 @@ public class LaunchDisplay extends JFrame {
     private JButton startSetup = new JButton("Start Setup"), quitSetup = new JButton("Quit Setup");
     private JPasswordField userPassOne, userPassTwo;
 
+    private boolean firstLaunch = true;
     private Writer writer;
     private int userCount = 0;
     private boolean showPass = false;
@@ -29,11 +27,12 @@ public class LaunchDisplay extends JFrame {
         setLayout(new GridLayout(2,0));
         greetPanel.setLayout(new BorderLayout());
 
-        // GREETING MESSAGE - LATER
-        JLabel welcomeMsg = new JLabel("Welcome and Setup info here!");
+        JLabel welcomeMsg = new JLabel("<html>Welcome to ReMaIn registration!<br><br>" +
+                "- Click Start Setup to continue<br>" +
+                "- Quit Setup to cancel registration!</html>", SwingConstants.CENTER);
         welcomeMsg.setHorizontalAlignment(0);
         greetPanel.add(welcomeMsg, BorderLayout.CENTER);
-        Utilities.updateFont(welcomeMsg, .05);
+        Utilities.updateFont(welcomeMsg, .075);
 
         Utilities.multiAdd(setupCtrls, startSetup, Box.createRigidArea(new Dimension(10, 0)), quitSetup);
 
@@ -67,10 +66,10 @@ public class LaunchDisplay extends JFrame {
         quitSetup.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    writer.close();
+                    if (!firstLaunch) { writer.close(); }
                     new File("UserPass.txt").delete();
                     System.exit(0);
-                } catch (Exception ex) {}}                      // Quit system when Clicked
+                } catch (Exception ex) { ex.printStackTrace(); }}                      // Quit system when Clicked
         });
         startSetup.addActionListener(click);
         showPassToggle.addActionListener(click);
@@ -86,9 +85,8 @@ public class LaunchDisplay extends JFrame {
         });
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);                                          // Keep window maximized
-//        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);                             // Disable ALT+F4 Close
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        setUndecorated(true);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);                             // Disable ALT+F4 Close
+        setUndecorated(true);
 
         greetPanel.add(setupCtrls, BorderLayout.SOUTH);
         Utilities.multiAdd(this, greetPanel, setupPanel);
@@ -105,6 +103,7 @@ public class LaunchDisplay extends JFrame {
             // Initiate display to start password creation
             if (event.getSource() == startSetup) {
                 startSetup.setEnabled(false);
+                firstLaunch = false;
                 setupPanel.add(userPanel, BorderLayout.NORTH);
                 userPassOne.requestFocusInWindow();
                 revalidate();
@@ -151,16 +150,16 @@ public class LaunchDisplay extends JFrame {
                     try {
                         switch (userCount) {
                             case 0:
-                                writer.write("manager," + securePass);
+                                writer.write(securePass);
                                 break;
                             case 1:
-                                writer.write(",\ncook," + securePass);
+                                writer.write("," + securePass);
                                 break;
                             case 2:
-                                writer.write(",\nhost," + securePass);
+                                writer.write("," + securePass);
                                 break;
                             case 3:
-                                writer.write(",\nwaiter," + securePass);
+                                writer.write("," + securePass);
                                 break;
                             default:
                                 break;
@@ -188,10 +187,11 @@ public class LaunchDisplay extends JFrame {
                         userName.setText("Waiter");
                         userConfirm.setText("Launch ");
                     }
-
                     if (userCount == 4) {
                         userCount = 0;
-                        try {writer.close();} catch (Exception ex) {}
+                        try {
+                            writer.close();
+                        } catch (Exception ex) { ex.printStackTrace(); }
 
                         new LoginDisplay();
                         dispose();
