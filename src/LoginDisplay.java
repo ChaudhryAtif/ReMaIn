@@ -19,7 +19,6 @@ public class LoginDisplay extends JFrame {
 
         // Create instances of User Class
         User cook_user = new User("Cook","cooks");
-        //TODO add to user list, or dictionary, key = typeofuser, value = dict of the users where key = id_no and value = user
         User host_user = new User("Host","hosts");
         User waiter_user = new User("Waiter","waiters");
         User manager_user = new User("Manager","manages");
@@ -51,27 +50,19 @@ public class LoginDisplay extends JFrame {
      */
     public class ButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent event) {
-//            pwdVerifier.readFile(new File("UserPass.txt"));
+            pwdVerifier.readFile(new File("UserPass.txt"));
 
             if (event.getSource() == manager) {
-//                if (pwdVerifier.verifyPwd("manager")) {                        // If the password is correct, open Display
-                new ManagerDisplay();
-//                }
+                if (pwdVerifier.verifyPwd("manager")) { new ManagerDisplay(); }   // If correct pass, open Display
             }
             if (event.getSource() == cook) {
-//                if (pwdVerifier.verifyPwd("cook")) {
-                    new CookDisplay();
-//                }
+                if (pwdVerifier.verifyPwd("cook")) { new CookDisplay(); }
             }
             if (event.getSource() == host) {
-//                if (pwdVerifier.verifyPwd("host")) {
-                    new HostDisplay();
-//                }
+                if (pwdVerifier.verifyPwd("host")) { new HostDisplay(); }
             }
             if (event.getSource() == waiter) {
-//                if (pwdVerifier.verifyPwd("waiter")) {
-                    new WaiterDisplay();
-//                }
+                if (pwdVerifier.verifyPwd("waiter")) { new WaiterDisplay(); }
             }
         }
     } // ButtonListener
