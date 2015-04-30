@@ -1,10 +1,7 @@
 import java.util.ArrayList;
 
 public class InventoryManager {
-	
-	//************************************************
-	// Private
-	//************************************************
+
 	private static ArrayList<InventoryItem> inventoryItems = new ArrayList<InventoryItem>();
 	
 	private static InventoryItem getItem(String itemID) {
@@ -13,16 +10,12 @@ public class InventoryManager {
     	}
     	return null;
     }
-	
-	//************************************************
-	// Public
-	//************************************************
+
 	/**
 	 * Add an item to the ArrayList of items
 	 * @param tableValues 	An array of values for the item being added
 	 */
     public static void addInventoryItem(String tableValues[]) {
-        //inventoryItems.add(new InventoryItem(tableValues));
         InventoryDB.insert(tableValues);
     }
     
@@ -45,7 +38,6 @@ public class InventoryManager {
     public static void removeInventoryItem(String itemID) {
     	InventoryItem item = getItem(itemID);
         if (item != null) {
-        	//inventoryItems.remove(item);
         	InventoryDB.remove(new Integer(itemID));
         }
     }
@@ -58,7 +50,6 @@ public class InventoryManager {
     public static void setStatus(String itemID, String status) {
     	InventoryItem item = getItem(itemID);
     	if (item != null) {
-    		//item.setStatus(status);
     		InventoryDB.singleModify(new Integer(itemID), "status", status);
     	}
     }
