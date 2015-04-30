@@ -1,7 +1,6 @@
 import java.sql.*;
 import java.util.*;
 
-
 public class TableDB {
 	
 	private static Connection myConn;
@@ -14,30 +13,22 @@ public class TableDB {
 				"jdbc:mysql://25.2.208.207:3306/MAnRI", "test" , "Maximus69");
 			//System.out.println("Connected\n");
 		}
-		catch (Exception exc){
-			exc.printStackTrace();
-		}
+		catch (Exception exc){ exc.printStackTrace(); }
 	}
 	
 	public static void close() {
-		try {
-			myConn.close();
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
+		try { myConn.close(); }
+		catch (SQLException e) { e.printStackTrace(); }
 	}
 	
 	public static void modify(int tableNumber, String tableValues[]) {
-		//for (int i = 0; i < tableValues.length; i++) {
-		singleModify(tableNumber, "status", tableValues[1]);
-		singleModify(tableNumber, "name", tableValues[2]);
-		singleModify(tableNumber, "date", tableValues[3]);
-		singleModify(tableNumber, "time", tableValues[4]);
-		singleModify(tableNumber, "phone", tableValues[5]);
-		singleModify(tableNumber, "heads", tableValues[6]);
-		singleModify(tableNumber, "notes", tableValues[7]);
-		//}
+        singleModify(tableNumber, "status", tableValues[1]);
+        singleModify(tableNumber, "name", tableValues[2]);
+        singleModify(tableNumber, "date", tableValues[3]);
+        singleModify(tableNumber, "time", tableValues[4]);
+        singleModify(tableNumber, "phone", tableValues[5]);
+        singleModify(tableNumber, "heads", tableValues[6]);
+        singleModify(tableNumber, "notes", tableValues[7]);
 	}
 	
 	public static void singleModify(int tableNumber, String field, String value) {
@@ -55,9 +46,7 @@ public class TableDB {
 	
 			preparedStmt.executeUpdate();
 		}
-		catch (Exception exc){
-			exc.printStackTrace();
-		}
+		catch (Exception exc){ exc.printStackTrace(); }
 		close();
 	}
 	
@@ -90,9 +79,7 @@ public class TableDB {
 			}
 			return tables;
 		}
-		catch (Exception exc) {
-			exc.printStackTrace();
-		}
+		catch (Exception exc) { exc.printStackTrace(); }
 		close();
 		return null;
 	}
