@@ -21,47 +21,7 @@ public class HostDisplay extends JFrame {
     private JLabel timeDate = new JLabel();                                 // timeDate: Dynamic Time & Date;
     private ButtonListener click = new ButtonListener();
 
-//    private String[] table1Data = {"", "", "", "", "", "", "", ""};
-//    private String[] table2Data = {"", "", "", "", "", "", "", ""};
-//    private String[] table3Data = {"", "", "", "", "", "", "", ""};
-//    private String[] table4Data = {"", "", "", "", "", "", "", ""};
-//    private String[] table5Data = {"", "", "", "", "", "", "", ""};
-//    private String[] table6Data = {"", "", "", "", "", "", "", ""};
-//    private String[] table7Data = {"", "", "", "", "", "", "", ""};
-//    private String[] table8Data = {"", "", "", "", "", "", "", ""};
-//    private String[] table9Data = {"", "", "", "", "", "", "", ""};
-//    private String[] table10Data = {"", "", "", "", "", "", "", ""};
-//    private String[] table11Data = {"", "", "", "", "", "", "", ""};
-
-    // Populated by Connie
-    /*private String[] table1Data = {"1","Reserved","Connor", "12/12/1212", "12:03 am", "(222) 222-2222", "2", "nothing"};
-    private String[] table2Data = {"2","Occupied","", "", "", "", "", ""};
-    private String[] table3Data = {"3","Reserved","Jordan", "13/13/1313", "13:03 am", "(333) 333-3333", "3", "Brennan is ehh"};
-    private String[] table4Data = {"4","Reserved","Max", "14/14/1414", "14:03 am", "(444) 444-4444", "4", "Databases are cool"};
-    private String[] table5Data = {"5", "","", "", "", "", "", ""};
-    private String[] table6Data = {"6","Reserved","Atif", "15/15/1515", "15:03 am", "(555) 555-5555", "5", "Incoherent babble"};
-    private String[] table7Data = {"7","Reserved","Brennan", "16/16/1616", "16:03 am", "(666) 666-6666", "6", "Jordo is better"};
-    private String[] table8Data = {"8","Reserved","Scannell", "17/17/1717", "17:03 am", "(777) 777-7777", "7", "Languages"};
-    private String[] table9Data = {"9","Reserved","Sukhodolsky", "18/18/1818", "18:03 am", "(888) 888-8888", "8", "For Russia"};
-    private String[] table10Data = {"10","Reserved","Chambers", "19/19/1919", "19:03 am", "(999) 999-9999", "9", "Data Structures"};
-    private String[] table11Data = {"11","Reserved","Goldwasser", "11/11/1111", "11:03 am", "(111) 111-1111", "1", "ALGORITHMS"};
-    private String[][] reservationData = {table1Data, table2Data, table3Data, table4Data, table5Data, table6Data,
-            table7Data, table8Data, table9Data, table10Data, table11Data};
-*/
-//    private String[][] reservationData = new String[11][8];
     private String[][] reservationData = TableManager.getTables();
-
-    public String[][] getResData() {
-        return reservationData;
-    }
-
-    public void setResData(String[]... tableData) {
-        int table = 1; //$
-        for (String[] resInfo : tableData) {
-            reservationData[table] = resInfo;
-            table++;
-        }
-    }
 
     public HostDisplay() {
         setupHDisplay();
@@ -87,7 +47,6 @@ public class HostDisplay extends JFrame {
         } catch(IOException e) {
             e.printStackTrace();
         }
-
 
         // Create Table Buttons (x11), Add ActionListener to them and Add them to Table Rows
         for (int tableNo=1; tableNo < 12; tableNo++) {
@@ -369,6 +328,7 @@ public class HostDisplay extends JFrame {
                                 tableList[index].setForeground(Color.black);
                                 clicked[index] = false;
                                 
+                            	// Update the core code
                                 TableManager.setStatus(index, "Cleared");
 
                                 Window win = SwingUtilities.getWindowAncestor(cancelBtn);
@@ -389,7 +349,7 @@ public class HostDisplay extends JFrame {
         } // ButtonListener
     }
 
-    public static void main(String[] args) throws Exception {
-        new HostDisplay();
-    }
+//    public static void main(String[] args) throws Exception {
+//        new HostDisplay();
+//    }
 }
