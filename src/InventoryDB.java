@@ -13,18 +13,12 @@ public class InventoryDB {
 				"jdbc:mysql://25.2.208.207:3306/MAnRI", "test" , "Maximus69");
 			//	System.out.println("Connected\n");
 		}
-		catch (Exception exc){
-			exc.printStackTrace();
-		}
+		catch (Exception exc){ exc.printStackTrace(); }
 	}
 	
 	public static void close() {
-		try {
-			myConn.close();
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
+		try { myConn.close(); }
+		catch (SQLException e) { e.printStackTrace(); }
 	}
 	
 	public static void insert(String tableValues[]) {
@@ -42,15 +36,11 @@ public class InventoryDB {
 			
 			preparedStmt.execute();
 		}
-		catch (Exception exc) {
-			exc.printStackTrace();
-		}
+		catch (Exception exc) { exc.printStackTrace(); }
 		close();
 	}
 	
 	public static void modify(int id, String tableValues[]) {
-		System.out.println("shits modifying");
-
 		singleModify(id, "qty_need", tableValues[1]);
 		singleModify(id, "description", tableValues[2]);
 		singleModify(id, "in_stock", tableValues[3]);
@@ -70,12 +60,9 @@ public class InventoryDB {
 				preparedStmt.setString	(1, value);
 			}
 			preparedStmt.setInt	(2, id);
-	
 			preparedStmt.executeUpdate();
 		}
-		catch (Exception exc){
-			exc.printStackTrace();
-		}
+		catch (Exception exc){ exc.printStackTrace(); }
 		close();
 	}
 	
@@ -88,22 +75,18 @@ public class InventoryDB {
 			ArrayList<InventoryItem> items = new ArrayList<InventoryItem>();
 			
 			while (results.next()) {
-				String[] myList = new String[6]; 
-				//for (int i = 0; i < 6; i++) { // 6 columns in the table
+				String[] myList = new String[6];
 				myList[0] = results.getString("id");
 				myList[1] = results.getString("qty_need");
 				myList[2] = results.getString("description");
 				myList[3] = results.getString("in_stock");
 				myList[4] = results.getString("notes");
 				myList[5] = results.getString("status");
-				//}
-	            		items.add(new InventoryItem(myList));
+                items.add(new InventoryItem(myList));
 			}
 			return items;
 		}
-		catch (Exception exc) {
-			exc.printStackTrace();
-		}
+		catch (Exception exc) { exc.printStackTrace(); }
 		close();
 		return null;
 	}
@@ -117,10 +100,7 @@ public class InventoryDB {
 	
   		preparedStmt.execute();
 		}
-		catch (Exception exc){
-			exc.printStackTrace();
-		}
+		catch (Exception exc){ exc.printStackTrace(); }
 		close();
 	}
-	
 }
