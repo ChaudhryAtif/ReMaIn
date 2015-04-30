@@ -1,18 +1,12 @@
 public class InventoryItem {
 
-	//************************************************
-	// Private
-	//************************************************
 	private String itemID;
     private String itemName;
     private String itemQty;
     private String itemStock;
     private String itemNotes;
     private String status;
-	
-	//************************************************
-	// Public 
-	//************************************************
+
     /**
      * Construct an InventoryItem
      * @param tableValues 	An array of values for the item
@@ -27,8 +21,8 @@ public class InventoryItem {
      */
     public void update(String tableValues[]) {
     	this.itemID = tableValues[0];
-    	this.itemQty = tableValues[1];
-    	this.itemName = tableValues[2];
+    	this.itemName = tableValues[1];
+    	this.itemQty = tableValues[2];
     	this.itemStock = tableValues[3];
     	this.itemNotes = tableValues[4];
     	this.status = tableValues[5];
@@ -42,9 +36,7 @@ public class InventoryItem {
 		this.status = status;
 	}
     
-	/**
-	 * Getters
-	 */
+	// Getters
     public String getItemID() { return itemID; }
     public String getItemName() { return itemName; }
     public String getItemQty() { return itemQty; }
