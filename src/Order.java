@@ -1,19 +1,13 @@
 
 public class Order {
-	
-	//*************************************************
-	// Private
-	//*************************************************
+
 	private String orderID;          // ID of the order
     private String orderTableNo;     // Table associated with the order
     private String orderInfo;        // String that represents the order information
     private String orderTime;        // Time of the order (Requires military time in form 99:99)
     private String orderNotes;       // Additional information about the order
     private String status;           // Status of the order
-    
-    //************************************************
-  	// Public 
-  	//************************************************  
+
     /**
      * Construct an Order
      * @param tableValues 	An array of values for the Order
@@ -42,10 +36,8 @@ public class Order {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
-    /**
-    * Getters
-    */
+
+    // Getters
     public String getOrderID() { return orderID; }
     public String getOrderTableNo() { return orderTableNo; }
     public String getOrderInfo() { return orderInfo; }
