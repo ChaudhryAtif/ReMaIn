@@ -171,7 +171,6 @@ public class TableButtonHandler {
             tableValues[col] = "PENDING";
             InventoryManager.addInventoryItem(tableValues);
         }
-
         model.addRow(tableValues);
     }
 
@@ -262,12 +261,14 @@ public class TableButtonHandler {
     public void removeRow(JTable table, JLabel tableMsg, JLabel tableName) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
 
-        String ID = (String) model.getValueAt(table.getSelectedRow(), 0);
         if (tableName.getText().equals("orderTable")) {
+            String ID = (String) model.getValueAt(table.getSelectedRow(), 0);
         	OrderManager.removeOrder(ID);
-        }
-        else {
+        } else if (tableName.getText().equals("inventoryTable")) {
+            String ID = (String) model.getValueAt(table.getSelectedRow(), 0);
         	InventoryManager.removeInventoryItem(ID);
+        } else {
+            //
         }
         model.removeRow(table.getSelectedRow());
     }
