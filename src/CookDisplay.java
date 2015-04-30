@@ -108,7 +108,7 @@ public class CookDisplay extends JFrame {
 
         Utilities.multiUpdateFont(.02, addItm = new JButton("Add"), updateItm = new JButton("Update"),
                 removeItm = new JButton("Remove"), clearItm = new JButton("Clear Input"));
-        Utilities.multiAdd(inventoryCtrls, itemId, itemQty, itemName, itemStock, itemNotes,
+        Utilities.multiAdd(inventoryCtrls, itemId, itemName, itemQty, itemStock, itemNotes,
                 Box.createRigidArea(new Dimension(10, 0)), addItm,
                 Box.createRigidArea(new Dimension(10, 0)), updateItm,
                 Box.createRigidArea(new Dimension(10, 0)), removeItm,
@@ -217,7 +217,7 @@ public class CookDisplay extends JFrame {
         }
     }
 
-    public static void main(String[] args) {
-        new CookDisplay();
-    }
+//    public static void main(String[] args) {
+//        new CookDisplay();
+//    }
 }
