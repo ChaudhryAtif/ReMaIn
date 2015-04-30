@@ -202,7 +202,7 @@ public class LaunchDisplay extends JFrame {
         }
     }
 
-    public static void main(String[] args) {
-        new LaunchDisplay();
-    }
+//    public static void main(String[] args) {
+//        new LaunchDisplay();
+//    }
 }
