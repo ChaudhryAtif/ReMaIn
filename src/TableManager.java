@@ -8,17 +8,14 @@ public class TableManager {
     
     public static void setStatus(int tableNumber, String status) {
     	tables.get(tableNumber-1).setStatus(status);
-    	//TableDB.singleModify(tableNumber, 1, status);
     }
     
     public static void setReservationInfo(int tableNumber, String resName, String resDate, String resTime, 
 		     String resPhone, String resHeads, String resNotes) {
     	tables.get(tableNumber-1).setReservationInfo(resName, resDate, resTime, resPhone, resHeads, resNotes);
-    	//TableDB.modifyReservation(tableNumber, new String[]{resName, resDate, resTime, resPhone, resHeads, resNotes});
     }
     
     public static String[][] getTables() {
-    	//tables = TableDB.getAll();
     	if (x == 0) {
 	    	for (int i = 0; i < numOfTables; i++) {
 	    		tables.add(new Table(Integer.toString(i), "CLEARED"));
@@ -34,5 +31,4 @@ public class TableManager {
     	}
     	return tempTables;
     }
-    
 }
