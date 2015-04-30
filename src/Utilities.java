@@ -74,7 +74,7 @@ public class Utilities {
     }
 
     /**
-     * Checks if a name is valid
+     * #NOT USED# Checks if a name is valid
      * @param name          Name to validate
      * @return              Result to valid or not
      */
