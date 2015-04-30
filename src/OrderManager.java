@@ -2,27 +2,20 @@ import java.util.ArrayList;
 
 public class OrderManager {
 
-	//************************************************
-	// Private
-	//************************************************
     private static ArrayList<Order> orders = new ArrayList<Order>();
-    
+
 	private static Order getOrder(String orderID) {
     	for (Order order : orders) {
     		if (order.getOrderID() == orderID) { return order; }
     	}
     	return null;
     }
-	
-	//************************************************
-	// Public 
-	//************************************************
+
     /**
     * Add an order to the ArrayList orders
     * @param tableValues 	An array of values to be added to the order
     */
     public static void addOrder(String tableValues[]) {
-    	//orders.add(new Order(tableValues));
     	OrderDB.insert(tableValues);
     }
     
@@ -34,7 +27,6 @@ public class OrderManager {
     public static void updateOrder(String orderID, String tableValues[]) {
     	Order order = getOrder(orderID);
     	if (orderID != null) {
-    		//order.update(tableValues);
     		OrderDB.modify(new Integer(orderID), tableValues);
     	}
     }
@@ -46,7 +38,6 @@ public class OrderManager {
     public static void removeOrder(String orderID) {
     	Order order = getOrder(orderID);
     	if (order != null) {
-    		//orders.remove(order);
     		OrderDB.remove(new Integer(orderID));
     	}
     }
@@ -59,7 +50,6 @@ public class OrderManager {
     public static void setStatus(String orderID, String status) {
     	Order order = getOrder(orderID);
     	if (order != null) {
-    		//order.setStatus(status);
     		OrderDB.singleModify(new Integer(orderID), "order_status", status);
     	}
     }
@@ -77,6 +67,5 @@ public class OrderManager {
     	}
     	if (count == 0) return new Object[][]{};
     	return tempOrders;
-	//return orders;
     }
 }
