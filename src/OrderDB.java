@@ -13,18 +13,12 @@ public class OrderDB {
 				"jdbc:mysql://25.2.208.207:3306/MAnRI", "test" , "Maximus69");
 			//System.out.println("Connected\n");
 		}
-		catch (Exception exc){
-			exc.printStackTrace();
-		}
+		catch (Exception exc){ exc.printStackTrace(); }
 	}
 	
 	public static void close() {
-		try {
-			myConn.close();
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
+		try { myConn.close(); }
+		catch (SQLException e) { e.printStackTrace(); }
 	}
 	
 	public static void insert(String tableValues[]) {
@@ -42,14 +36,11 @@ public class OrderDB {
 			
 			preparedStmt.execute();
 		}
-		catch (Exception exc) {
-			exc.printStackTrace();
-		}
+		catch (Exception exc) { exc.printStackTrace(); }
 		close();
 	}
 	
 	public static void modify(int id, String tableValues[]) {
-
 		singleModify(id, "table_num", tableValues[1]);
 		singleModify(id, "order_detail", tableValues[2]);
 		singleModify(id, "time_ordered", tableValues[3]);
@@ -73,9 +64,7 @@ public class OrderDB {
 	
 			preparedStmt.executeUpdate();
 		}
-		catch (Exception exc){
-			exc.printStackTrace();
-		}
+		catch (Exception exc){ exc.printStackTrace(); }
 		close();
 	}
 	
@@ -89,21 +78,13 @@ public class OrderDB {
 			
 			while (results.next()) {
 				String[] myList = new String[6];
-				/*for (int i = 0; i < 6; i++) { // 6 columns in the table
-					myList[1] = results.getString("id");
-					myList[2] = results.getString("table");
-					myList[3] = results.getString("order_detail");
-		                        myList[4] = results.getString("time_ordered");
-					myList[5] = results.getString("notes");
-		                        myList[6] = results.getString("order_status");
-				//}*/
 				myList[0] = results.getString("id");
-	            		myList[1] = results.getString("table_num");
-	            		myList[2] = results.getString("order_detail");
-	            		myList[3] = results.getString("time_ordered");
-	            		myList[4] = results.getString("notes");
-	            		myList[5] = results.getString("order_status");
-	            		orders.add(new Order(myList));
+                myList[1] = results.getString("table_num");
+                myList[2] = results.getString("order_detail");
+                myList[3] = results.getString("time_ordered");
+                myList[4] = results.getString("notes");
+                myList[5] = results.getString("order_status");
+                orders.add(new Order(myList));
 			}
 			return orders;
 		}
@@ -123,9 +104,7 @@ public class OrderDB {
 	
   		preparedStmt.execute();
 		}
-		catch (Exception exc){
-			exc.printStackTrace();
-		}
+		catch (Exception exc){ exc.printStackTrace(); }
 		close();
 	}
 	
