@@ -1,7 +1,7 @@
 
 public class Order {
-
-	private String orderID;          // ID of the order
+    
+    private String orderID;          // ID of the order
     private String orderTableNo;     // Table associated with the order
     private String orderInfo;        // String that represents the order information
     private String orderTime;        // Time of the order (Requires military time in form 99:99)
@@ -21,21 +21,19 @@ public class Order {
 	 * @param tableValues 	An array of values to update the order
 	 */
 	public void update(String tableValues[]) {
-		this.orderID = tableValues[0];
-		this.orderTableNo = tableValues[1];
-	    this.orderInfo = tableValues[2];
-	    this.orderTime = tableValues[3];
-	    this.orderNotes = tableValues[4];
-	    this.status = tableValues[5];
+        this.orderID = tableValues[0];
+        this.orderTableNo = tableValues[1];
+        this.orderInfo = tableValues[2];
+        this.orderTime = tableValues[3];
+        this.orderNotes = tableValues[4];
+        this.status = tableValues[5];
 	}
 	
 	/**
 	 * Set the status of the Order
 	 * @param status		The new status of the Order
 	 */
-	public void setStatus(String status) {
-		this.status = status;
-	}
+	public void setStatus(String status) { this.status = status; }
 
     // Getters
     public String getOrderID() { return orderID; }
