@@ -36,7 +36,7 @@ public class TableDB {
 		String query = "update table_dir set "+field+"= ? where id= ?";
 		try {
 			PreparedStatement preparedStmt = myConn.prepareStatement(query);
-			if (field.equals("heads")) {	//////////////////////////////// UPDATE THIS IF
+			if (field.equals("heads")) {
 				preparedStmt.setInt	(1, Integer.parseInt(value));
 			}
 			else {
