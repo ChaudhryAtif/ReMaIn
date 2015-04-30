@@ -4,9 +4,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
 
 public class ManagerDisplay extends JFrame {
-    private JPanel dayInfo = new JPanel(), control = new JPanel();                  // Top (dayInfo), Bottom (control) Sections
+    private JPanel dayInfo = new JPanel(), control = new JPanel();                  // Top (dayInfo), Bottom (control)
 
     // Inventory
     private boolean selectAll = false;
@@ -15,15 +18,16 @@ public class ManagerDisplay extends JFrame {
     private JPanel inventoryClock = new JPanel();
     private JPanel inventoryCtrls = new JPanel();
     private JTable inventoryTable;
-    private JButton orderItem, cancelItem, removeItm, checkAll;                     // Inventory Table Buttons
+    private JButton orderItem, cancelItem, checkAll;                     // Inventory Table Buttons
 
     private JLabel timeDate = new JLabel(), timeDateInvtry = new JLabel();          // timeDate: Dynamic Time & Date;
 
-    private JButton rButton, cButton, iButton;
+    private JButton cButton, iButton;
     private ButtonListener click = new ButtonListener();
     private PasswordVerifier pwdVerifier = new PasswordVerifier();
 
-    public static final String[] users = { "Cook", "Host", "Waiter", "Manager" };
+    public static final String[] users = { "Manager", "Cook", "Host", "Waiter" };
+    private String[] passData;                                                      // Stores secured passwords
 
 
     public ManagerDisplay() {
@@ -40,9 +44,7 @@ public class ManagerDisplay extends JFrame {
         control.setLayout(new GridLayout(3, 1));
         JPanel manButtons = new JPanel(new GridLayout());
 
-        Utilities.multiUpdateFont(.065,
-//                rButton = new JButton("Revenue"),
-                cButton = new JButton("User Controls"), iButton = new JButton("Inventory"));
+        Utilities.multiUpdateFont(.065, cButton = new JButton("User Controls"), iButton = new JButton("Inventory"));
         Utilities.multiAdd(manButtons, cButton, iButton);
         control.add(manButtons);
         add(control, BorderLayout.CENTER);
@@ -52,19 +54,15 @@ public class ManagerDisplay extends JFrame {
         //*********************************************************************//
         Utilities.startDayInfo(inventoryFrame, inventoryClock, "Welcome, Manager!", timeDateInvtry, .09, false);
         inventoryPanel.setLayout(new BorderLayout());
-        JLabel orderStatus = new JLabel("Order Status:");
-//        Utilities.updateFont(orderStatus, .025);
-        Utilities.multiUpdateFont(.03, removeItm = new JButton("Remove"), checkAll = new JButton("Select All/None"),
+        Utilities.multiUpdateFont(.03, checkAll = new JButton("Select All/None"),
                 cancelItem = new JButton("Cancel Item(s)"), orderItem = new JButton("Order Item(s)"));
-        Utilities.multiAdd(inventoryCtrls,
-//                removeItm, Box.createRigidArea(new Dimension(10, 0)),
-                checkAll, Box.createRigidArea(new Dimension(10, 0)),
+        Utilities.multiAdd(inventoryCtrls, checkAll, Box.createRigidArea(new Dimension(10, 0)),
                 cancelItem, Box.createRigidArea(new Dimension(10, 0)), orderItem);
 
         //*********************************************************************//
         // Create, Populate, and Update Looks of Inventory Table
         //*********************************************************************//
-		Object[][] inventoryData = InventoryManager.getInventoryItems();
+        Object[][] inventoryData = InventoryManager.getInventoryItems();
         /*Object[][] inventoryData = {
                 {"001", "Eggs", "20", "10", "Urgent", "PENDING", false},
                 {"002", "Cheese", "05", "01", "", "ORDERED", false},
@@ -81,7 +79,7 @@ public class ManagerDisplay extends JFrame {
                 return super.getColumnClass(col);
             }
             @Override
-            public boolean isCellEditable(int row, int col) {
+            public boolean isCellEditable(int row, int col) {               // Make specific columns editable
                 if (col == 6)
                     return true;
                 if (col == 7)
@@ -96,8 +94,6 @@ public class ManagerDisplay extends JFrame {
         inventoryPanel.add(inventoryCtrls, BorderLayout.NORTH);
         inventoryPanel.add(new JScrollPane(inventoryTable), BorderLayout.CENTER);
         inventoryFrame.add(inventoryPanel, BorderLayout.CENTER);
-
-        //#####
 
         // Listeners for all the Buttons;
         cButton.addActionListener(click);
@@ -174,17 +170,13 @@ public class ManagerDisplay extends JFrame {
             }
 
             if (event.getSource() == cButton) {
-
-                pwdVerifier.readFile(new File("UserPass.txt"));
-//                if (pwdVerifier.verifyPwd("manager")) {
+                passData = pwdVerifier.getData(new File("UserPass.txt")); // Manager, Cook, Host, Waiter
+                if (pwdVerifier.verifyPwd("manager")) {
                     JPanel panel = new JPanel();
                     panel.setLayout(new BoxLayout(panel, 1));
                     panel.add(new JLabel("Please choose a user:"));
                     JComboBox userList = new JComboBox(users);
 
-//                    JPasswordField oldPass = new JPasswordField();
-//                    oldPass.setDocument(new InputLimit(10));
-//                    oldPass.setBorder(BorderFactory.createTitledBorder("Enter Old Password (10 max):"));
                     JPasswordField newPassA = new JPasswordField();
                     newPassA.setDocument(new InputLimit(10));
                     newPassA.setBorder(BorderFactory.createTitledBorder("Enter New Password (10 max):"));
@@ -194,21 +186,37 @@ public class ManagerDisplay extends JFrame {
 
 
                     Utilities.multiAdd(panel, userList, Box.createRigidArea(new Dimension(0,25)),
-//                            oldPass, Box.createRigidArea(new Dimension(0,5)),
-                            newPassA,
-                            Box.createRigidArea(new Dimension(0,5)), newPassB);
+                            newPassA, Box.createRigidArea(new Dimension(0,5)), newPassB);
 
-                    JOptionPane.showConfirmDialog(null,
+                    int reply = JOptionPane.showConfirmDialog(null,
                             panel,
                             "Password Changer",
                             JOptionPane.OK_CANCEL_OPTION,
                             JOptionPane.PLAIN_MESSAGE);
-//                }
-            }
-        }
-    }
 
-    public static void main(String[] args) {
-        new ManagerDisplay();
-    }
+                    if (reply == JOptionPane.OK_OPTION) {
+                        if (!Arrays.equals(newPassA.getPassword(), newPassB.getPassword())) {
+                            JOptionPane.showMessageDialog(null, "Passwords do not match!\nUser password NOT updated!", "Failure!", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            passData[userList.getSelectedIndex()] = pwdVerifier.getSecurePass(newPassB.getPassword());
+                            File file = new File("UserPass.txt");
+                            try {
+                                FileWriter writer = new FileWriter(file, false);
+
+                                writer.write(passData[0]);
+                                for (int i=1; i < passData.length; i++) { writer.write("," + passData[i]); }
+                                writer.close();
+
+                            } catch (IOException e) { e.printStackTrace(); }
+                            JOptionPane.showMessageDialog(null, "Passwords matched\nUser password updated!!", "Success!", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    } // Reply Check
+                } // Password
+            } // Control Button
+        } // Action Event
+    } // Button Listener
+
+//    public static void main(String[] args) {
+//        new ManagerDisplay();
+//    }
 }
