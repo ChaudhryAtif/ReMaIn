@@ -3,7 +3,6 @@ import java.io.File;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -15,15 +14,18 @@ public class PasswordVerifier {
     int diagResp;                                                           // Dialog response (OK, CANCEL, CLOSE)
     private String orgPwd;                                                  // Password to compare to
     private String[] tokens;                                                // User1,Pass1,User2,Pass2...
-    private JPasswordField pwd = new JPasswordField();                              // Password Field
+    private JPasswordField pwd = new JPasswordField();                      // Password Field
 
     public void readFile(File file) {
         try {
             Scanner scanner = new Scanner(file);
-            while (scanner.hasNext()) { tokens = scanner.nextLine().split(","); }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            tokens = scanner.nextLine().split(",");
+        } catch (IOException e) { e.printStackTrace(); }
+    }
+
+    public String[] getData(File file) {
+        readFile(file);
+        return tokens;
     }
 
     /**
@@ -33,10 +35,10 @@ public class PasswordVerifier {
      */
     public boolean verifyPwd(String user) {
         orgPwd = null;
-        if (user.equals("manager")) { orgPwd = tokens[1];
-        } else if (user.equals("cook")) { orgPwd = tokens[3];
-        } else if (user.equals("host")) { orgPwd = tokens[5];
-        } else if (user.equals("waiter")) { orgPwd = tokens[7];
+        if (user.equals("manager")) { orgPwd = tokens[0];
+        } else if (user.equals("cook")) { orgPwd = tokens[1];
+        } else if (user.equals("host")) { orgPwd = tokens[2];
+        } else if (user.equals("waiter")) { orgPwd = tokens[3];
         } else { orgPwd = null;
         }
 
@@ -59,7 +61,6 @@ public class PasswordVerifier {
      * Given a char array, returns encrypted string     // http://goo.gl/8bRBwR  http://goo.gl/jnEh88
      * @param passToHash    Char array password from JPassField
      * @return String       Encypted password string
-     * @throws NoSuchAlgorithmException
      */
     public static String getSecurePass(char[] passToHash) {
         StringBuffer generatedPass = null;
@@ -69,16 +70,8 @@ public class PasswordVerifier {
             ArrayList<Byte> list = new ArrayList<Byte>();
             for (int i = 0; i < passToHash.length; i++) { list.add((byte) passToHash[i]); }
 
-//        byte[] saltInBytes = salt.getBytes();
-//        byte[] toBeHashed = new byte[(saltInBytes.length + list.size())];
-
             byte[] toBeHashed = new byte[list.size()];
             for(int i = 0; i < list.size(); i++){ toBeHashed[i] = list.get(i); }
-
-//            for (int i = 0; i < saltInBytes.length; i++) { toBeHashed[i] = saltInBytes[i]; }
-//            for (int i = saltInBytes.length; i < list.size() + saltInBytes.length; i++) {
-//                toBeHashed[i] = list.get(i - saltInBytes.length);
-//            }
 
             msgDig.update(toBeHashed);
             byte byteData[] = msgDig.digest();
@@ -93,17 +86,5 @@ public class PasswordVerifier {
             e.printStackTrace();
         }
         return generatedPass.toString();
-    }
-
-    /**
-     *
-     * @return
-     * @throws NoSuchAlgorithmException
-     */
-    private static String getSalt() throws NoSuchAlgorithmException {
-        SecureRandom secRan = SecureRandom.getInstance("SHA1PRNG");
-        byte[] salt = new byte[16];
-        secRan.nextBytes(salt);
-        return salt.toString();
     }
 }
