@@ -3,8 +3,11 @@ import java.util.*;
 
 public class OrderDB {
 	
-	private static Connection myConn;
+	private static Connection myConn;	// Connection variable to interface with the database
 	
+	/**
+     * Initializes the connection to the database
+     */
 	public static void initialize() {
 		try {
 			//System.out.println("Connecting...\n");
@@ -16,11 +19,18 @@ public class OrderDB {
 		catch (Exception exc){ exc.printStackTrace(); }
 	}
 	
+	/**
+     * Closes the connection to the database
+     */
 	public static void close() {
 		try { myConn.close(); }
 		catch (SQLException e) { e.printStackTrace(); }
 	}
 	
+	/**
+     * Inserts a new order with the specified table values into the database
+     * @param tableValues	An array of table values for the order
+     */
 	public static void insert(String tableValues[]) {
 		initialize();
 		String query = " INSERT INTO orders VALUES (?, ?, ?, ?, ?, ?)";
@@ -40,6 +50,11 @@ public class OrderDB {
 		close();
 	}
 	
+	/**
+     * Modifies the order with the provided table values
+     * @param id			The ID of the order to modify
+     * @param tableValues	An array of table values for the order
+     */
 	public static void modify(int id, String tableValues[]) {
 		singleModify(id, "table_num", tableValues[1]);
 		singleModify(id, "order_detail", tableValues[2]);
@@ -49,6 +64,12 @@ public class OrderDB {
 
 	}
 	
+	/**
+     * Modifies a single attribute of an order
+     * @param id			The ID of the order to modify
+     * @param field			The field to be modified
+     * @param value			The new value to put into the field
+     */
 	public static void singleModify(int id, String field, String value) {
 		initialize();
 		String query = "update orders set "+field+"= ? where id= ?";
@@ -68,6 +89,10 @@ public class OrderDB {
 		close();
 	}
 	
+	/**
+     * Gets all of the order in the database
+     * @return 			An arraylist of all order in the database
+     */
 	public static ArrayList<Order> getAll() {
 		initialize();
 		String query = "SELECT * FROM orders";
@@ -95,6 +120,10 @@ public class OrderDB {
 		return null;
 	}
 	
+	/**
+     * Removes the specified order from the database
+     * @param id		The ID of the order to be removed
+     */
 	public static void remove(int id) {
 		initialize();
 		String query = "DELETE FROM orders WHERE id=?";

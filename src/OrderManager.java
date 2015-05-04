@@ -4,6 +4,11 @@ public class OrderManager {
 
     private static ArrayList<Order> orders = new ArrayList<Order>();
 
+    /**
+	 * Returns the order with the provided ID
+	 * @param orderID		The ID of the order to be returned
+	 * @return				The order with the provided ID
+	 */
 	private static Order getOrder(String orderID) {
     	for (Order order : orders) {
     		if (order.getOrderID() == orderID) { return order; }
@@ -25,7 +30,6 @@ public class OrderManager {
      * @param tableValues 	An array of values to update the order
      */
     public static void updateOrder(String orderID, String tableValues[]) {
-    	Order order = getOrder(orderID);
     	if (orderID != null) {
     		OrderDB.modify(new Integer(orderID), tableValues);
     	}

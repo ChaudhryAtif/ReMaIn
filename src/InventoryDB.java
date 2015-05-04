@@ -3,8 +3,11 @@ import java.util.*;
 
 public class InventoryDB {
 
-    private static Connection myConn;
+    private static Connection myConn;	// Connection variable to interface with the database
 
+    /**
+     * Initializes the connection to the database
+     */
     public static void initialize() {
         try {
             //  System.out.println("Connecting...\n");
@@ -16,11 +19,18 @@ public class InventoryDB {
         catch (Exception exc){ exc.printStackTrace(); }
     }
 
+    /**
+     * Closes the connection to the database
+     */
     public static void close() {
         try { myConn.close(); }
         catch (SQLException e) { e.printStackTrace(); }
     }
 
+    /**
+     * Inserts a new inventory item with the specified table values into the database
+     * @param tableValues	An array of table values for the item
+     */
     public static void insert(String tableValues[]) {
         initialize();
         String query = " INSERT INTO inventory VALUES (?, ?, ?, ?, ?, ?)";
@@ -40,6 +50,11 @@ public class InventoryDB {
         close();
     }
 
+    /**
+     * Modifies the inventory item with the provided table values
+     * @param id			The ID of the item to modify
+     * @param tableValues	An array of table values for the item
+     */
     public static void modify(int id, String tableValues[]) {
         singleModify(id, "description", tableValues[1]);
         singleModify(id, "qty_need", tableValues[2]);
@@ -48,6 +63,12 @@ public class InventoryDB {
         singleModify(id, "status", tableValues[5]);
     }
 
+    /**
+     * Modifies a single attribute of an inventory item
+     * @param id			The ID of the item to modify
+     * @param field			The field to be modified
+     * @param value			The new value to put into the field
+     */
     public static void singleModify(int id, String field, String value) {
         initialize();
         String query = "update inventory set "+field+"= ? where id= ?";
@@ -66,6 +87,10 @@ public class InventoryDB {
         close();
     }
 
+    /**
+     * Gets all of the inventory items in the database
+     * @return 			An arraylist of all inventory items in the database
+     */
     public static ArrayList<InventoryItem> getAll() {
         initialize();
         String query = "SELECT * FROM inventory";
@@ -91,6 +116,10 @@ public class InventoryDB {
         return null;
     }
 
+    /**
+     * Removes the specified item from the database
+     * @param id		The ID of the item to be removed
+     */
     public static void remove(int id) {
         initialize();
         String query = "DELETE FROM inventory WHERE id=?";

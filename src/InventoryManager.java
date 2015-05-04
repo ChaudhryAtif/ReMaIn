@@ -4,6 +4,11 @@ public class InventoryManager {
 
 	private static ArrayList<InventoryItem> inventoryItems = new ArrayList<InventoryItem>();
 	
+	/**
+	 * Returns the inventory item with the provided ID
+	 * @param itemID		The ID of the item to be returned
+	 * @return				The inventory item with the provided ID
+	 */
 	private static InventoryItem getItem(String itemID) {
     	for (InventoryItem item : inventoryItems) {
     		if (item.getItemID() == itemID) { return item; }

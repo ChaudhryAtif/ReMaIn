@@ -3,8 +3,11 @@ import java.util.*;
 
 public class TableDB {
 	
-	private static Connection myConn;
+	private static Connection myConn;	// Connection variable to interface with the database
 	
+	/**
+     * Initializes the connection to the database
+     */
 	public static void initialize() {
 		try {
 			//System.out.println("Connecting...\n");
@@ -16,11 +19,19 @@ public class TableDB {
 		catch (Exception exc){ exc.printStackTrace(); }
 	}
 	
+	/**
+     * Closes the connection to the database
+     */
 	public static void close() {
 		try { myConn.close(); }
 		catch (SQLException e) { e.printStackTrace(); }
 	}
 	
+	/**
+     * Modifies the table with the provided table values
+     * @param id			The ID of the table to modify
+     * @param tableValues	An array of table values for the table
+     */
 	public static void modify(int tableNumber, String tableValues[]) {
         singleModify(tableNumber, "status", tableValues[1]);
         singleModify(tableNumber, "name", tableValues[2]);
@@ -31,6 +42,12 @@ public class TableDB {
         singleModify(tableNumber, "notes", tableValues[7]);
 	}
 	
+	/**
+     * Modifies a single attribute of a table
+     * @param id			The ID of the table to modify
+     * @param field			The field to be modified
+     * @param value			The new value to put into the field
+     */
 	public static void singleModify(int tableNumber, String field, String value) {
 		initialize();
 		String query = "update table_dir set "+field+"= ? where id= ?";
@@ -50,6 +67,10 @@ public class TableDB {
 		close();
 	}
 	
+	/**
+     * Gets all of the tables in the database
+     * @return 			An arraylist of all tables in the database
+     */
 	public static ArrayList<Table> getAll() {
 		initialize();
 		String query = "SELECT * FROM table_dir";
